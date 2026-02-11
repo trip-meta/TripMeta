@@ -1,0 +1,3 @@
+Assets/Resources/PXR_PlatformSetting.asset
+Assets/Resources/PXR_ProjectSetting.asset
+Assets/Resources/PXR_SDKSettingAsset.asset

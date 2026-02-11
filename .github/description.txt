@@ -1,0 +1,4 @@
+AI-powered VR tourism platform built with Unity. Explore virtual attractions with intelligent tour guides on PICO VR headsets.
+
+中文描述：
+基于Unity构建的AI驱动VR旅游平台。在PICO VR头显上探索虚拟景点，体验智能导游服务。

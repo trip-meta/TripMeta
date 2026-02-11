@@ -1,0 +1,20 @@
+{
+  "//": "建议版本范围，最终以Unity 2023.3包管理器兼容矩阵为准",
+  "dependencies": {
+    "com.unity.inputsystem": "1.7.x",
+    "com.unity.xr.interaction.toolkit": "3.0.x",
+    "com.unity.xr.management": "4.5.x",
+    "com.unity.render-pipelines.universal": "17.0.x",
+    "com.unity.textmeshpro": "3.0.x",
+    "com.unity.timeline": "1.8.x",
+    "com.unity.addressables": "1.22.x",
+    "com.unity.netcode.gameobjects": "1.12.x",
+    "com.unity.profiling.core": "1.0.x"
+  },
+  "notes": [
+    "升级到XROrigin并迁移XR事件接口",
+    "URP若不采用，可不绑定Pipeline Asset",
+    "删除Packages/packages-lock.json让Unity重解锁",
+    "首次用Unity 2023打开时允许API Updater"
+  ]
+}
