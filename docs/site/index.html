@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TripMeta - VR Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            color: #fff;
+            margin-bottom: 10px;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            color: #a0aec0;
+        }
+
+        .video-wrapper {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #000;
+        }
+
+        video {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 12px;
+        }
+
+        .info {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .info h2 {
+            color: #fff;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .info p {
+            color: #a0aec0;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .feature {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .feature h3 {
+            color: #fff;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+        }
+
+        .feature p {
+            color: #a0aec0;
+            font-size: 0.9rem;
+        }
+
+        .github-link {
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .github-link a {
+            display: inline-block;
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .github-link a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 TripMeta VR Demo</h1>
+            <p>AI-Powered Virtual Tourism Experience</p>
+        </div>
+
+        <div class="video-wrapper">
+            <div class="video-container">
+                <video controls preload="metadata" poster="https://raw.githubusercontent.com/trip-meta/TripMeta/main/docs/site/poster.jpg">
+                    <source src="https://raw.githubusercontent.com/trip-meta/TripMeta/main/vr.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+        </div>
+
+        <div class="info">
+            <h2>Experience the Future of Tourism</h2>
+            <p>🤖 <strong>AI Tour Guide</strong> - Intelligent conversation system powered by GPT</p>
+            <p>🥽 <strong>Immersive VR</strong> - High-quality virtual tourism on PICO headsets</p>
+            <p>🎯 <strong>Natural Interaction</strong> - Voice dialogue and VR controller support</p>
+        </div>
+
+        <div class="features">
+            <div class="feature">
+                <div class="feature-icon">🌍</div>
+                <h3>Virtual Attractions</h3>
+                <p>Explore worldwide destinations from home</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">💬</div>
+                <h3>Smart Conversations</h3>
+                <p>Natural dialogue with AI tour guides</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🎓</div>
+                <h3>Rich Knowledge</h3>
+                <p>Deep historical and cultural insights</p>
+            </div>
+        </div>
+
+        <div class="github-link">
+            <a href="https://github.com/trip-meta/TripMeta" target="_blank">
+                ⭐ Star on GitHub
+            </a>
+        </div>
+    </div>
+</body>
+</html>

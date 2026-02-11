@@ -32,9 +32,11 @@ TripMeta is an innovative VR tourism platform that combines AI technology with v
 
 ### Demo Video
 
-https://raw.githubusercontent.com/trip-meta/TripMeta/main/vr.mp4
+[![Watch VR Demo](https://raw.githubusercontent.com/trip-meta/TripMeta/main/docs/site/poster.jpg)](https://trip-meta.github.io/TripMeta/)
 
-> 🎬 Watch the VR tourism demo to see the AI tour guide in action!
+**[▶ Watch the VR Demo Video](https://trip-meta.github.io/TripMeta/)**
+
+> 🎬 Click to watch the AI tour guide in action!
 
 ### Quick Start
 
@@ -114,9 +116,9 @@ TripMeta 是一个创新的 VR 旅游平台，结合 AI 技术和虚拟现实，
 
 ### 演示视频
 
-https://raw.githubusercontent.com/trip-meta/TripMeta/main/vr.mp4
+**[▶ 观看 VR 演示视频](https://trip-meta.github.io/TripMeta/)**
 
-> 🎬 观看 VR 旅游演示视频，体验 AI 智能导游的精彩表现！
+> 🎬 点击观看 AI 智能导游的精彩演示！
 
 ### 快速开始
 
