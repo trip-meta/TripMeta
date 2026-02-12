@@ -114,7 +114,6 @@ jobs:
         key: Library-${{ matrix.targetPlatform }}-${{ hashFiles('TripMeta/Assets/**', 'TripMeta/Packages/**', 'TripMeta/ProjectSettings/**') }}
         restore-keys: |
           Library-${{ matrix.targetPlatform }}-
-          Library-
 
     - name: Setup Unity
       uses: game-ci/unity-builder@v2
