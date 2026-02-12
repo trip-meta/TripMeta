@@ -5,7 +5,7 @@
 AI-powered VR tourism platform built with Unity. Explore virtual attractions with intelligent tour guides on PICO VR headsets.
 ```
 
-## Topics/Tags
+## Topics/Tags ✅
 Add these topics to your repository:
 - unity
 - vr
