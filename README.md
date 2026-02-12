@@ -1,4 +1,4 @@
-# TripMeta - AI-Powered VR Tourism Platform
+# TripMeta - AI-Powered VR Tourism Platform [ci]
 
 <div align="center">
 
