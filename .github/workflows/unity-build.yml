@@ -20,10 +20,8 @@ on:
 
 env:
   UNITY_VERSION: 2022.3.10f1
-  UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
   UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
   UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
-  UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
 
 jobs:
   # 代码质量检查
@@ -77,18 +75,20 @@ jobs:
           Library-
 
     - name: Setup Unity
+      uses: game-ci/unity-activate@v2
+      with:
+        unityVersion: ${{ env.UNITY_VERSION }}
+      env:
+        UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+        UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+
+    - name: Run Tests
       uses: game-ci/unity-test-runner@v4
       with:
         unityVersion: ${{ env.UNITY_VERSION }}
         testMode: all
         artifactsPath: TestResults
         checkName: Test Results
-        runHost: test
-      env:
-        UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-        UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
-        UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
-        UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
 
     - name: Upload Test Results
       uses: actions/upload-artifact@v4
@@ -127,7 +127,15 @@ jobs:
     - name: Set Working Directory
       run: echo "UNITY_PROJECT_PATH=$(pwd)" >> $GITHUB_ENV
 
-    - name: Setup Unity
+    - name: Activate Unity
+      uses: game-ci/unity-activate@v2
+      with:
+        unityVersion: ${{ env.UNITY_VERSION }}
+      env:
+        UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+        UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+
+    - name: Build Project
       uses: game-ci/unity-builder@v4
       with:
         unityVersion: ${{ env.UNITY_VERSION }}
@@ -136,11 +144,6 @@ jobs:
         buildMethod: TripMeta.Editor.BuildAutomation.BuildManager.BuildProject
         buildName: TripMeta-${{ matrix.targetPlatform }}
         versioning: Semantic
-      env:
-        UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-        UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
-        UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
-        UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
 
     - name: Upload Build Artifacts
       uses: actions/upload-artifact@v4

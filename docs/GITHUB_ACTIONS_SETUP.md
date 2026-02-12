@@ -2,21 +2,53 @@
 
 This guide explains how to set up Unity license for GitHub Actions CI/CD.
 
-## Prerequisites
+## Quick Start (Recommended Method)
 
-- Unity 2022.3.10f1 installed locally
-- GitHub repository access (Settings > Secrets and variables > Actions)
+### Step 1: Create Unity Account (Free)
 
-## Option 1: Unity Personal License (Free)
+1. Go to https://id.unity.com
+2. Click "Create account"
+3. Fill in your information (Unity Personal is FREE)
 
-### Step 1: Activate Unity Locally
+### Step 2: Add GitHub Secrets
 
-1. Open Unity Hub
-2. Go to Preferences > Licenses
-3. Sign in with your Unity account
-4. Activate a Personal license (free)
+Go to: https://github.com/trip-meta/TripMeta/settings/secrets/actions
 
-### Step 2: Get License File
+Add these two secrets:
+
+| Secret Name | Value | Description |
+|-------------|--------|-------------|
+| `UNITY_EMAIL` | Your Unity account email | For auto-activation |
+| `UNITY_PASSWORD` | Unity app password | NOT your main password! |
+
+### Step 3: Create Unity App Password (Security)
+
+**IMPORTANT: Use an app password, not your main Unity password!**
+
+1. Go to https://id.unity.com
+2. Sign in to your account
+3. Go to **Security** section
+4. Enable **Two-Factor Authentication** (if not enabled)
+5. Create an **App Password**
+6. Copy this app password
+
+**Use the app password as `UNITY_PASSWORD` secret.**
+
+### Step 4: Verify
+
+1. Go to Actions tab in GitHub
+2. Click "Unity Build and Test" workflow
+3. Click "Run workflow"
+4. Select build target and run
+5. The workflow will automatically activate Unity using your credentials
+
+---
+
+## Alternative: Using Unity License File
+
+If you have Unity installed locally and have already activated it:
+
+### Getting License File
 
 **Windows:**
 ```
@@ -28,7 +60,7 @@ C:\ProgramData\Unity\Unity_lic.ulf
 /Library/Application Support/Unity/Unity_lic.ulf
 ```
 
-### Step 3: Encode License to Base64
+### Encoding to Base64
 
 **PowerShell (Windows):**
 ```powershell
@@ -40,68 +72,47 @@ C:\ProgramData\Unity\Unity_lic.ulf
 base64 -i /Library/Application\ Support/Unity/Unity_lic.ulf
 ```
 
-### Step 4: Add to GitHub Secrets
+### Add to GitHub
 
-1. Go to repository: https://github.com/trip-meta/TripMeta/settings/secrets/actions
-2. Click "New repository secret"
-3. Name: `UNITY_LICENSE`
-4. Value: Paste the base64-encoded license content
-5. Click "Add secret"
+| Secret Name | Value |
+|-------------|--------|
+| `UNITY_LICENSE` | Paste the base64-encoded license |
 
-## Option 2: Unity Pro/Plus Serial License
+---
 
-Add these secrets to GitHub:
+## Unity Personal License Details
 
-| Secret Name | Description |
-|-------------|-------------|
-| `UNITY_SERIAL` | Your Unity serial number (XXXX-XXXX-XXXX-XXXX-XXXX-XXXX) |
-| `UNITY_EMAIL` | Your Unity account email |
-| `UNITY_PASSWORD` | Your Unity account password (use app password for security) |
+| Feature | Details |
+|----------|----------|
+| **Cost** | Completely FREE |
+| **Revenue Limit** | Under $100,000 USD annual revenue |
+| **Features** | Full Unity engine capabilities |
+| **Use Cases** | Personal projects, indie development, open source |
+| **CI/CD** | Supported for GitHub Actions |
 
-### Creating an App Password (Recommended)
-
-1. Go to https://id.unity.com
-2. Sign in to your account
-3. Go to Security > Two-Factor Authentication
-4. Enable 2FA if not already enabled
-5. Create an App Password
-6. Use this app password (not your main password) for `UNITY_PASSWORD`
-
-## Option 3: Unity Gaming Services (Cloud Build)
-
-For teams using Unity Gaming Services, you can use:
-
-| Secret Name | Description |
-|-------------|-------------|
-| `UNITY_EMAIL` | Unity account email |
-| `UNITY_PASSWORD` | Unity account password or app password |
-
-The workflow will automatically activate Unity in the CI environment.
-
-## Verification
-
-After adding secrets, verify the workflow runs:
-
-1. Go to Actions tab in GitHub
-2. Click "Unity Build and Test" workflow
-3. Click "Run workflow"
-4. Select build target and run
-5. Check logs for successful activation
+---
 
 ## Troubleshooting
 
-### Error: "Missing Unity License File"
-- Ensure `UNITY_LICENSE` secret is set correctly
-- Verify the base64 encoding is complete (no line breaks)
-
-### Error: "Invalid Serial"
-- Check `UNITY_SERIAL` format (XXXX-XXXX-XXXX-XXXX-XXXX-XXXX)
-- Verify the serial is active and not expired
-
 ### Error: "Authentication Failed"
+
 - Verify email and password are correct
-- Use an app password if 2FA is enabled
-- Check for special characters in password
+- Use an app password (not main password) if 2FA is enabled
+- Check for extra spaces in secret values
+
+### Error: "License Activation Failed"
+
+- Ensure your Unity account is in good standing
+- Verify you're using Unity Personal (not Pro/Plus trial)
+- Check that the password hasn't expired
+
+### Workflow Runs But Tests Fail
+
+- Unity activation may have succeeded but tests have issues
+- Check test logs for specific failure reasons
+- Verify Unity version compatibility
+
+---
 
 ## Security Best Practices
 
@@ -111,12 +122,15 @@ After adding secrets, verify the workflow runs:
 4. **Limit Access** - Only enable Actions for trusted collaborators
 5. **Monitor Logs** - Check for unauthorized usage
 
-## License Type Selection
+---
 
-| License Type | UNITY_LICENSE | UNITY_SERIAL | UNITY_EMAIL/PASSWORD |
-|--------------|----------------|----------------|---------------------|
-| Personal (Free) | Required (base64 .ulf) | Not used | Not used |
-| Pro/Plus | Optional | Required | Required |
-| Gaming Services | Not used | Not used | Required |
+## How the Workflow Activation Works
 
-For **TripMeta**, using Unity Personal license with `UNITY_LICENSE` is recommended.
+The GitHub Actions workflow now uses `game-ci/unity-activate@v2` which:
+
+1. Takes your `UNITY_EMAIL` and `UNITY_PASSWORD`
+2. Activates Unity Personal license in CI environment
+3. Returns activation file for subsequent build/test steps
+4. License is discarded after workflow completes
+
+This is more secure than storing a license file directly!
