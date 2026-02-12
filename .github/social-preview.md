@@ -2,7 +2,7 @@
 
 ## About Description (120 chars max)
 ```
-AI-powered VR tourism platform built with Unity. Explore virtual attractions with intelligent tour guides on PICO VR headsets.
+AI-powered VR tourism platform with intelligent tour guides. Built with Unity for PICO VR headsets. Explore virtual attractions worldwide.
 ```
 
 ## Topics/Tags ✅
