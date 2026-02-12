@@ -130,7 +130,7 @@ jobs:
         customParameters: -buildTarget ${{ matrix.targetPlatform }}
 
     - name: Upload Build Artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: build-${{ matrix.targetPlatform }}
         path: TripMeta/Builds/${{ matrix.targetPlatform }}/
