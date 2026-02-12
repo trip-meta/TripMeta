@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Test - TripMeta</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #1a1a2e;
+            color: #fff;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .viewport-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .viewport-buttons button {
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .viewport-buttons button:hover {
+            background: #764ba2;
+        }
+        .viewport-buttons button.active {
+            background: #22c55e;
+        }
+        .preview-frame {
+            border: 2px solid #333;
+            border-radius: 8px;
+            background: #000;
+            transition: width 0.3s ease;
+            margin: 0 auto;
+            display: block;
+        }
+        .info {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+        }
+        .info h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        .size-info {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .size-item {
+            padding: 10px;
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 6px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📱 Responsive Design Test</h1>
+        <p style="color: #a0aec0; margin-bottom: 20px;">Test TripMeta site at different viewport sizes</p>
+
+        <div class="viewport-buttons">
+            <button onclick="setViewport(375)" class="vp-btn active" data-width="375">📱 Mobile (375px)</button>
+            <button onclick="setViewport(768)" class="vp-btn" data-width="768">📟 Tablet (768px)</button>
+            <button onclick="setViewport(1024)" class="vp-btn" data-width="1024">💻 Laptop (1024px)</button>
+            <button onclick="setViewport(1440)" class="vp-btn" data-width="1440">🖥️ Desktop (1440px)</button>
+            <button onclick="setViewport('100%')" class="vp-btn" data-width="100%">🔍 Full Width</button>
+        </div>
+
+        <div class="info">
+            <h3>Current Viewport</h3>
+            <div class="size-info">
+                <div class="size-item">Width: <span id="currentWidth">375</span>px</div>
+                <div class="size-item">Height: <span id="currentHeight">667</span>px</div>
+                <div class="size-item">Device: <span id="deviceType">Mobile</span></div>
+            </div>
+        </div>
+
+        <iframe id="preview" class="preview-frame" src="index.html" width="375" height="667" style="width: 375px; height: 667px;"></iframe>
+    </div>
+
+    <script>
+        const iframe = document.getElementById('preview');
+        const currentWidth = document.getElementById('currentWidth');
+        const currentHeight = document.getElementById('currentHeight');
+        const deviceType = document.getElementById('deviceType');
+
+        const viewportSizes = {
+            375: { height: 667, name: 'Mobile (iPhone SE)' },
+            768: { height: 1024, name: 'Tablet (iPad Mini)' },
+            1024: { height: 768, name: 'Laptop (Small)' },
+            1440: { height: 900, name: 'Desktop (Full HD)' },
+        };
+
+        function setViewport(width) {
+            // Update button states
+            document.querySelectorAll('.vp-btn').forEach(btn => btn.classList.remove('active'));
+            const btn = document.querySelector(`[data-width="${width}"]`);
+            if (btn) btn.classList.add('active');
+
+            // Set iframe size
+            if (width === '100%') {
+                iframe.style.width = '100%';
+                iframe.style.height = '800px';
+                currentWidth.textContent = '100%';
+                currentHeight.textContent = '800';
+                deviceType.textContent = 'Full Width';
+            } else {
+                iframe.style.width = width + 'px';
+                iframe.style.height = viewportSizes[width].height + 'px';
+                currentWidth.textContent = width;
+                currentHeight.textContent = viewportSizes[width].height;
+                deviceType.textContent = viewportSizes[width].name;
+            }
+        }
+
+        // Initialize
+        setViewport(375);
+    </script>
+</body>
+</html>
