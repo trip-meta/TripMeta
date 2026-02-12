@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Poster</title>
+</head>
+<body>
+    <canvas id="poster" width="1280" height="720"></canvas>
+    <script>
+        const canvas = document.getElementById('poster');
+        const ctx = canvas.getContext('2d');
+
+        // Background gradient
+        const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+        gradient.addColorStop(0, '#1a1a2e');
+        gradient.addColorStop(0.5, '#16213e');
+        gradient.addColorStop(1, '#0f3460');
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Text
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 72px -apple-system, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('▶ TripMeta VR', canvas.width / 2, canvas.height / 2 - 20);
+
+        ctx.font = '24px -apple-system, sans-serif';
+        ctx.fillStyle = '#a0aec0';
+        ctx.fillText('AI-Powered Virtual Tourism', canvas.width / 2, canvas.height / 2 + 40);
+
+        // Save
+        const link = document.createElement('a');
+        link.download = 'poster.jpg';
+        link.href = canvas.toDataURL('image/jpeg', 0.9);
+        link.click();
+
+        console.log('Poster image created and downloaded!');
+    </script>
+</body>
+</html>
