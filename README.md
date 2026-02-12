@@ -73,6 +73,7 @@ Assets/Scripts/
 ### Documentation
 
 - [Quick Start Guide](docs/QUICKSTART.md)
+- [GitHub Actions Setup](docs/GITHUB_ACTIONS_SETUP.md) - CI/CD license configuration
 - [Architecture](docs/ARCHITECTURE.md)
 - [AI Integration](docs/AI_INTEGRATION.md)
 - [Contributing](docs/CONTRIBUTING.md)
@@ -155,6 +156,7 @@ Assets/Scripts/
 ### 文档
 
 - [快速开始指南](docs/QUICKSTART.md)
+- [GitHub Actions 配置](docs/GITHUB_ACTIONS_SETUP.md) - CI/CD 许可证配置
 - [系统架构](docs/ARCHITECTURE.md)
 - [AI 集成](docs/AI_INTEGRATION.md)
 - [贡献指南](docs/CONTRIBUTING.md)
