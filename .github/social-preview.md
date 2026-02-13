@@ -1,30 +1,43 @@
-# GitHub Repository Settings
+# Social Image Preview
 
-## About Description (120 chars max)
+Recommended: 1280x640px PNG with VR scene showcase
+
+## Description
+
+A VR tourism scene showing:
+- **Center**: A virtual attraction environment (city, nature, or historical site)
+- **Bottom**: AI tour guide interface with conversation bubbles
+- **Overlay**: "TripMeta" logo and tagline
+- **Style**: Clean, modern, immersive with depth
+- **Colors**: Dark blue gradient background (#1a1a2e to #0f3460) with bright UI elements
+- **Vibe**: Technological yet welcoming, futuristic but accessible
+
+## Creating the Image
+
+### Option 1: Generate with AI
+Use DALL-E 3 or Midjourney with prompt:
 ```
-AI-powered VR tourism platform with intelligent tour guides. Built with Unity for PICO VR headsets. Explore virtual attractions worldwide.
+VR tourism screenshot, 1280x640, showing virtual travel destination with AI tour guide interface, modern dark blue gradient colors (#1a1a2e to #0f3460), TripMeta logo, clean UI design, futuristic yet accessible
 ```
 
-## Topics/Tags ✅
-Add these topics to your repository:
-- unity
-- vr
-- virtual-reality
-- ai
-- openai
-- gpt
-- tourism
-- pico
-- pico-vr
-- chatgpt
-- unity3d
-- csharp
-- metaverse
-- smart-tour-guide
+### Option 2: Capture from Unity
+1. Open TripMeta project in Unity
+2. Setup a nice scene with lighting
+3. Position camera for good composition
+4. Capture at 1280x640 or higher resolution
+5. Add text overlay in image editor
+6. Export as PNG
 
-## Social Image Preview
-Recommended: 1280x640px
-Description: Show a VR scene with AI tour guide interface
+## Social Preview
 
-## Website
-https://trip-meta.github.io/TripMeta/ (if you set up GitHub Pages)
+When your repository is shared on:
+- **Twitter/X** - Shows image with full description
+- **LinkedIn** - Shows image in professional feed
+- **Discord** - Shows image when link is expanded
+- **Facebook** - Shows image with open graph preview
+
+**Best Practices:**
+- Include a clear "VR" or "AI" element in the image
+- Show actual interface, not just concept art
+- Ensure text is readable at small sizes
+- Add TripMeta branding if possible
