@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="TripMeta - AI NPC Metaverse Tourism Platform with intelligent virtual tour guides">
+    <title>TripMeta - AI NPC Metaverse</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #667eea;
+            --primary-dark: #764ba2;
+            --bg-dark: #1a1a2e;
+            --bg-medium: #16213e;
+            --bg-light: #0f3460;
+            --text-white: #ffffff;
+            --text-muted: #a0aec0;
+            --text-dim: #718096;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --npc-historian: #e74c3c;
+            --npc-food: #f59e0b;
+            --npc-culture: #8b5cf6;
+            --npc-transport: #06b6d4;
+            --npc-photo: #ec4899;
+            --npc-stay: #10b981;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-medium) 50%, var(--bg-light) 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            color: var(--text-white);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero {
+            text-align: center;
+            padding: 60px 20px;
+            margin-bottom: 50px;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--text-white) 0%, var(--primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: var(--text-muted);
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        .section {
+            margin-bottom: 60px;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 40px;
+            background: linear-gradient(135deg, var(--text-white) 0%, var(--primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .npc-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .npc-card {
+            background: var(--glass-bg);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .npc-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--npc-color, var(--primary));
+        }
+
+        .npc-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.2);
+        }
+
+        .npc-icon {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .npc-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--text-white);
+        }
+
+        .npc-role {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .npc-description {
+            color: var(--text-muted);
+            line-height: 1.7;
+            margin-bottom: 15px;
+        }
+
+        .dialogue-example {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .dialogue-example .user-msg {
+            color: var(--primary);
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .dialogue-example .npc-msg {
+            color: var(--text-muted);
+        }
+
+        .scenario-section {
+            margin-bottom: 50px;
+        }
+
+        .scenario-card {
+            background: var(--glass-bg);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+
+        .scenario-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+
+        .scenario-steps {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .step {
+            flex: 1;
+            min-width: 200px;
+            padding: 15px;
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 10px;
+            border-left: 3px solid var(--primary);
+        }
+
+        .step-label {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+        .step-content {
+            font-size: 0.95rem;
+            color: var(--text-white);
+        }
+
+        .roadmap {
+            background: rgba(102, 126, 234, 0.05);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+        }
+
+        .roadmap-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .roadmap-item {
+            padding: 20px;
+            border-radius: 12px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+        }
+
+        .roadmap-phase {
+            font-size: 0.9rem;
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .roadmap-item ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .roadmap-item li {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            color: var(--text-muted);
+        }
+
+        .roadmap-item li:last-child {
+            border-bottom: none;
+        }
+
+        .cta-section {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 18px 40px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: var(--text-white);
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+            margin: 0 10px;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 50px rgba(102, 126, 234, 0.5);
+        }
+
+        .cta-btn.secondary {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .cta-btn.secondary:hover {
+            background: var(--primary);
+            color: var(--text-white);
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 40px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .back-link:hover {
+            color: var(--primary);
+        }
+
+        @media (max-width: 768px) {
+            .npc-grid {
+                grid-template-columns: 1fr;
+            }
+            .roadmap-grid {
+                grid-template-columns: 1fr;
+            }
+            .scenario-steps {
+                flex-direction: column;
+            }
+            .hero h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Hero Section -->
+        <div class="hero">
+            <h1>🤖 AI NPC 元宇宙旅游平台</h1>
+            <p>
+                在虚拟世界中与智能AI NPC对话，获取个性化旅游攻略、深度文化讲解和真实社交体验。
+                这不是传统VR旅游——这是**活的元宇宙**。
+            </p>
+        </div>
+
+        <!-- NPC Types Section -->
+        <div class="section">
+            <h2 class="section-title">智能NPC向导团队</h2>
+            <div class="npc-grid">
+                <div class="npc-card" style="--npc-color: var(--npc-historian)">
+                    <span class="npc-icon">🏛️</span>
+                    <div class="npc-name">历史学家</div>
+                    <div class="npc-role">Historian</div>
+                    <p class="npc-description">
+                        专精历史背景、建筑故事和文物讲解。了解每个景点背后的历史，
+                        从古埃及金字塔到现代摩天大楼的完整故事链。
+                    </p>
+                    <div class="dialogue-example">
+                        <div class="user-msg">用户: "这座建筑有什么历史？"</div>
+                        <div class="npc-msg">NPC: "这座建筑建于1889年，当时是为世界博览会而建..."</div>
+                    </div>
+                </div>
+
+                <div class="npc-card" style="--npc-color: var(--npc-food)">
+                    <span class="npc-icon">🍜️</span>
+                    <div class="npc-name">美食向导</div>
+                    <div class="npc-role">Food Guide</div>
+                    <p class="npc-description">
+                        当地美食专家，推荐特色餐厅、街头小吃和美食体验。
+                        从巴黎小馆到大阪烧饼，了解真正的"食"在旅游。
+                    </p>
+                    <div class="dialogue-example">
+                        <div class="user-msg">用户: "附近有什么特色菜？"</div>
+                        <div class="npc-msg">NPC: "前方200米有家传承三代的老店..."</div>
+                    </div>
+                </div>
+
+                <div class="npc-card" style="--npc-color: var(--npc-culture)">
+                    <span class="npc-icon">🎨</span>
+                    <div class="npc-name">文化专家</div>
+                    <div class="npc-role">Culture Expert</div>
+                    <p class="npc-description">
+                        艺术传统、民俗风情和节日庆典专家。参与虚拟文化活动，
+                        了解当地真实的文化传统和艺术形式。
+                    </p>
+                    <div class="dialogue-example">
+                        <div class="user-msg">用户: "有什么传统表演？"</div>
+                        <div class="npc-msg">NPC: "每天下午2点有京剧表演，要提醒您吗？"</div>
+                    </div>
+                </div>
+
+                <div class="npc-card" style="--npc-color: var(--npc-transport)">
+                    <span class="npc-icon">🚌</span>
+                    <div class="npc-name">交通顾问</div>
+                    <div class="npc-role">Transport Advisor</div>
+                    <p class="npc-description">
+                        路线规划和交通专家。最优路线推荐、交通方式比较
+                        和实时出行建议，让您轻松游览虚拟城市。
+                    </p>
+                    <div class="dialogue-example">
+                        <div class="user-msg">用户: "怎么去下一个景点？"</div>
+                        <div class="npc-msg">NPC: "建议步行15分钟，沿途还能看3个景点..."</div>
+                    </div>
+                </div>
+
+                <div class="npc-card" style="--npc-color: var(--npc-photo)">
+                    <span class="npc-icon">📸</span>
+                    <div class="npc-name">摄影师NPC</div>
+                    <div class="npc-role">Photographer</div>
+                    <p class="npc-description">
+                        最佳拍摄点和摄影技巧向导。虚拟相机设置建议、
+                        黄金时刻推荐和构图指导，拍出完美的虚拟旅行照片。
+                    </p>
+                    <div class="dialogue-example">
+                        <div class="user-msg">用户: "哪里拍照最好看？"</div>
+                        <div class="npc-msg">NPC: "夕阳时分到对面山坡，光线正好..."</div>
+                    </div>
+                </div>
+
+                <div class="npc-card" style="--npc-color: var(--npc-stay)">
+                    <span class="npc-icon">🏨</span>
+                    <div class="npc-name">住宿推荐</div>
+                    <div class="npc-role">Accommodation</div>
+                    <p class="npc-description">
+                        酒店评价和民宿推荐专家。根据预算和偏好推荐住宿，
+                        提供真实用户评价和价格对比。
+                    </p>
+                    <div class="dialogue-example">
+                        <div class="user-msg">用户: "附近有什么好的住宿？"</div>
+                        <div class="npc-msg">NPC: "推荐这家传统旅馆，评分4.8，每晚$120..."</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Experience Scenarios -->
+        <div class="section">
+            <h2 class="section-title">元宇宙体验场景</h2>
+
+            <div class="scenario-card">
+                <h3 class="scenario-title">🏮️ 场景1：虚拟城市漫步</h3>
+                <div class="scenario-steps">
+                    <div class="step">
+                        <div class="step-label">Step 1</div>
+                        <div class="step-content">用户在虚拟巴黎街道漫步，遇见AI NPC</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-label">Step 2</div>
+                        <div class="step-content">自然语音对话："埃菲尔铁塔有什么故事？"</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-label">Step 3</div>
+                        <div class="step-content">AI实时讲述历史，附带虚拟信息弹窗</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-label">Step 4</div>
+                        <div class="step-content">用户继续探索，触发其他NPC对话</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="scenario-card">
+                <h3 class="scenario-title">🍜️ 场景2：美食探索之旅</h3>
+                <div class="scenario-steps">
+                    <div class="step">
+                        <div class="step-label">Discover</div>
+                        <div class="step-content">在虚拟大阪道顿堀，跟随美食向导"樱花"</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-label">Order</div>
+                        <div class="step-content">用户："我想吃正宗大阪烧饼！"</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-label">Navigate</div>
+                        <div class="step-content">AI推荐3家必吃店铺并在地图标记路径</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-label">Experience</div>
+                        <div class="step-content">到达店铺，触发虚拟试吃体验</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="scenario-card">
+                <h3 class="scenario-title">👥 场景3：多人元宇宙社交</h3>
+                <div class="scenario-steps">
+                    <div class="step">
+                        <div class="step-label">Invite</div>
+                        <div class="step-content">朋友发来消息："我也在TripMeta！"</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-label">Teleport</div>
+                        <div class="step-content">用户点击邀请，朋友瞬间传送到身边</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-label">Interact</div>
+                        <div class="step-content">多个AI NPC同时为用户服务</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-label">Achieve</div>
+                        <div class="step-content">完成"京都达人"成就，解锁限定虚拟纪念品</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Roadmap -->
+        <div class="section">
+            <h2 class="section-title">发展路线图</h2>
+            <div class="roadmap">
+                <div class="roadmap-grid">
+                    <div class="roadmap-item">
+                        <div class="roadmap-phase">Phase 1: MVP</div>
+                        <ul>
+                            <li>基础VR场景渲染</li>
+                            <li>单一AI NPC对话</li>
+                            <li>语音输入支持</li>
+                            <li>基础知识库</li>
+                        </ul>
+                    </div>
+                    <div class="roadmap-item">
+                        <div class="roadmap-phase">Phase 2: 核心功能</div>
+                        <ul>
+                            <li>多NPC类型（历史、美食、文化）</li>
+                            <li>NPC地图导航标记</li>
+                            <li>用户偏好记忆</li>
+                            <li>对话历史记录</li>
+                        </ul>
+                    </div>
+                    <div class="roadmap-item">
+                        <div class="roadmap-phase">Phase 3: 增强体验</div>
+                        <ul>
+                            <li>NPC个性化和情感表达</li>
+                            <li>多用户同时对话</li>
+                            <li>AR信息叠加</li>
+                            <li>虚拟商品购买</li>
+                        </ul>
+                    </div>
+                    <div class="roadmap-item">
+                        <div class="roadmap-phase">Phase 4: 元宇宙生态</div>
+                        <ul>
+                            <li>UGC内容创作</li>
+                            <li>跨世界传送</li>
+                            <li>虚拟活动系统</li>
+                            <li>社交功能完善</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CTA -->
+        <div class="cta-section">
+            <a href="https://github.com/trip-meta/TripMeta" target="_blank" class="cta-btn">
+                ⭐ GitHub Star
+            </a>
+            <a href="index.html" class="cta-btn secondary">
+                🚀 返回演示页面
+            </a>
+        </div>
+
+        <div style="text-align: center;">
+            <a href="index.html" class="back-link">← 返回主演示页面</a>
+        </div>
+    </div>
+</body>
+</html>

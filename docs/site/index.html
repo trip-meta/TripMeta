@@ -724,6 +724,126 @@
         [data-i18n].hidden {
             display: none !important;
         }
+
+        /* Metaverse Preview Section */
+        .metaverse-preview {
+            margin: 60px 0;
+            padding: 50px;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
+            border-radius: 24px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+
+        .metaverse-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            background: linear-gradient(135deg, #f59e0b 0%, #ec4899 100%);
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .metaverse-title {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #fff 0%, #f59e0b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .metaverse-description {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            max-width: 700px;
+            margin: 0 auto 30px;
+            line-height: 1.8;
+        }
+
+        .npc-preview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin: 40px 0;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .npc-preview-item {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s ease;
+        }
+
+        .npc-preview-item:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .npc-preview-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .npc-preview-name {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-white);
+        }
+
+        .metaverse-cta {
+            margin-top: 40px;
+        }
+
+        .metaverse-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 18px 40px;
+            background: linear-gradient(135deg, #f59e0b 0%, #ec4899 100%);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(245, 158, 11, 0.4);
+        }
+
+        .metaverse-btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 50px rgba(245, 158, 11, 0.6);
+        }
+
+        .metaverse-btn.secondary {
+            background: transparent;
+            border: 2px solid #f59e0b;
+            color: #f59e0b;
+        }
+
+        .metaverse-btn.secondary:hover {
+            background: #f59e0b;
+            color: #fff;
+        }
+
+        @media (max-width: 768px) {
+            .npc-preview-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .metaverse-title {
+                font-size: 1.8rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -962,6 +1082,47 @@
             </div>
         </div>
 
+        <!-- AI NPC Metaverse Preview -->
+        <div class="metaverse-preview">
+            <div class="metaverse-badge" data-i18n="metaverseBadge">Coming Soon</div>
+            <h2 class="metaverse-title" data-i18n="metaverseTitle">🤖 AI NPC 元宇宙旅游平台</h2>
+            <p class="metaverse-description" data-i18n="metaverseDesc">
+                在虚拟世界中与智能AI NPC对话，获取个性化旅游攻略、深度文化讲解和真实社交体验。
+                这不是传统VR旅游——这是**活的元宇宙**。
+            </p>
+
+            <div class="npc-preview-grid">
+                <div class="npc-preview-item">
+                    <div class="npc-preview-icon">🏛️</div>
+                    <div class="npc-preview-name" data-i18n="npcHistorian">历史学家</div>
+                </div>
+                <div class="npc-preview-item">
+                    <div class="npc-preview-icon">🍜️</div>
+                    <div class="npc-preview-name" data-i18n="npcFood">美食向导</div>
+                </div>
+                <div class="npc-preview-item">
+                    <div class="npc-preview-icon">🎨</div>
+                    <div class="npc-preview-name" data-i18n="npcCulture">文化专家</div>
+                </div>
+                <div class="npc-preview-item">
+                    <div class="npc-preview-icon">🚌</div>
+                    <div class="npc-preview-name" data-i18n="npcTransport">交通顾问</div>
+                </div>
+                <div class="npc-preview-item">
+                    <div class="npc-preview-icon">📸</div>
+                    <div class="npc-preview-name" data-i18n="npcPhoto">摄影师NPC</div>
+                </div>
+                <div class="npc-preview-item">
+                    <div class="npc-preview-icon">🏨</div>
+                    <div class="npc-preview-name" data-i18n="npcStay">住宿推荐</div>
+                </div>
+            </div>
+
+            <div class="metaverse-cta">
+                <a href="ai-npc-metaverse.html" class="metaverse-btn" data-i18n="metaverseCta">🚀 探索AI NPC元宇宙</a>
+            </div>
+        </div>
+
         <!-- CTA -->
         <div class="cta-section">
             <a href="https://github.com/trip-meta/TripMeta" target="_blank" class="cta-btn">
@@ -1107,8 +1268,91 @@
                 cta2: "📖 查看架构文档",
                 footer1: "GitHub",
                 footer2: "文档",
+                footer3: "Report Issue",
+                copyright: "© 2025 TripMeta. MIT License. Built with ❤️ by open-source community.",
+                // Metaverse translations
+                metaverseBadge: "Coming Soon",
+                metaverseTitle: "🤖 AI NPC Metaverse Tourism Platform",
+                metaverseDesc: "Chat with intelligent AI NPCs in the metaverse, get personalized travel guides, deep cultural insights, and real social experiences. This is not traditional VR tourism — this is a **living metaverse**.",
+                npcHistorian: "Historian",
+                npcFood: "Food Guide",
+                npcCulture: "Culture Expert",
+                npcTransport: "Transport Advisor",
+                npcPhoto: "Photographer",
+                npcStay: "Accommodation",
+                metaverseCta: "🚀 Explore AI NPC Metaverse"
+            },
+            zh: {
+                badge: "开源VR平台",
+                tagline: "AI驱动的虚拟旅游体验",
+                videoTitle: "▶ VR演示",
+                sizeSmall: "小",
+                sizeMedium: "中",
+                sizeLarge: "大",
+                infoTitle: "体验旅游的未来",
+                info1Title: "AI导游",
+                info1Desc: "由GPT驱动的智能对话系统，提供个性化的景点讲解",
+                info2Title: "沉浸式VR",
+                info2Desc: "在PICO VR头显上体验高质量虚拟旅游，帧率达90FPS",
+                info3Title: "自然交互",
+                info3Desc: "语音对话、VR控制器输入和直观的空间UI控制",
+                info4Title: "丰富知识",
+                info4Desc: "深厚的旅游知识，为每个目的地提供历史和文化见解",
+                techStackTitle: "技术栈",
+                statsTitle: "项目指标",
+                stat1Label: "目标帧率",
+                stat2Label: "毫秒延迟",
+                stat3Label: "AI服务",
+                stat4Label: "支持语言",
+                featuresTitle: "核心功能",
+                feature1Title: "虚拟景点",
+                feature1Desc: "在家探索世界各地的目的地，具有逼真的环境和精细的3D模型",
+                feature2Title: "智能对话",
+                feature2Desc: "与AI导游进行自然对话，理解上下文并提供个性化响应",
+                feature3Title: "丰富知识",
+                feature3Desc: "包含图片和音频的深度历史和文化见解",
+                feature4Title: "VR交互",
+                feature4Desc: "直观的控制器输入，具有触觉反馈和手势识别系统",
+                aiTitle: "🤖 AI驱动的体验",
+                aiIntro: "体验我们智能导游系统，结合自然语言理解和丰富的知识图谱",
+                aiChatTitle: "💬 试用AI导游",
+                aiChatHint: "点击下方问题查看AI的实际效果！",
+                question1: "📍 这里有什么特别的？",
+                question2: "🏛️ 讲讲历史",
+                question3: "🎨 推荐附近景点",
+                question4: "💡 我怎么去那里？",
+                question5: "🌐 天气怎么样？",
+                aiWelcome: "你好！我是你的AI导游。问我关于这个虚拟目的地的任何问题！",
+                aiTryAsking: "试试问：",
+                aiTry1: "\"这里有什么特别的？\"",
+                aiTry2: "\"讲讲历史\"",
+                aiTry3: "\"推荐附近的景点\"",
+                questionLabel: "问题：",
+                cap1Title: "自然语言理解",
+                cap1Desc: "理解上下文并提供相关、个性化的响应",
+                cap2Title: "知识图谱",
+                cap2Desc: "包含历史事实、文化见解和旅行贴士的丰富数据库",
+                cap3Title: "语音交互",
+                cap3Desc: "自然语音输入和AI驱动的对话",
+                cap4Title: "多语言支持",
+                cap4Desc: "支持英语、中文、日语等多种语言的实时翻译",
+                cta1: "⭐ 在GitHub上加星标",
+                cta2: "📖 查看架构文档",
+                footer1: "GitHub",
+                footer2: "文档",
                 footer3: "反馈问题",
-                copyright: "© 2025 TripMeta. MIT许可证. 由开源社区用❤️构建."
+                copyright: "© 2025 TripMeta. MIT许可证. 由开源社区用❤️构建.",
+                // Metaverse translations
+                metaverseBadge: "即将推出",
+                metaverseTitle: "🤖 AI NPC 元宇宙旅游平台",
+                metaverseDesc: "在虚拟世界中与智能AI NPC对话，获取个性化旅游攻略、深度文化讲解和真实社交体验。这不仅是传统VR旅游——这是**活的元宇宙**。",
+                npcHistorian: "历史学家",
+                npcFood: "美食向导",
+                npcCulture: "文化专家",
+                npcTransport: "交通顾问",
+                npcPhoto: "摄影师NPC",
+                npcStay: "住宿推荐",
+                metaverseCta: "🚀 探索AI NPC元宇宙"
             }
         };
 
