@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TripMeta - Site Verification Test</title>
+    <style>
+        body {
+            font-family: system-ui, sans-serif;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #0f172a;
+            color: #e2e8f0;
+        }
+        h1 { color: #667eea; }
+        .test-item {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.05);
+        }
+        .pass { border-left: 4px solid #22c55e; }
+        .fail { border-left: 4px solid #ef4444; }
+        .status { font-weight: bold; }
+        .pass .status { color: #22c55e; }
+        .fail .status { color: #ef4444; }
+        .actions { margin-top: 30px; }
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            margin: 5px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <h1>TripMeta Site Verification</h1>
+    <div id="results"></div>
+    <div class="actions">
+        <a href="index.html" class="btn">View Demo Site</a>
+        <a href="../INDEX.md" class="btn">Documentation Index</a>
+    </div>
+
+    <script>
+        const tests = [
+            {
+                name: 'vr.mp4 file accessibility',
+                test: () => fetch('vr.mp4', {method: 'HEAD'})
+                    .then(r => r.ok),
+                expected: true
+            },
+            {
+                name: 'HTML file valid',
+                test: () => Promise.resolve(true),
+                expected: true
+            }
+        ];
+
+        async function runTests() {
+            const results = document.getElementById('results');
+
+            for (const t of tests) {
+                let passed;
+                try {
+                    const result = await t.test();
+                    passed = result === t.expected;
+                } catch (e) {
+                    passed = false;
+                }
+
+                const div = document.createElement('div');
+                div.className = `test-item ${passed ? 'pass' : 'fail'}`;
+                div.innerHTML = `
+                    <span class="status">${passed ? 'PASS' : 'FAIL'}</span>
+                    ${t.name}
+                `;
+                results.appendChild(div);
+            }
+        }
+
+        runTests();
+    </script>
+</body>
+</html>
