@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![TripMeta Banner](docs/site/banner-placeholder.png)
+<!-- Banner image will be added later -->
 
 # ![Unity](https://img.shields.io/badge/Unity-2021.3.11f1-black?style=for-the-badge&logo=unity)
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
