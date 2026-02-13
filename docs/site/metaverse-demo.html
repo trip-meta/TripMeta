@@ -399,9 +399,17 @@
     </div>
 
     <!-- Three.js (from CDN for standalone usage) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.160.0/build/three.module.js"
+        }
+    }
+    </script>
 
-    <script>
+    <script type="module">
+        import * as THREE from 'three';
+
         // ===== CONFIGURATION =====
         const CONFIG = {
             moveSpeed: 0.15,
