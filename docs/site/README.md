@@ -20,7 +20,6 @@ This directory contains the TripMeta demo website hosted on GitHub Pages.
 | `test-responsive.html` | Responsive design tester | ~5 KB |
 | `verify-site.sh` | CLI verification script | ~2.5 KB |
 | `check-deployment.sh` | Deployment status checker | ~1.7 KB |
-| `create-poster.html` | Poster image generator | ~1.4 KB |
 
 ## Features
 
