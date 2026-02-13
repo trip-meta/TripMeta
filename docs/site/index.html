@@ -903,20 +903,6 @@
             </div>
         </div>
 
-        <div class="features">
-                <div class="feature">
-                    <div class="feature-icon">🌐</div>
-                    <h3>Multi-language</h3>
-                    <p>Support for English, Chinese, Japanese, and more with real-time translation</p>
-                </div>
-                <div class="feature">
-                    <div class="feature-icon">⚙️</div>
-                    <h3>Modular Architecture</h3>
-                    <p>Dependency injection, event-driven design, and scalable service architecture</p>
-                </div>
-            </div>
-        </div>
-
         <!-- CTA -->
         <div class="cta-section">
             <a href="https://github.com/trip-meta/TripMeta" target="_blank" class="cta-btn">
@@ -982,13 +968,13 @@
         }
 
         // AI Demo Interaction
-        const aiResponses = {
-            "Great choice! The Statue of Liberty was a gift from France to the United States in 1886...",
-            "Times Square is surrounded by many iconic buildings, making it one of the world's most visited tourist attractions...",
-            "Absolutely! The Brooklyn Bridge connects Manhattan and Brooklyn, spanning nearly 1,800 feet with stunning Gothic architecture...",
-        };
+        const aiResponses = [
+            "Great choice! The Statue of Liberty was a gift from France to the United States in 1886. Standing at 305 feet tall, this copper statue has welcomed millions of immigrants arriving by ship and remains a symbol of freedom and democracy.",
+            "Times Square is surrounded by many iconic buildings, making it one of the world's most visited tourist attractions. Known as 'The Crossroads of the World', it features dazzling billboards and Broadway theaters just steps away.",
+            "Absolutely! The Brooklyn Bridge connects Manhattan and Brooklyn, spanning nearly 1,800 feet with stunning Gothic architecture. When it opened in 1883, it was the longest suspension bridge in the world and a marvel of engineering."
+        ];
 
-        let currentResponse = null;
+        let currentResponse = 0;
 
         function addAIMessage(content, isUser = false) {
             const messagesContainer = document.querySelector('.chat-messages');
