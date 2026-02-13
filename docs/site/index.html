@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="TripMeta - AI-Powered VR Tourism Platform with intelligent tour guides and immersive virtual experiences">
     <title>TripMeta - AI-Powered VR Tourism Platform</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -12,35 +15,97 @@
             box-sizing: border-box;
         }
 
+        /* Make English text darker for better contrast */
+        html[lang="en"] body,
+        html[lang="en"] p,
+        html[lang="en"] h1,
+        html[lang="en"] h2,
+        html[lang="en"] h3,
+        html[lang="en"] .video-title,
+        html[lang="en"] .info h2,
+        html[lang="en"] .tech-name,
+        html[lang="en"] .section-title,
+        html[lang="en"] .feature h3,
+        html[lang="en"] .capability-card h3,
+        html[lang="en"] .stat-value {
+            color: #047857;
+        }
+
         :root {
-            --primary: #667eea;
-            --primary-dark: #764ba2;
-            --bg-dark: #1a1a2e;
-            --bg-medium: #16213e;
-            --bg-light: #0f3460;
-            --text-white: #ffffff;
-            --text-muted: #a0aec0;
-            --text-dim: #718096;
-            --glass-bg: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(255, 255, 255, 0.1);
+            --backdrop-filter: blur(16px);
+            --primary: #10B981;
+            --primary-dark: #059669;
+            --secondary: #34D399;
+            --cta: #047857;
+            --bg-dark: #0F172B;
+            --bg-medium: #1E293B;
+            --bg-light: #D1FAE5;
+            --bg-white: #F0FDF4;
+            --text-primary: #064E3B;
+            --text-white: #FFFFFF;
+            --text-muted: #475569;
+            --text-dim: #94A3B8;
+            --glass-bg: rgba(255, 255, 255, 0.85);
+            --glass-border: rgba(16, 185, 129, 0.15);
+            --border-light: rgba(30, 41, 59, 0.08);
+            --shadow-sm: 0 2px 8px rgba(16, 185, 129, 0.08);
+            --shadow-md: 0 4px 16px rgba(16, 185, 129, 0.12);
+            --shadow-lg: 0 8px 32px rgba(16, 185, 129, 0.15);
+            --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            --font-sans: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-medium) 50%, var(--bg-light) 100%);
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #F0FDF4 0%, #D1FAE5 50%, #B7E4B7 100%);
             background-attachment: fixed;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             padding: 20px;
-            color: var(--text-white);
+            color: var(--text-primary);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            line-height: 1.6;
+        }
+
+        /* SVG Icons */
+        .icon-inline {
+            display: inline-flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .icon-inline svg {
+            width: 40px;
+            height: 40px;
+            color: var(--primary);
+        }
+
+        .icon-svg {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            flex-shrink: 0;
+        }
+
+        .icon-svg svg {
+            width: 100%;
+            height: 100%;
+            color: var(--primary);
         }
 
         .container {
             max-width: 1200px;
             width: 100%;
-            animation: fadeInUp 0.8s ease-out;
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: var(--backdrop-filter);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: var(--shadow-lg);
         }
 
         @keyframes fadeInUp {
@@ -57,8 +122,8 @@
         /* Header */
         .header {
             text-align: center;
-            margin-bottom: 50px;
-            animation: fadeInDown 1s ease-out;
+            margin-bottom: 60px;
+            animation: fadeInDown 0.8s ease-out;
         }
 
         @keyframes fadeInDown {
@@ -74,51 +139,51 @@
 
         .header-badge {
             display: inline-block;
-            padding: 6px 16px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            border-radius: 20px;
-            font-size: 0.85rem;
+            padding: 8px 20px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 24px;
+            font-size: 0.8rem;
             font-weight: 600;
             margin-bottom: 20px;
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
             text-transform: uppercase;
+            color: var(--bg-white);
         }
 
         .header h1 {
             font-size: clamp(2.5rem, 5vw, 4rem);
             font-weight: 800;
-            background: linear-gradient(135deg, var(--text-white) 0%, #a0aec0 100%);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            margin-bottom: 15px;
-            text-shadow: 0 4px 30px rgba(102, 126, 234, 0.3);
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
         }
 
         .header p {
-            font-size: clamp(1rem, 2vw, 1.3rem);
+            font-size: clamp(1rem, 2vw, 1.15rem);
             color: var(--text-muted);
             font-weight: 400;
         }
 
         /* Video Section */
         .video-section {
-            margin-bottom: 50px;
+            margin-bottom: 60px;
         }
 
         .video-wrapper {
-            background: var(--glass-bg);
-            border-radius: 24px;
+            background: var(--bg-white);
+            border-radius: 20px;
             padding: 24px;
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-light);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
         }
 
         .video-wrapper:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 40px 100px rgba(102, 126, 234, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(14, 165, 233, 0.15);
         }
 
         .video-header {
@@ -127,41 +192,49 @@
             align-items: center;
             margin-bottom: 16px;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 16px;
         }
 
         .video-title {
             font-size: 1.1rem;
             font-weight: 600;
-            color: var(--text-white);
+            color: var(--text-primary);
         }
 
         .video-size-controls {
             display: flex;
-            gap: 8px;
+            gap: 16px;
             align-items: center;
         }
 
         .size-btn {
-            padding: 6px 14px;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid var(--glass-border);
-            border-radius: 8px;
+            padding: 8px 16px;
+            background: transparent;
+            border: 1px solid var(--border-light);
+            border-radius: 10px;
             color: var(--text-muted);
             font-size: 0.85rem;
             cursor: pointer;
             transition: all 0.2s ease;
+            font-weight: 500;
+        }
+
+        
+        .size-btn:focus {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
         }
 
         .size-btn:hover {
-            background: rgba(255, 255, 255, 0.12);
-            color: var(--text-white);
+            background: rgba(14, 165, 233, 0.05);
+            color: var(--primary);
+            border-color: var(--primary);
         }
 
         .size-btn.active {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            border-color: transparent;
-            color: var(--text-white);
+            background: var(--primary);
+            border-color: var(--primary);
+            color: var(--bg-white);
         }
 
         .video-container {
@@ -195,13 +268,13 @@
 
         /* Info Section */
         .info {
-            margin-bottom: 50px;
+            margin-bottom: 60px;
         }
 
         .info h2 {
             font-size: 2rem;
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
             background: linear-gradient(135deg, var(--text-white) 0%, #cbd5e1 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -211,22 +284,24 @@
         .info-items {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
+            gap: 16px;
         }
 
         .info-item {
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             align-items: flex-start;
             gap: 16px;
             padding: 24px;
-            background: var(--glass-bg);
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(10px);
             border-radius: 16px;
-            border: 1px solid var(--glass-border);
-            transition: all 0.3s ease;
+            border: 1px solid var(--border-light);
+            cursor: pointer;
         }
 
         .info-item:hover {
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.85);
             transform: translateY(-3px);
         }
 
@@ -240,7 +315,7 @@
             font-size: 1.1rem;
             font-weight: 600;
             margin-bottom: 6px;
-            color: var(--text-white);
+            color: var(--text-primary);
         }
 
         .info-content p {
@@ -251,14 +326,14 @@
 
         /* Tech Stack */
         .tech-stack {
-            margin-bottom: 50px;
+            margin-bottom: 60px;
         }
 
         .section-title {
             font-size: 1.75rem;
             text-align: center;
-            margin-bottom: 30px;
-            color: var(--text-white);
+            margin-bottom: 40px;
+            color: var(--text-primary);
         }
 
         .tech-grid {
@@ -268,17 +343,19 @@
         }
 
         .tech-item {
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
             padding: 20px;
-            background: var(--glass-bg);
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(10px);
             border-radius: 12px;
-            border: 1px solid var(--glass-border);
+            border: 1px solid var(--border-light);
             text-align: center;
-            transition: all 0.3s ease;
+            cursor: pointer;
         }
 
         .tech-item:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.85);
+            transform: translateY(-3px);
         }
 
         .tech-icon {
@@ -289,7 +366,7 @@
         .tech-name {
             font-size: 1rem;
             font-weight: 600;
-            color: var(--text-white);
+            color: var(--text-primary);
             margin-bottom: 4px;
         }
 
@@ -300,22 +377,24 @@
 
         /* Stats */
         .stats {
-            margin-bottom: 50px;
+            margin-bottom: 60px;
         }
 
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
+            gap: 16px;
         }
 
         .stat-card {
             padding: 24px;
-            background: linear-gradient(135deg, var(--glass-bg) 0%, rgba(102, 126, 234, 0.1) 100%);
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(10px);
             border-radius: 16px;
-            border: 1px solid var(--glass-border);
+            border: 1px solid var(--border-light);
             text-align: center;
-            transition: all 0.3s ease;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
         }
 
         .stat-card:hover {
@@ -342,21 +421,22 @@
 
         /* Features */
         .features {
-            margin-bottom: 50px;
+            margin-bottom: 60px;
         }
 
         .features-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
+            gap: 16px;
         }
 
         .feature {
             padding: 28px;
-            background: var(--glass-bg);
+            background: var(--bg-white);
             border-radius: 16px;
-            border: 1px solid var(--glass-border);
-            transition: all 0.3s ease;
+            border: 1px solid var(--border-light);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
         }
 
         .feature:hover {
@@ -374,7 +454,7 @@
             font-size: 1.15rem;
             font-weight: 600;
             margin-bottom: 10px;
-            color: var(--text-white);
+            color: var(--text-primary);
         }
 
         .feature p {
@@ -387,24 +467,30 @@
         .cta-section {
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 16px;
             flex-wrap: wrap;
-            margin-bottom: 40px;
+            margin-bottom: 60px;
         }
 
         .cta-btn {
             display: inline-flex;
             align-items: center;
-            gap: 10px;
+            gap: 16px;
             padding: 16px 32px;
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: var(--text-white);
+            color: var(--text-primary);
             text-decoration: none;
             border-radius: 50px;
             font-weight: 600;
             font-size: 1rem;
-            transition: all 0.3s ease;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
             box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        
+        .cta-btn:focus {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
         }
 
         .cta-btn:hover {
@@ -420,7 +506,7 @@
 
         .cta-btn.secondary:hover {
             background: var(--primary);
-            color: var(--text-white);
+            color: var(--text-primary);
         }
 
         /* Footer */
@@ -434,7 +520,7 @@
         .footer-links {
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 16px;
             flex-wrap: wrap;
             margin-bottom: 15px;
         }
@@ -465,7 +551,8 @@
         @media (max-width: 768px) {
             body {
                 padding: 15px;
-            }
+            line-height: 1.6;
+        }
 
             .header h1 {
                 font-size: 2rem;
@@ -483,7 +570,7 @@
 
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr);
-                gap: 15px;
+                gap: 16px;
             }
 
             .stat-value {
@@ -534,82 +621,26 @@
         /* AI Showcase Section Styles */
         .ai-showcase {
             margin: 60px 0;
+            padding: 50px;
+            background: var(--bg-white);
+            border-radius: 24px;
+            border: 1px solid var(--border-light);
             padding: 40px;
-            background: rgba(102, 126, 234, 0.1);
+            background: rgba(255, 255, 255, 0.65);
             border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--border-light);
+            backdrop-filter: blur(10px);
         }
 
         .ai-intro {
             text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .chat-interface {
-            max-width: 800px;
-            margin: 0 auto;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 16px;
-            padding: 20px;
-        }
-
-        .chat-messages {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            margin-bottom: 20px;
-        }
-
-        .ai-message, .user-message {
-            display: flex;
-            gap: 12px;
-            padding: 16px;
-            border-radius: 12px;
-        }
-
-        .ai-message {
-            background: rgba(102, 126, 234, 0.1);
-            align-self: flex-start;
-        }
-
-        .user-message {
-            background: rgba(255, 255, 255, 0.05);
-            align-self: flex-end;
-        }
-
-        .message-icon {
-            font-size: 2rem;
-            flex-shrink: 0;
-        }
-
-        .message-content p {
-            margin: 0;
-            color: #a0aec0;
-            line-height: 1.6;
-        }
-
-        .message-content strong {
-            color: #fff;
-        }
-
-        .typing-indicator {
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            border: 2px solid #667eea;
-            border-radius: 50%;
-            animation: typing 1.5s infinite;
-        }
-
-        @keyframes typing {
-            0%, 100% { transform: translateX(0); }
-            50% { transform: translateX(4px); }
+            margin-bottom: 60px;
         }
 
         .ai-capabilities {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
+            gap: 16px;
             margin-top: 30px;
         }
 
@@ -619,6 +650,7 @@
             border-radius: 16px;
             text-align: center;
             transition: all 0.3s;
+            cursor: pointer;
         }
 
         .capability-card:hover {
@@ -632,33 +664,23 @@
         }
 
         .capability-card h3 {
-            color: #667eea;
+            color: var(--primary);
             margin-bottom: 8px;
         }
 
-        .preset-questions {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
+        
 
-        .preset-question {
-            padding: 12px 24px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: var(--text-white);
-            text-decoration: none;
-            border-radius: 50px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            flex: 1;
-            font-size: 0.95rem;
+        
+
+        
+        .preset-question:focus {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
         }
 
         .preset-question:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 8px 24px rgba(14, 165, 233, 0.15);
         }
 
         .preset-question:active {
@@ -668,7 +690,7 @@
         }
 
         .capability-card p {
-            color: #a0aec0;
+            color: var(--text-muted);
             font-size: 0.9rem;
         }
 
@@ -679,11 +701,11 @@
             right: 20px;
             z-index: 1000;
             display: flex;
-            gap: 8px;
-            background: var(--glass-bg);
+            gap: 16px;
+            background: var(--bg-white);
             padding: 6px;
             border-radius: 30px;
-            border: 1px solid var(--glass-border);
+            border: 1px solid var(--border-light);
             backdrop-filter: blur(10px);
         }
 
@@ -701,12 +723,12 @@
 
         .lang-btn:hover {
             background: rgba(255, 255, 255, 0.1);
-            color: var(--text-white);
+            color: var(--text-primary);
         }
 
         .lang-btn.active {
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: var(--text-white);
+            color: var(--text-primary);
         }
 
         @media (max-width: 768px) {
@@ -724,14 +746,23 @@
         [data-i18n].hidden {
             display: none !important;
         }
-
-        /* Metaverse Preview Section */
+    </style>
+</head>
+<body>
+    <!-- Language Switcher -->
+    <div class="lang-switcher">
+        <button class="lang-btn active" onclick="setLanguage('cn')" data-lang="cn">中文</button>
+        <button class="lang-btn" onclick="setLanguage('en')" data-lang="en">EN</button>
+    </div>
 
     <div class="container">
         <!-- Header -->
         <div class="header">
             <div class="header-badge" data-i18n="badge">Open Source VR Platform</div>
-            <h1>🚀 TripMeta</h1>
+            <h1><span class="icon-inline"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 2L2 7l10 5 10-5 10 5-10-5L12 2z"/>
+        <path d="M4.5 13.5L12 21l7.5-7.5"/>
+    </svg></span> TripMeta</h1>
             <p data-i18n="tagline">AI-Powered Virtual Tourism Experience</p>
         </div>
 
@@ -739,7 +770,9 @@
         <div class="video-section">
             <div class="video-wrapper">
                 <div class="video-header">
-                    <span class="video-title" data-i18n="videoTitle">▶ VR Demo</span>
+                    <span data-i18n="videoTitle" class="video-title-with-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+        <polygon points="5,3 19,12 5,12 5,21,12,19 12,5,3"/>
+    </svg> VR Demo</span>
                     <div class="video-size-controls">
                         <button class="size-btn" onclick="setVideoSize('small')" data-size="small" data-i18n="sizeSmall">Small</button>
                         <button class="size-btn active" onclick="setVideoSize('medium')" data-size="medium" data-i18n="sizeMedium">Medium</button>
@@ -760,28 +793,43 @@
             <h2 data-i18n="infoTitle">Experience the Future of Tourism</h2>
             <div class="info-items">
                 <div class="info-item">
-                    <div class="info-icon">🤖</div>
+                    <div class="info-icon svg-icon" title="Azure Speech"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12,1 a3,3 0,0,0 -3,3 v4 a3,3 0,0,0 3,3 4,4 0,0,0 -3,-3 V4 a3,3 0,0,0 -3,-3 -3z"/>
+        <path d="M19 10 v2 a7,7 0,0,1 -7,7 h-4 a7,7 0,0,1 -7,-7 v-2"/>
+        <line x1="12" y1="19" x2="12" y2="23"/>
+    </svg></div>
                     <div class="info-content">
                         <h3 data-i18n="info1Title">AI Tour Guide</h3>
                         <p data-i18n="info1Desc">Intelligent conversation system powered by GPT with personalized attraction explanations</p>
                     </div>
                 </div>
                 <div class="info-item">
-                    <div class="info-icon">🥽</div>
+                    <div class="info-icon svg-icon" title="Immersive VR"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="3"/>
+        <path d="M12 1v6m0 6v6m-6-6h12"/>
+        <path d="M12 15l-4 4m4-4l4 4"/>
+    </svg></div>
                     <div class="info-content">
                         <h3 data-i18n="info2Title">Immersive VR</h3>
                         <p data-i18n="info2Desc">High-quality virtual tourism experience on PICO VR headsets with 90 FPS</p>
                     </div>
                 </div>
                 <div class="info-item">
-                    <div class="info-icon">🎯</div>
+                    <div class="info-icon svg-icon" title="Natural Interaction"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/>
+        <circle cx="12" cy="12" r="3"/>
+        <path d="M12 2v4m0 16v4"/>
+    </svg></div>
                     <div class="info-content">
                         <h3 data-i18n="info3Title">Natural Interaction</h3>
                         <p data-i18n="info3Desc">Voice dialogue, VR controller input, and spatial UI for intuitive control</p>
                     </div>
                 </div>
                 <div class="info-item">
-                    <div class="info-icon">📚</div>
+                    <div class="info-icon svg-icon" title="Rich Knowledge"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M4 19.5A2.5 2.5,0,0,1,6.5 17H20"/>
+        <path d="M6.5 2H11v6H6.5a2.5 2.5,0,0 0-2.5 2.5V11h11V4.5a2.5 2.5,0,0 0-2.5-2.5z"/>
+    </svg></div>
                     <div class="info-content">
                         <h3 data-i18n="info4Title">Rich Knowledge</h3>
                         <p data-i18n="info4Desc">Deep tourism knowledge with historical and cultural insights for each destination</p>
@@ -795,17 +843,30 @@
             <h2 class="section-title" data-i18n="techStackTitle">Technology Stack</h2>
             <div class="tech-grid">
                 <div class="tech-item">
-                    <div class="tech-icon">🎮</div>
+                    <div class="tech-icon svg-icon" title="Unity 2021.3"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="2" y="6" width="20" height="12" rx="2"/>
+        <circle cx="7" cy="12" r="1"/>
+        <circle cx="17" cy="12" r="1"/>
+        <path d="M7 12v2m10-2v2"/>
+    </svg></div>
                     <div class="tech-name">Unity 2021.3</div>
                     <div class="tech-desc">Game Engine & VR Framework</div>
                 </div>
                 <div class="tech-item">
-                    <div class="tech-icon">🥽</div>
+                    <div class="tech-icon svg-icon" title="Immersive VR"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="3"/>
+        <path d="M12 1v6m0 6v6m-6-6h12"/>
+        <path d="M12 15l-4 4m4-4l4 4"/>
+    </svg></div>
                     <div class="tech-name">PICO 4</div>
                     <div class="tech-desc">VR Headset Platform</div>
                 </div>
                 <div class="tech-item">
-                    <div class="tech-icon">🧠</div>
+                    <div class="tech-icon svg-icon" title="GPT-4"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M9.5 2A2.5 2.5,0,0,0,7 4.5v15a2.5 2.5,0,0,0,2.5-2.5h7a2.5 2.5,0,0,0,2.5 2.5v-15A2.5 2.5,0,0,0,14.5 2h-7z"/>
+        <path d="M9.5 7c0 1.4.6 2.5 2.5 2.5s2.5-1.1 2.5-2.5"/>
+        <path d="M14.5 7c0 1.4.6 2.5 2.5 2.5s2.5-1.1 2.5-2.5"/>
+    </svg></div>
                     <div class="tech-name">GPT-4</div>
                     <div class="tech-desc">AI Conversation Engine</div>
                 </div>
@@ -815,12 +876,17 @@
                     <div class="tech-desc">Voice Recognition & TTS</div>
                 </div>
                 <div class="tech-item">
-                    <div class="tech-icon">👁️</div>
+                    <div class="tech-icon svg-icon" title="Computer Vision"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M2,12 s3,-7 10,-7 10,7 10,7 -3,-7 -10,-7 -10,7z"/>
+        <circle cx="12" cy="12" r="3"/>
+    </svg></div>
                     <div class="tech-name">Computer Vision</div>
                     <div class="tech-desc">Object Detection & AR</div>
                 </div>
                 <div class="tech-item">
-                    <div class="tech-icon">⚡</div>
+                    <div class="tech-icon svg-icon" title="URP"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polygon points="13,2 3,14 12,22 14,11 22,11 12,13,2"/>
+    </svg></div>
                     <div class="tech-name">URP</div>
                     <div class="tech-desc">Universal Render Pipeline</div>
                 </div>
@@ -855,22 +921,37 @@
             <h2 class="section-title" data-i18n="featuresTitle">Key Features</h2>
             <div class="features-grid">
                 <div class="feature">
-                    <div class="feature-icon">🌍</div>
+                    <div class="feature-icon svg-icon" title="Virtual Attractions"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/>
+        <path d="M12 2a14.5 14.5,0,0 1,0,0v20a14.5 14.5,0,0 1-20 0"/>
+        <path d="M2 12h20"/>
+    </svg></div>
                     <h3 data-i18n="feature1Title">Virtual Attractions</h3>
                     <p data-i18n="feature1Desc">Explore worldwide destinations from home with photorealistic environments and detailed 3D models</p>
                 </div>
                 <div class="feature">
-                    <div class="feature-icon">💬</div>
+                    <div class="feature-icon svg-icon" title="Smart Conversations"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 15a2,2,0,0,1-2-2H7l-4 4V5a2,2,0,0,1 2-2h11a2,2,0,0,1,2,2z"/>
+        <path d="M3 7v6l6-3v-3"/>
+    </svg></div>
                     <h3 data-i18n="feature2Title">Smart Conversations</h3>
                     <p data-i18n="feature2Desc">Natural dialogue with AI tour guides that understand context and provide personalized responses</p>
                 </div>
                 <div class="feature">
-                    <div class="feature-icon">🎓</div>
+                    <div class="feature-icon svg-icon" title="Rich Knowledge"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 3l1.5 4.5M12 3l-1.5 4.5M12 3v6M12 21l-1.5-4.5M12 21l1.5-4.5M12 21v-6"/>
+        <path d="M4.5 9l4.5-1.5M9 4.5L7.5 9M4.5 15l4.5 1.5M9 19.5l-1.5-4.5M19.5 9l-4.5 1.5M15 4.5l1.5 4.5M19.5 15l-4.5-1.5M15 19.5l1.5-4.5"/>
+    </svg></div>
                     <h3 data-i18n="feature3Title">Rich Knowledge</h3>
                     <p data-i18n="feature3Desc">Deep historical and cultural insights with multimedia content including images and audio</p>
                 </div>
                 <div class="feature">
-                    <div class="feature-icon">🎮</div>
+                    <div class="feature-icon svg-icon" title="Unity 2021.3"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="2" y="6" width="20" height="12" rx="2"/>
+        <circle cx="7" cy="12" r="1"/>
+        <circle cx="17" cy="12" r="1"/>
+        <path d="M7 12v2m10-2v2"/>
+    </svg></div>
                     <h3 data-i18n="feature4Title">VR Interactions</h3>
                     <p data-i18n="feature4Desc">Intuitive controller input with haptic feedback and gesture recognition system</p>
                 </div>
@@ -879,90 +960,30 @@
 
         <!-- AI Showcase Section -->
         <div class="ai-showcase">
-            <h2 class="section-title" style="margin-bottom: 30px;" data-i18n="aiTitle">🤖 AI-Powered Experience</h2>
+            <h2 class="section-title" style="margin-bottom: 40px;" data-i18n="aiTitle"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="4" y="4" width="16" height="16" rx="2"/>
+        <path d="M9 9h6m-6 4h6m-6 4h6"/>
+    </svg> AI-Powered Experience</h2>
 
-            <div class="ai-intro" style="text-align: center; margin-bottom: 40px; max-width: 800px; margin-left: auto; margin-right: auto;">
-                <p style="color: #a0aec0; font-size: 1.1rem; line-height: 1.8;" data-i18n="aiIntro">
+            <div class="ai-intro" style="text-align: center; margin-bottom: 60px; max-width: 800px; margin-left: auto; margin-right: auto;">
+                <p style="color: var(--text-muted); font-size: 1.1rem; line-height: 1.8;" data-i18n="aiIntro">
                     Experience our intelligent tour guide system that combines natural language understanding with rich knowledge graphs
                 </p>
-            </div>
-
-            <!-- Interactive Demo -->
-            <div class="chat-interface">
-                <h3 style="text-align: center; color: #fff; margin-bottom: 20px;" data-i18n="aiChatTitle">💬 Try AI Tour Guide</h3>
-                <p style="text-align: center; color: #a0aec0; margin-bottom: 15px;" data-i18n="aiChatHint">Click a question below to see AI in action!</p>
-
-                <div class="preset-questions" style="display: flex; gap: 10px; justify-content: center; margin-bottom: 20px;">
-                    <button class="preset-question">📍 What's special here?</button>
-                    <button class="preset-question">🏛️ Tell me about the history</button>
-                    <button class="preset-question">🎨 Recommend nearby attractions</button>
-                    <button class="preset-question">💡 How do I get there?</button>
-                    <button class="preset-question">🌐 What's the weather like?</button>
-                </div>
-
-                <div class="chat-messages">
-                    <!-- AI Welcome Message -->
-                    <div class="ai-message">
-                        <div class="message-icon">🤖</div>
-                        <div class="message-content">
-                            <p>Hi! I'm your AI tour guide. Ask me anything about this virtual destination!</p>
-                            <p style="font-size: 0.9rem; color: #667eea;">Try asking:</p>
-                            <ul style="text-align: left; margin-top: 10px; color: #a0aec0;">
-                                <li>"What's special about this place?"</li>
-                                <li>"Tell me about the history"</li>
-                                <li>"Recommend nearby attractions"</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <!-- User Message Examples -->
-                    <div class="user-message">
-                        <div class="message-icon">👤</div>
-                        <div class="message-content">
-                            <p><strong>Question:</strong> What can you tell me about this place?</p>
-                        </div>
-                    </div>
-                    <div class="user-message">
-                        <div class="message-icon">👤</div>
-                        <div class="message-content">
-                            <p><strong>Question:</strong> What's the history here?</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- AI Capabilities Grid -->
-            <div class="ai-capabilities">
-                <div class="capability-card">
-                    <div class="capability-icon">💬</div>
-                    <h3>Natural Language</h3>
-                    <p>Understands context and provides relevant, personalized responses</p>
-                </div>
-                <div class="capability-card">
-                    <div class="capability-icon">🧠</div>
-                    <h3>Knowledge Graph</h3>
-                    <p>Rich database of historical facts, cultural insights, and travel tips</p>
-                </div>
-                <div class="capability-card">
-                    <div class="capability-icon">🎯</div>
-                    <h3>Voice Interaction</h3>
-                    <p>Natural speech input with AI-powered conversation</p>
-                </div>
-                <div class="capability-card">
-                    <div class="capability-icon">🌐</div>
-                    <h3>Multi-Language</h3>
-                    <p>Support for English, Chinese, Japanese, and more with real-time translation</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- CTA -->
+            </div><!-- CTA -->
         <div class="cta-section">
             <a href="https://github.com/trip-meta/TripMeta" target="_blank" class="cta-btn">
-                ⭐ Star on GitHub
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+        <polygon points="12,2 15.09,8.26 22,9.27 17,14.18 17,17 17,17 14,18 22,9.27 15.09,8.26 12,2"/>
+    </svg> Star on GitHub
             </a>
             <a href="https://github.com/trip-meta/TripMeta/blob/main/docs/ARCHITECTURE.md" target="_blank" class="cta-btn secondary">
-                📖 View Architecture
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M14 2H6a2,2,0,0,0-2 2v16a2,2,0,0,0,2,2h12a2,2,0,0,0 2-2V8z"/>
+        <polyline points="14,2 14,8 22,8"/>
+        <line x1="16" y1="13" x2="8" y2="13"/>
+        <line x1="16" y1="17" x2="8" y2="17"/>
+        <line x1="16" y1="9" x2="8" y2="9"/>
+    </svg> View Architecture
             </a>
         </div>
 
@@ -1013,15 +1034,21 @@
                 feature3Desc: "Deep historical and cultural insights with multimedia content including images and audio",
                 feature4Title: "VR Interactions",
                 feature4Desc: "Intuitive controller input with haptic feedback and gesture recognition system",
-                aiTitle: "🤖 AI-Powered Experience",
+                aiTitle: '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="4" y="4" width="16" height="16" rx="2"/>
+        <path d="M9 9h6m-6 4h6m-6 4h6"/>
+    </svg> AI-Powered Experience',
                 aiIntro: "Experience our intelligent tour guide system that combines natural language understanding with rich knowledge graphs",
-                aiChatTitle: "💬 Try AI Tour Guide",
+                aiChatTitle: "<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 15a2,2,0,0,1-2-2H7l-4 4V5a2,2,0,0,1 2-2h11a2,2,0,0,1,2,2z"/>
+        <path d="M3 7v6l6-3v-3"/>
+    </svg> Try AI Tour Guide",
                 aiChatHint: "Click a question below to see AI in action!",
-                question1: "📍 What's special here?",
-                question2: "🏛️ Tell me about history",
-                question3: "🎨 Recommend nearby attractions",
-                question4: "💡 How do I get there?",
-                question5: "🌐 What's the weather like?",
+                question1: "What's special here?",
+                question2: "Tell me about history",
+                question3: "Recommend nearby attractions",
+                question4: "How do I get there?",
+                question5: "What's the weather like?",
                 aiWelcome: "Hi! I'm your AI tour guide. Ask me anything about this virtual destination!",
                 aiTryAsking: "Try asking:",
                 aiTry1: "\"What's special about this place?\"",
@@ -1036,14 +1063,22 @@
                 cap3Desc: "Natural speech input with AI-powered conversation",
                 cap4Title: "Multi-Language",
                 cap4Desc: "Support for English, Chinese, Japanese, and more with real-time translation",
-                cta1: "⭐ Star on GitHub",
-                cta2: "📖 View Architecture",
+                cta1: "<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+        <polygon points="12,2 15.09,8.26 22,9.27 17,14.18 17,17 17,17 14,18 22,9.27 15.09,8.26 12,2"/>
+    </svg> Star on GitHub",
+                cta2: "<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M14 2H6a2,2,0,0,0-2 2v16a2,2,0,0,0,2,2h12a2,2,0,0,0 2-2V8z"/>
+        <polyline points="14,2 14,8 22,8"/>
+        <line x1="16" y1="13" x2="8" y2="13"/>
+        <line x1="16" y1="17" x2="8" y2="17"/>
+        <line x1="16" y1="9" x2="8" y2="9"/>
+    </svg> View Architecture",
                 footer1: "GitHub",
                 footer2: "Documentation",
                 footer3: "Report Issue",
                 copyright: "© 2025 TripMeta. MIT License. Built with ❤️ by open-source community."
             },
-            zh: {
+            cn: {
                 badge: "开源VR平台",
                 tagline: "AI驱动的虚拟旅游体验",
                 videoTitle: "▶ VR演示",
@@ -1074,25 +1109,19 @@
                 feature3Desc: "包含图片和音频的深度历史和文化见解",
                 feature4Title: "VR交互",
                 feature4Desc: "直观的控制器输入，具有触觉反馈和手势识别系统",
-                aiTitle: "🤖 AI驱动的体验",
+                aiTitle: "AI驱动的体验",
                 aiIntro: "体验我们智能导游系统，结合自然语言理解和丰富的知识图谱",
                 aiChatTitle: "💬 试用AI导游",
                 aiChatHint: "点击下方问题查看AI的实际效果！",
-                question1: "📍 这里有什么特别的？",
-                question2: "🏛️ 讲讲历史",
-                question3: "🎨 推荐附近景点",
-                question4: "💡 我怎么去那里？",
-                question5: "🌐 天气怎么样？",
-                aiWelcome: "你好！我是你的AI导游。问我关于这个虚拟目的地的任何问题！",
-                aiTryAsking: "试试问：",
-                aiTry1: "\"这里有什么特别的？\"",
-                aiTry2: "\"讲讲历史\"",
-                aiTry3: "\"推荐附近的景点\"",
+                question1: "这里有什么特别的？",
+                question2: "讲讲历史",
+                question3: "推荐附近景点",
+                question4: "我怎么去那里？",
+                question5: "今天天气怎么样？",
                 questionLabel: "问题：",
                 cap1Title: "自然语言理解",
                 cap1Desc: "理解上下文并提供相关、个性化的响应",
                 cap2Title: "知识图谱",
-                cap2Desc: "包含历史事实、文化见解和旅行贴士的丰富数据库",
                 cap3Title: "语音交互",
                 cap3Desc: "自然语音输入和AI驱动的对话",
                 cap4Title: "多语言支持",
@@ -1101,19 +1130,8 @@
                 cta2: "📖 查看架构文档",
                 footer1: "GitHub",
                 footer2: "文档",
-                footer3: "Report Issue",
-                copyright: "© 2025 TripMeta. MIT License. Built with ❤️ by open-source community.",
-                // Metaverse translations
-                metaverseBadge: "Coming Soon",
-                metaverseTitle: "🤖 AI NPC Metaverse Tourism Platform",
-                metaverseDesc: "Chat with intelligent AI NPCs in the metaverse, get personalized travel guides, deep cultural insights, and real social experiences. This is not traditional VR tourism — this is a **living metaverse**.",
-                npcHistorian: "Historian",
-                npcFood: "Food Guide",
-                npcCulture: "Culture Expert",
-                npcTransport: "Transport Advisor",
-                npcPhoto: "Photographer",
-                npcStay: "Accommodation",
-                metaverseCta: "🚀 Explore AI NPC Metaverse"
+                footer3: "反馈问题",
+                copyright: "© 2025 TripMeta. MIT许可证。 由开源社区用❤️构建。"
             },
             zh: {
                 badge: "开源VR平台",
@@ -1146,7 +1164,9 @@
                 feature3Desc: "包含图片和音频的深度历史和文化见解",
                 feature4Title: "VR交互",
                 feature4Desc: "直观的控制器输入，具有触觉反馈和手势识别系统",
-                aiTitle: "🤖 AI驱动的体验",
+                aiTitle: "AI驱动的体验",
+                badge: "开源VR平台",
+                tagline: "AI驱动的虚拟旅游体验",
                 aiIntro: "体验我们智能导游系统，结合自然语言理解和丰富的知识图谱",
                 aiChatTitle: "💬 试用AI导游",
                 aiChatHint: "点击下方问题查看AI的实际效果！",
@@ -1174,18 +1194,7 @@
                 footer1: "GitHub",
                 footer2: "文档",
                 footer3: "反馈问题",
-                copyright: "© 2025 TripMeta. MIT许可证. 由开源社区用❤️构建.",
-                // Metaverse translations
-                metaverseBadge: "即将推出",
-                metaverseTitle: "🤖 AI NPC 元宇宙旅游平台",
-                metaverseDesc: "在虚拟世界中与智能AI NPC对话，获取个性化旅游攻略、深度文化讲解和真实社交体验。这不仅是传统VR旅游——这是**活的元宇宙**。",
-                npcHistorian: "历史学家",
-                npcFood: "美食向导",
-                npcCulture: "文化专家",
-                npcTransport: "交通顾问",
-                npcPhoto: "摄影师NPC",
-                npcStay: "住宿推荐",
-                metaverseCta: "🚀 探索AI NPC元宇宙"
+                copyright: "© 2025 TripMeta. MIT许可证. 由开源社区用❤️构建。"
             }
         };
 
@@ -1194,13 +1203,85 @@
 
         // Language switcher function
         function setLanguage(lang) {
+            console.log('[DEBUG] setLanguage called with:', lang);
             currentLang = lang;
             localStorage.setItem('language', lang);
+            console.log('[DEBUG] Updated currentLang to:', currentLang);
+
+            // Apply cn translations
+            if (lang === 'cn') {
+                const cnTranslations = {
+                    badge: "开源VR平台",
+                    tagline: "AI驱动的虚拟旅游体验",
+                    videoTitle: "▶ VR演示",
+                    sizeSmall: "小",
+                    sizeMedium: "中",
+                    sizeLarge: "大",
+                    infoTitle: "体验旅游的未来",
+                    info1Title: "AI导游",
+                    info1Desc: "由GPT驱动的智能对话系统，提供个性化的景点讲解",
+                    info2Title: "沉浸式VR",
+                    info2Desc: "在PICO VR头显上体验高质量虚拟旅游，帧率达90FPS",
+                    info3Title: "自然交互",
+                    info3Desc: "语音对话、VR控制器输入和直观的空间UI控制",
+                    info4Title: "丰富知识",
+                    info4Desc: "深厚的旅游知识，为每个目的地提供历史和文化见解",
+                    techStackTitle: "技术栈",
+                    statsTitle: "项目指标",
+                    stat1Label: "目标帧率",
+                    stat2Label: "毫秒延迟",
+                    stat3Label: "AI服务",
+                    stat4Label: "支持语言",
+                    featuresTitle: "核心功能",
+                    feature1Title: "翻译题",
+                    feature1Desc: "在家探索世界各地的目的地，具有逼真的环境和精细的3D模型",
+                    feature2Title: "智能对话",
+                    feature2Desc: "与AI导游进行自然对话，理解上下文并提供个性化响应",
+                    feature3Title: "丰富知识",
+                    feature3Desc: "包含图片和音频的深度历史和文化见解",
+                    feature4Title: "VR交互",
+                    feature4Desc: "直观的控制器输入，具有触觉反馈和手势识别系统",
+                    aiTitle: "AI驱动的体验",
+                    aiIntro: "体验我们智能导游系统，结合自然语言理解和丰富的知识图谱",
+                    aiChatTitle: "💬 试用AI导游",
+                    aiChatHint: "点击下方问题查看AI的实际效果！",
+                    question1: "这里有什么特别的？",
+                    question2: "讲讲历史",
+                    question3: "推荐附近景点",
+                    question4: "我怎么去那里？",
+                    question5: "今天天气怎么样？",
+                    questionLabel: "问题：",
+                    cap1Title: "自然语言理解",
+                    cap1Desc: "理解上下文并提供相关、个性化的响应",
+                    cap2Title: "知识图谱",
+                    cap3Title: "语音交互",
+                    cap3Desc: "自然语音输入和AI驱动的对话",
+                    cap4Title: "多语言支持",
+                    cap4Desc: "支持英语、中文、日语等多种语言的实时翻译",
+                    cta1: "⭐ 在GitHub上加星标",
+                    cta2: "📖 查看架构文档",
+                    footer1: "GitHub",
+                    footer2: "文档",
+                    footer3: "反馈问题",
+                    copyright: "© 2025 TripMeta. MIT许可证。 由开源社区用❤️构建。"
+                };
+
+                document.querySelectorAll('[data-i18n]').forEach(el => {
+                    const key = el.getAttribute('data-i18n');
+                    if (cnTranslations[key]) {
+                        el.textContent = cnTranslations[key];
+                    }
+                });
+            }
 
             // Update language buttons
-            document.querySelectorAll('.lang-btn').forEach(btn => {
+            const langButtons = document.querySelectorAll('.lang-btn');
+            console.log('[DEBUG] Found language buttons:', langButtons.length);
+            langButtons.forEach(btn => {
+                console.log('[DEBUG] Button data-lang:', btn.dataset.lang, 'Target lang:', lang);
                 btn.classList.remove('active');
                 if (btn.dataset.lang === lang) {
+                    console.log('[DEBUG] Setting active on button');
                     btn.classList.add('active');
                 }
             });
@@ -1244,13 +1325,19 @@
 
         // Load saved preferences
         document.addEventListener('DOMContentLoaded', () => {
+            console.log('[DEBUG] Page loaded, initializing...');
+
             // Load video size preference
             const savedSize = localStorage.getItem('videoSize') || 'medium';
             setVideoSize(savedSize);
 
             // Load language preference
             const savedLang = localStorage.getItem('language') || 'en';
+            console.log('[DEBUG] Loading language preference:', savedLang);
             setLanguage(savedLang);
+
+            console.log('[DEBUG] Language buttons found:', document.querySelectorAll('.lang-btn').length);
+            console.log('[DEBUG] Current language:', currentLang);
         });
 
         // Video event tracking
@@ -1280,7 +1367,10 @@
 
             const icon = document.createElement('div');
             icon.className = 'message-icon';
-            icon.textContent = isUser ? '👤' : '🤖';
+            icon.textContent = isUser ? '👤' : '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="4" y="4" width="16" height="16" rx="2"/>
+        <path d="M9 9h6m-6 4h6m-6 4h6"/>
+    </svg>';
 
             const contentDiv = document.createElement('div');
             contentDiv.className = 'message-content';
