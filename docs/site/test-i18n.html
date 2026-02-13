@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Language Switch Test</title>
+    <style>
+        body {
+            font-family: system-ui, sans-serif;
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #0f172a;
+            color: #e2e8f0;
+        }
+        h1 { color: #667eea; margin-bottom: 20px; }
+        .test-item {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.05);
+        }
+        .pass { border-left: 4px solid #22c55e; }
+        .fail { border-left: 4px solid #ef4444; }
+        .status { font-weight: bold; }
+        .pass .status { color: #22c55e; }
+        .fail .status { color: #ef4444; }
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            margin: 5px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Language Switch Test</h1>
+    <div id="results"></div>
+    <div style="margin-top: 30px;">
+        <a href="index.html" class="btn">Back to Demo Site</a>
+    </div>
+
+    <script>
+        const tests = [
+            {
+                name: 'Language switcher present',
+                test: () => document.querySelector('.lang-switcher') !== null,
+            },
+            {
+                name: 'setLanguage function exists',
+                test: () => typeof setLanguage === 'function',
+            },
+            {
+                name: 'translations object exists',
+                test: () => typeof translations === 'object',
+            },
+            {
+                name: 'data-i18n attributes present',
+                test: () => document.querySelectorAll('[data-i18n]').length > 0,
+            },
+            {
+                name: 'Language buttons clickable',
+                test: () => document.querySelectorAll('.lang-btn').length === 2,
+            }
+        ];
+
+        async function runTests() {
+            const results = document.getElementById('results');
+
+            for (const t of tests) {
+                let passed;
+                try {
+                    const result = t.test();
+                    passed = result === true || result > 0;
+                } catch (e) {
+                    passed = false;
+                }
+
+                const div = document.createElement('div');
+                div.className = `test-item ${passed ? 'pass' : 'fail'}`;
+                div.innerHTML = `
+                    <span class="status">${passed ? 'PASS' : 'FAIL'}</span>
+                    ${t.name}
+                `;
+                results.appendChild(div);
+            }
+        }
+
+        runTests();
+    </script>
+</body>
+</html>
