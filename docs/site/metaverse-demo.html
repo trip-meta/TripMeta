@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TripMeta - AI NPC Metaverse Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0a0f;
+            color: #ffffff;
+            overflow: hidden;
+        }
+
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: 1;
+        }
+
+        #three-canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        /* Loading Screen */
+        #loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            transition: opacity 0.5s ease;
+        }
+
+        #loading.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loader {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(102, 126, 234, 0.3);
+            border-top-color: #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            margin-top: 20px;
+            font-size: 1.2rem;
+            color: #a0aec0;
+        }
+
+        /* UI Overlay */
+        #ui-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        .header-ui {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 200;
+            pointer-events: auto;
+        }
+
+        .logo {
+            background: rgba(102, 126, 234, 0.2);
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
+        }
+
+        /* Instructions */
+        .instructions {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px 40px;
+            border-radius: 20px;
+            text-align: center;
+            z-index: 200;
+            backdrop-filter: blur(10px);
+        }
+
+        .instructions h3 {
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .key-hint {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 10px 0;
+            font-size: 0.9rem;
+            color: #a0aec0;
+        }
+
+        .key {
+            display: inline-block;
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            font-family: monospace;
+            border: 1px solid rgba(102, 126, 234, 0.3);
+        }
+
+        /* NPC Name Tag */
+        .npc-name {
+            position: fixed;
+            top: 100px;
+            left: 20px;
+            background: rgba(102, 126, 234, 0.3);
+            padding: 15px 25px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            z-index: 150;
+            backdrop-filter: blur(10px);
+            border-left: 4px solid #667eea;
+        }
+
+        /* Speech Bubble */
+        .speech-bubble {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.85);
+            padding: 20px;
+            border-radius: 20px;
+            max-width: 300px;
+            pointer-events: none;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+
+        .speech-bubble.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .speech-bubble .npc-name {
+            font-size: 0.85rem;
+            color: #667eea;
+            margin-bottom: 8px;
+        }
+
+        .speech-bubble p {
+            margin: 0;
+            color: #fff;
+            line-height: 1.5;
+        }
+
+        .speech-bubble .typing {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: #667eea;
+            border-radius: 50%;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            25%, 75% { opacity: 0; }
+        }
+
+        /* Status indicators */
+        .status-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: rgba(102, 126, 234, 0.3);
+            z-index: 300;
+        }
+
+        .status-progress {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.3s ease;
+        }
+
+        /* Controls */
+        .controls-hint {
+            position: fixed;
+            right: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(102, 126, 234, 0.2);
+            padding: 15px 25px;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            color: #a0aec0;
+            z-index: 150;
+            backdrop-filter: blur(10px);
+        }
+
+        .controls-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .control-key {
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .control-key span {
+            display: block;
+            font-size: 0.7rem;
+            color: #a0aec0;
+        }
+
+        /* Language Switcher */
+        .lang-switcher {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 500;
+            display: flex;
+            gap: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 8px 16px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .lang-btn {
+            padding: 8px 16px;
+            background: rgba(102, 126, 234, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            color: #fff;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .lang-btn:hover {
+            background: rgba(102, 126, 234, 0.4);
+            transform: scale(1.05);
+        }
+
+        .lang-btn.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-color: transparent;
+        }
+
+            @media (max-width: 768px) {
+            .lang-switcher {
+                top: 10px;
+                right: 10px;
+            }
+            .lang-btn {
+                padding: 6px 12px;
+                font-size: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading">
+        <div class="loader"></div>
+        <div class="loading-text" data-i18n="loading">Loading Metaverse...</div>
+    </div>
+
+    <!-- Language Switcher -->
+    <div class="lang-switcher">
+        <button class="lang-btn active" data-lang="en" onclick="setLanguage('en')">EN</button>
+        <button class="lang-btn" data-lang="zh" onclick="setLanguage('zh')">中文</button>
+    </div>
+
+    <!-- 3D Canvas Container -->
+    <div id="canvas-container">
+        <canvas id="three-canvas"></canvas>
+    </div>
+
+    <!-- UI Overlay -->
+    <div id="ui-overlay">
+        <!-- Header -->
+        <div class="header-ui">
+            <div class="logo">🤖 TripMeta</div>
+            <a href="index.html" class="back-btn" data-i18n="backBtn">← 返回主页</a>
+        </div>
+
+        <!-- NPC Name Tag -->
+        <div class="npc-name">
+            <span id="npc-name-display" style="color: #667eea;">历史学家 皮埃尔</span>
+        </div>
+
+        <!-- Instructions -->
+        <div class="instructions">
+            <h3 data-i18n="instructions">探索方式</h3>
+            <div class="key-hint">
+                <div class="key">W</div>
+                <span data-i18n="moveForward">前进</span>
+            </div>
+            <div class="key-hint">
+                <div class="key">S</div>
+                <span data-i18n="moveBackward">后退</span>
+            </div>
+            <div class="key-hint">
+                <div class="key">A</div>
+                <span data-i18n="moveLeft">左移</span>
+            </div>
+            <div class="key-hint">
+                <div class="key">D</div>
+                <span data-i18n="moveRight">右移</span>
+            </div>
+            <div class="key-hint">
+                <div class="key">SPACE</div>
+                <span data-i18n="interact">交互</span>
+            </div>
+        </div>
+
+        <!-- Controls Hint -->
+        <div class="controls-hint">
+            <div data-i18n="controlsTitle">视角控制</div>
+            <div class="controls-grid">
+                <div class="control-key"><div>↑</div><span data-i18n="lookUp">上视</span></div>
+                <div class="control-key"><div>↓</div><span data-i18n="lookDown">下视</span></div>
+                <div class="control-key"><div>←</div><span data-i18n="lookLeft">左视</span></div>
+                <div class="control-key"><div>→</div><span data-i18n="lookRight">右视</span></div>
+                <div class="control-key"><div>🖱️</div><span data-i18n="dragView">拖动旋转</span></div>
+            </div>
+        </div>
+
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <div class="status-progress" id="status-progress" style="width: 0%;"></div>
+        </div>
+    </div>
+
+    <!-- Speech Bubble Container -->
+    <div class="speech-bubble" id="speech-bubble">
+        <div class="npc-name" data-i18n="npcName">NPC名称</div>
+        <p id="speech-text">
+            <span class="typing"></span>
+        </p>
+    </div>
+
+    <!-- Three.js (from CDN for standalone usage) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <script>
+        // ===== CONFIGURATION =====
+        const CONFIG = {
+            moveSpeed: 0.15,
+            rotationSpeed: 0.03,
+            npcWalkRadius: 8,
+            npcTalkRadius: 5,
+            cameraSensitivity: 0.002
+        };
+
+        // ===== TRANSLATIONS WITH FULL MESSAGES =====
+        const translations = {
+            en: {
+                loading: "Loading Metaverse...",
+                backBtn: "← Back to Home",
+                instructions: "Exploration",
+                moveForward: "Move Forward",
+                moveBackward: "Move Backward",
+                moveLeft: "Move Left",
+                moveRight: "Move Right",
+                interact: "Interact",
+                controlsTitle: "Camera Controls",
+                lookUp: "Look Up",
+                lookDown: "Look Down",
+                lookLeft: "Look Left",
+                lookRight: "Look Right",
+                dragView: "Drag to Rotate"
+                npcName: "Historian Pierre",
+                welcome: "Welcome to TripMeta Metaverse! Use WASD to walk, Mouse to look around."
+            },
+            zh: {
+                loading: "正在加载元宇宙...",
+                backBtn: "← 返回主页",
+                instructions: "探索方式",
+                moveForward: "前进",
+                moveBackward: "后退",
+                moveLeft: "左移",
+                moveRight: "右移",
+                interact: "交互",
+                controlsTitle: "视角控制",
+                lookUp: "上视",
+                lookDown: "下视",
+                lookLeft: "左视",
+                lookRight: "右视",
+                dragView: "拖动旋转",
+                npcName: "历史学家 皮埃尔",
+                welcome: "欢迎来到TripMeta元宇宙！使用WASD移动，鼠标环顾四周。"
+            }
+        };
+
+        let currentLang = localStorage.getItem('language') || 'en';
+        function t(key) {
+            return translations[currentLang][key] || translations['en'][key];
+        }
+
+        // Apply translations
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            el.textContent = t(key);
+        });
+
+        // ===== THREE.JS SETUP =====
+        let scene, camera, renderer;
+        let player, playerVelocity;
+        let npcs = [];
+        let clock, delta;
+        let moveForward = false, moveBackward = false, moveLeft = false, moveRight = false;
+        let yaw = 0, pitch = 0;
+        let isPointerLocked = false;
+
+        // ===== INITIALIZATION =====
+        function init() {
+            // Scene
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x1a1a2e);
+            scene.fog = new THREE.Fog(0x1a1a2e, 50, 200);
+
+            // Camera
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(0, 1.7, 5);
+
+            // Renderer
+            renderer = new THREE.WebGLRenderer({
+                canvas: document.getElementById('three-canvas'),
+                antialias: true
+            });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.shadowMap.enabled = true;
+
+            // Lighting
+            const ambientLight = new THREE.AmbientLight(0x404040, 0.5);
+            scene.add(ambientLight);
+
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight.position.set(50, 50, 50);
+            directionalLight.castShadow = true;
+            scene.add(directionalLight);
+
+            const hemisphereLight = new THREE.HemisphereLight(0x606080, 0x404040, 0.5);
+            scene.add(hemisphereLight);
+
+            // Ground
+            const groundGeometry = new THREE.PlaneGeometry(200, 200);
+            const groundMaterial = new THREE.MeshStandardMaterial({
+                color: 0x1a5f3c,
+                roughness: 0.8,
+                metalness: 0.2
+            });
+            const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+            ground.rotation.x = -Math.PI / 2;
+            ground.position.y = -0.01;
+            ground.receiveShadow = true;
+            scene.add(ground);
+
+            // Create environment
+            createEnvironment();
+
+            // Create NPCs
+            createNPCs();
+
+            // Player
+            createPlayer();
+
+            // Event Listeners
+            setupEventListeners();
+
+            // Start animation
+            clock = new THREE.Clock();
+
+            // Hide loading
+            setTimeout(() => {
+                document.getElementById('loading').classList.add('hidden');
+                showWelcomeMessage();
+            }, 2000);
+        }
+
+        function createEnvironment() {
+            // Create simple buildings/structures
+            const buildingPositions = [
+                { x: -30, z: -30, color: 0x2d5a27 },
+                { x: 30, z: -30, color: 0x3d5a27 },
+                { x: -30, z: 30, color: 0x5a8f7c },
+                { x: 30, z: 30, color: 0x7c8fa8 }
+            ];
+
+            buildingPositions.forEach(pos => {
+                const height = 8 + Math.random() * 6;
+                const geometry = new THREE.BoxGeometry(8, height, 8);
+                const material = new THREE.MeshStandardMaterial({
+                    color: pos.color,
+                    roughness: 0.7,
+                    metalness: 0.3
+                });
+                const building = new THREE.Mesh(geometry, material);
+                building.position.set(pos.x, height / 2, pos.z);
+                building.castShadow = true;
+                building.receiveShadow = true;
+                scene.add(building);
+
+                // Add windows (emissive)
+                const windowGeometry = new THREE.PlaneGeometry(1.5, 2);
+                const windowMaterial = new THREE.MeshBasicMaterial({
+                    color: 0xffff88
+                });
+                const window = new THREE.Mesh(windowGeometry, windowMaterial);
+                window.position.set(0, height / 2 + 1, 4.01);
+                building.add(window);
+            });
+        }
+
+        // Simple NPC creation with walking animation
+        function createNPCs() {
+            const npcData = [
+                {
+                    name: "历史学家 皮埃尔",
+                    position: { x: -15, y: 0, z: -15 },
+                    color: 0xe74c3c,
+                    role: "historian"
+                },
+                {
+                    name: "美食向导 樱花",
+                    position: { x: 15, y: 0, z: -15 },
+                    color: 0xf59e0b,
+                    role: "food"
+                },
+                {
+                    name: "文化专家 千代子",
+                    position: { x: -15, y: 0, z: 15 },
+                    color: 0x8b5cf6,
+                    role: "culture"
+                },
+                {
+                    name: "交通顾问 田中",
+                    position: { x: 15, y: 0, z: 15 },
+                    color: 0x06b6d4,
+                    role: "transport"
+                }
+            ];
+
+            npcData.forEach((data, index) => {
+                const npc = createSimpleNPC(data, index);
+                npcs.push(npc);
+                scene.add(npc);
+            });
+        }
+
+        function createSimpleNPC(data, index) {
+            const group = new THREE.Group();
+            group.position.set(data.position.x, data.position.y, data.position.z);
+
+            // Body
+            const bodyGeometry = new THREE.CapsuleGeometry(0.5, 1.2, 0.5);
+            const bodyMaterial = new THREE.MeshStandardMaterial({
+                color: data.color,
+                roughness: 0.5
+            });
+            const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
+            body.position.y = 0.6;
+            body.castShadow = true;
+            group.add(body);
+
+            // Head
+            const headGeometry = new THREE.SphereGeometry(0.4, 16, 16);
+            const headMaterial = new THREE.MeshStandardMaterial({
+                color: data.color,
+                roughness: 0.3
+            });
+            const head = new THREE.Mesh(headGeometry, headMaterial);
+            head.position.y = 1.4;
+            head.castShadow = true;
+            group.add(head);
+
+            // Floating icon above head
+            const iconCanvas = document.createElement('canvas');
+            iconCanvas.width = 64;
+            iconCanvas.height = 64;
+            const iconCtx = iconCanvas.getContext('2d');
+
+            const icons = ['🏛️', '🍜️', '🎨', '🚌'];
+            const icon = icons[index % icons.length];
+            iconCtx.font = '32px Arial';
+            iconCtx.textAlign = 'center';
+            iconCtx.fillText(icon, 32, 40);
+
+            const iconTexture = new THREE.CanvasTexture(iconCanvas);
+            const iconGeometry = new THREE.PlaneGeometry(1, 1);
+            const iconMaterial = new THREE.MeshBasicMaterial({
+                map: iconTexture,
+                transparent: true,
+                side: THREE.DoubleSide
+            });
+            const iconMesh = new THREE.Mesh(iconGeometry, iconMaterial);
+            iconMesh.position.set(0, 2.2, 0.5);
+            iconMesh.rotation.x = Math.PI; // Face player
+            group.add(iconMesh);
+
+            // Speech bubble
+            const speechGeometry = new THREE.PlaneGeometry(2, 1);
+            const speechMaterial = new THREE.MeshBasicMaterial({
+                color: 0x000000,
+                transparent: true,
+                opacity: 0.7,
+                side: THREE.DoubleSide
+            });
+            const speech = new THREE.Mesh(speechGeometry, speechMaterial);
+            speech.position.set(0, 2.5, 0.6);
+            speech.rotation.x = Math.PI;
+            speech.visible = false;
+            group.add(speech);
+
+            group.userData = {
+                ...data,
+                speechBubble: speech,
+                speechMesh: speech
+            };
+
+            return group;
+        }
+
+        function createPlayer() {
+            const geometry = new THREE.CapsuleGeometry(0.5, 1, 0.5);
+            const material = new THREE.MeshStandardMaterial({
+                color: 0x667eea,
+                roughness: 0.3,
+                emissive: 0x333333,
+                emissiveIntensity: 0.2
+            });
+            player = new THREE.Mesh(geometry, material);
+            player.position.set(0, 1, 0);
+            player.castShadow = true;
+            scene.add(player);
+
+            playerVelocity = new THREE.Vector3();
+        }
+
+        function setupEventListeners() {
+            // Keyboard
+            document.addEventListener('keydown', onKeyDown);
+            document.addEventListener('keyup', onKeyUp);
+
+            // Mouse for camera
+            document.addEventListener('mousemove', onMouseMove);
+            document.addEventListener('click', onMouseClick);
+
+            // Pointer lock
+            const canvas = document.getElementById('three-canvas');
+            canvas.addEventListener('click', requestPointerLock);
+            document.addEventListener('pointerlockchange', onPointerLockChange);
+
+            // Resize
+            window.addEventListener('resize', onWindowResize);
+        }
+
+        function requestPointerLock() {
+            const canvas = document.getElementById('three-canvas');
+            canvas.requestPointerLock();
+        }
+
+        function onPointerLockChange(e) {
+            isPointerLocked = (document.pointerLockElement === document.getElementById('three-canvas'));
+        }
+
+        function onKeyDown(e) {
+            switch(e.code) {
+                case 'KeyW': moveForward = true; break;
+                case 'KeyS': moveBackward = true; break;
+                case 'KeyA': moveLeft = true; break;
+                case 'KeyD': moveRight = true; break;
+                case 'Space':
+                    e.preventDefault();
+                    interactWithNearbyNPC();
+                    break;
+            }
+        }
+
+        function onKeyUp(e) {
+            switch(e.code) {
+                case 'KeyW': moveForward = false; break;
+                case 'KeyS': moveBackward = false; break;
+                case 'KeyA': moveLeft = false; break;
+                case 'KeyD': moveRight = false; break;
+            }
+        }
+
+        let mouseX = 0, mouseY = 0;
+        function onMouseMove(e) {
+            if (!isPointerLocked) return;
+
+            mouseX = e.movementX * CONFIG.cameraSensitivity;
+            mouseY = e.movementY * CONFIG.cameraSensitivity;
+        }
+
+        function onMouseClick() {
+            if (!isPointerLocked) {
+                requestPointerLock();
+            }
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        function interactWithNearbyNPC() {
+            const playerPos = player.position.clone();
+            let nearestNPC = null;
+            let nearestDist = CONFIG.npcTalkRadius;
+
+            npcs.forEach(npc => {
+                const npcPos = new THREE.Vector3();
+                npc.getWorldPosition(npcPos);
+                const dist = playerPos.distanceTo(npcPos);
+
+                if (dist < nearestDist) {
+                    nearestDist = dist;
+                    nearestNPC = npc;
+                }
+            });
+
+            if (nearestNPC) {
+                showNPCSpeech(nearestNPC, nearestNPC.userData);
+            }
+        }
+
+        function showNPCSpeech(npc, data) {
+            const speech = npc.userData.speechBubble;
+            speech.visible = true;
+
+            // Update speech text
+            const messages = {
+                historian: [
+                    "欢迎来到虚拟巴黎！我是历史学家皮埃尔。",
+                    "这座建筑建于1889年，是为世界博览会而建。",
+                    "有什么想了解的吗？"
+                ],
+                food: [
+                    "你好！我是樱花，美食向导！",
+                    "想尝试正宗大阪烧饼吗？",
+                    "我知道3家必吃店铺喔！"
+                ],
+                culture: [
+                    "我是千代子，文化专家。",
+                    "要了解日本传统文化吗？",
+                    "每個整点都有高赏！"
+                ],
+                transport: [
+                    "我是田中，交通顾问。",
+                    "需要路线规划吗？",
+                    "推荐乘坐地铁，最快哦！"
+                ]
+            };
+
+            const roleMessages = messages[data.role] || messages['historian'];
+            const message = roleMessages[Math.floor(Math.random() * roleMessages.length)];
+
+            // Update DOM speech bubble
+            const speechText = document.getElementById('speech-text');
+            speechText.innerHTML = '';
+            const bubble = document.getElementById('speech-bubble');
+            bubble.classList.add('visible');
+
+            // Typing effect
+            typeMessage(message, speechText);
+        }
+
+        function typeMessage(message, element) {
+            const typing = element.querySelector('.typing');
+            let i = 0;
+            const text = message;
+
+            function type() {
+                if (i < text.length) {
+                    element.innerHTML = text.substring(0, i + 1) + '<span class="typing"></span>';
+                    setTimeout(() => {
+                        element.innerHTML = element.innerHTML.replace('<span class="typing"></span>', text.substring(0, i + 1));
+                        i++;
+                        setTimeout(type, 30);
+                    }, 30);
+                } else {
+                    // Remove typing indicator after complete
+                    const spans = element.querySelectorAll('.typing');
+                    spans.forEach(s => s.remove());
+
+                    // Auto hide after 5 seconds
+                    setTimeout(() => {
+                        const bubble = document.getElementById('speech-bubble');
+                        bubble.classList.remove('visible');
+                    }, 5000);
+                }
+            }
+
+            type();
+        }
+
+        function showWelcomeMessage() {
+            const speechText = document.getElementById('speech-text');
+            const bubble = document.getElementById('speech-bubble');
+            bubble.classList.add('visible');
+
+            speechText.innerHTML = '';
+            const welcomeText = t('welcome');
+
+            // Update NPC name
+            document.getElementById('npc-name-display').textContent = npcs[0].userData.name;
+
+            let i = 0;
+            function typeWelcome() {
+                if (i < welcomeText.length) {
+                    speechText.innerHTML = welcomeText.substring(0, i + 1) + '<span class="typing"></span>';
+                    setTimeout(() => {
+                        speechText.innerHTML = speechText.innerHTML.replace('<span class="typing"></span>', welcomeText.substring(0, i + 1));
+                        i++;
+                        setTimeout(typeWelcome, 50);
+                    }, 50);
+                } else {
+                    setTimeout(() => {
+                        bubble.classList.remove('visible');
+                    }, 4000);
+                }
+            }
+
+            typeWelcome();
+        }
+
+        // ===== ANIMATION LOOP =====
+        let walkTime = 0;
+        const walkCycle = 5000; // 5 seconds per walk cycle
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            delta = clock.getDelta();
+
+            // Player movement
+            const speed = CONFIG.moveSpeed * delta * 60;
+            const direction = new THREE.Vector3();
+
+            if (moveForward) direction.z -= 1;
+            if (moveBackward) direction.z += 1;
+            if (moveLeft) direction.x -= 1;
+            if (moveRight) direction.x += 1;
+
+            direction.normalize().multiplyScalar(speed);
+
+            // Apply movement with boundary check
+            const newPos = player.position.clone().add(direction);
+            if (newPos.x > -45 && newPos.x < 45 && newPos.z > -45 && newPos.z < 45) {
+                player.position.add(direction);
+            }
+
+            // Camera rotation based on mouse
+            yaw -= mouseX * 0.1;
+            pitch -= mouseY * 0.1;
+            pitch = Math.max(-Math.PI / 3, Math.min(Math.PI / 3, pitch));
+
+            camera.rotation.order = 'YXZ';
+            camera.rotation.y = yaw;
+            camera.rotation.x = pitch;
+
+            // Update player rotation to face movement direction
+            if (direction.length() > 0.1) {
+                const angle = Math.atan2(direction.x, direction.z);
+                player.rotation.y = angle;
+            }
+
+            // NPC walking animation
+            walkTime += delta * 1000;
+            const walkCyclePos = (walkTime % walkCycle) / walkCycle;
+
+            npcs.forEach((npc, index) => {
+                const group = npc;
+
+                // Simple bobbing animation
+                const bobOffset = Math.sin(walkCyclePos * Math.PI * 2) * 0.1;
+                group.position.y = bobOffset;
+
+                // Walk in small circle
+                const walkRadius = 2;
+                const walkAngle = walkTime * 0.001 + index * (Math.PI * 2 / npcs.length);
+                group.position.x = npc.userData.position.x + Math.cos(walkAngle) * walkRadius;
+                group.position.z = npc.userData.position.z + Math.sin(walkAngle) * walkRadius;
+
+                // Face center occasionally
+                const angleToCenter = Math.atan2(-group.position.x, -group.position.z);
+                const targetAngle = angleToCenter + Math.sin(walkTime * 0.0005) * 0.5;
+                group.rotation.y = targetAngle;
+            });
+
+            // Update speech bubble to face camera
+            npcs.forEach(npc => {
+                if (npc.userData.speechBubble.visible) {
+                    const speech = npc.userData.speechBubble;
+
+                    // Make speech face player
+                    speech.lookAt(camera.position);
+
+                    // Keep speech upright and facing forward
+                    speech.quaternion.set(0, 0, 0, 1);
+                }
+            });
+
+            // Update loading progress
+            const progress = Math.min((walkTime / 2000) * 100, 100);
+            document.getElementById('status-progress').style.width = progress + '%';
+
+            renderer.render(scene, camera);
+        }
+
+        // Start
+        init();
+        animate();
+    </script>
+</body>
+</html>
