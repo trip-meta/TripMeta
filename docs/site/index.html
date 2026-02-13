@@ -671,26 +671,85 @@
             color: #a0aec0;
             font-size: 0.9rem;
         }
+
+        /* Language Switcher */
+        .lang-switcher {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            gap: 8px;
+            background: var(--glass-bg);
+            padding: 6px;
+            border-radius: 30px;
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+        }
+
+        .lang-btn {
+            padding: 8px 16px;
+            background: transparent;
+            border: none;
+            border-radius: 20px;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .lang-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-white);
+        }
+
+        .lang-btn.active {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: var(--text-white);
+        }
+
+        @media (max-width: 768px) {
+            .lang-switcher {
+                top: 10px;
+                right: 10px;
+            }
+            .lang-btn {
+                padding: 6px 12px;
+                font-size: 0.75rem;
+            }
+        }
+
+        /* Hide elements based on language */
+        [data-i18n].hidden {
+            display: none !important;
+        }
     </style>
 </head>
 <body>
+    <!-- Language Switcher -->
+    <div class="lang-switcher">
+        <button class="lang-btn active" data-lang="en" onclick="setLanguage('en')">EN</button>
+        <button class="lang-btn" data-lang="zh" onclick="setLanguage('zh')">中文</button>
+    </div>
+
     <div class="container">
         <!-- Header -->
         <div class="header">
-            <div class="header-badge">Open Source VR Platform</div>
+            <div class="header-badge" data-i18n="badge">Open Source VR Platform</div>
             <h1>🚀 TripMeta</h1>
-            <p>AI-Powered Virtual Tourism Experience</p>
+            <p data-i18n="tagline">AI-Powered Virtual Tourism Experience</p>
         </div>
 
         <!-- Video Section -->
         <div class="video-section">
             <div class="video-wrapper">
                 <div class="video-header">
-                    <span class="video-title">▶ VR Demo</span>
+                    <span class="video-title" data-i18n="videoTitle">▶ VR Demo</span>
                     <div class="video-size-controls">
-                        <button class="size-btn" onclick="setVideoSize('small')" data-size="small">Small</button>
-                        <button class="size-btn active" onclick="setVideoSize('medium')" data-size="medium">Medium</button>
-                        <button class="size-btn" onclick="setVideoSize('large')" data-size="large">Large</button>
+                        <button class="size-btn" onclick="setVideoSize('small')" data-size="small" data-i18n="sizeSmall">Small</button>
+                        <button class="size-btn active" onclick="setVideoSize('medium')" data-size="medium" data-i18n="sizeMedium">Medium</button>
+                        <button class="size-btn" onclick="setVideoSize('large')" data-size="large" data-i18n="sizeLarge">Large</button>
                     </div>
                 </div>
                 <div class="video-container size-medium" id="videoContainer">
@@ -704,34 +763,34 @@
 
         <!-- Info Section -->
         <div class="info">
-            <h2>Experience the Future of Tourism</h2>
+            <h2 data-i18n="infoTitle">Experience the Future of Tourism</h2>
             <div class="info-items">
                 <div class="info-item">
                     <div class="info-icon">🤖</div>
                     <div class="info-content">
-                        <h3>AI Tour Guide</h3>
-                        <p>Intelligent conversation system powered by GPT with personalized attraction explanations</p>
+                        <h3 data-i18n="info1Title">AI Tour Guide</h3>
+                        <p data-i18n="info1Desc">Intelligent conversation system powered by GPT with personalized attraction explanations</p>
                     </div>
                 </div>
                 <div class="info-item">
                     <div class="info-icon">🥽</div>
                     <div class="info-content">
-                        <h3>Immersive VR</h3>
-                        <p>High-quality virtual tourism experience on PICO VR headsets with 90 FPS</p>
+                        <h3 data-i18n="info2Title">Immersive VR</h3>
+                        <p data-i18n="info2Desc">High-quality virtual tourism experience on PICO VR headsets with 90 FPS</p>
                     </div>
                 </div>
                 <div class="info-item">
                     <div class="info-icon">🎯</div>
                     <div class="info-content">
-                        <h3>Natural Interaction</h3>
-                        <p>Voice dialogue, VR controller input, and spatial UI for intuitive control</p>
+                        <h3 data-i18n="info3Title">Natural Interaction</h3>
+                        <p data-i18n="info3Desc">Voice dialogue, VR controller input, and spatial UI for intuitive control</p>
                     </div>
                 </div>
                 <div class="info-item">
                     <div class="info-icon">📚</div>
                     <div class="info-content">
-                        <h3>Rich Knowledge</h3>
-                        <p>Deep tourism knowledge with historical and cultural insights for each destination</p>
+                        <h3 data-i18n="info4Title">Rich Knowledge</h3>
+                        <p data-i18n="info4Desc">Deep tourism knowledge with historical and cultural insights for each destination</p>
                     </div>
                 </div>
             </div>
@@ -739,7 +798,7 @@
 
         <!-- Tech Stack -->
         <div class="tech-stack">
-            <h2 class="section-title">Technology Stack</h2>
+            <h2 class="section-title" data-i18n="techStackTitle">Technology Stack</h2>
             <div class="tech-grid">
                 <div class="tech-item">
                     <div class="tech-icon">🎮</div>
@@ -776,68 +835,68 @@
 
         <!-- Stats -->
         <div class="stats">
-            <h2 class="section-title">Project Metrics</h2>
+            <h2 class="section-title" data-i18n="statsTitle">Project Metrics</h2>
             <div class="stats-grid">
                 <div class="stat-card">
                     <div class="stat-value">90</div>
-                    <div class="stat-label">FPS Target</div>
+                    <div class="stat-label" data-i18n="stat1Label">FPS Target</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-value">&lt;20</div>
-                    <div class="stat-label">ms Latency</div>
+                    <div class="stat-label" data-i18n="stat2Label">ms Latency</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-value">6+</div>
-                    <div class="stat-label">AI Services</div>
+                    <div class="stat-label" data-i18n="stat3Label">AI Services</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-value">4</div>
-                    <div class="stat-label">Languages</div>
+                    <div class="stat-label" data-i18n="stat4Label">Languages</div>
                 </div>
             </div>
         </div>
 
         <!-- Features -->
         <div class="features">
-            <h2 class="section-title">Key Features</h2>
+            <h2 class="section-title" data-i18n="featuresTitle">Key Features</h2>
             <div class="features-grid">
                 <div class="feature">
                     <div class="feature-icon">🌍</div>
-                    <h3>Virtual Attractions</h3>
-                    <p>Explore worldwide destinations from home with photorealistic environments and detailed 3D models</p>
+                    <h3 data-i18n="feature1Title">Virtual Attractions</h3>
+                    <p data-i18n="feature1Desc">Explore worldwide destinations from home with photorealistic environments and detailed 3D models</p>
                 </div>
                 <div class="feature">
                     <div class="feature-icon">💬</div>
-                    <h3>Smart Conversations</h3>
-                    <p>Natural dialogue with AI tour guides that understand context and provide personalized responses</p>
+                    <h3 data-i18n="feature2Title">Smart Conversations</h3>
+                    <p data-i18n="feature2Desc">Natural dialogue with AI tour guides that understand context and provide personalized responses</p>
                 </div>
                 <div class="feature">
                     <div class="feature-icon">🎓</div>
-                    <h3>Rich Knowledge</h3>
-                    <p>Deep historical and cultural insights with multimedia content including images and audio</p>
+                    <h3 data-i18n="feature3Title">Rich Knowledge</h3>
+                    <p data-i18n="feature3Desc">Deep historical and cultural insights with multimedia content including images and audio</p>
                 </div>
                 <div class="feature">
                     <div class="feature-icon">🎮</div>
-                    <h3>VR Interactions</h3>
-                    <p>Intuitive controller input with haptic feedback and gesture recognition system</p>
+                    <h3 data-i18n="feature4Title">VR Interactions</h3>
+                    <p data-i18n="feature4Desc">Intuitive controller input with haptic feedback and gesture recognition system</p>
                 </div>
             </div>
         </div>
 
         <!-- AI Showcase Section -->
         <div class="ai-showcase">
-            <h2 class="section-title" style="margin-bottom: 30px;">🤖 AI-Powered Experience</h2>
+            <h2 class="section-title" style="margin-bottom: 30px;" data-i18n="aiTitle">🤖 AI-Powered Experience</h2>
 
             <div class="ai-intro" style="text-align: center; margin-bottom: 40px; max-width: 800px; margin-left: auto; margin-right: auto;">
-                <p style="color: #a0aec0; font-size: 1.1rem; line-height: 1.8;">
+                <p style="color: #a0aec0; font-size: 1.1rem; line-height: 1.8;" data-i18n="aiIntro">
                     Experience our intelligent tour guide system that combines natural language understanding with rich knowledge graphs
                 </p>
             </div>
 
             <!-- Interactive Demo -->
             <div class="chat-interface">
-                <h3 style="text-align: center; color: #fff; margin-bottom: 20px;">💬 Try AI Tour Guide</h3>
-                <p style="text-align: center; color: #a0aec0; margin-bottom: 15px;">Click a question below to see AI in action!</p>
+                <h3 style="text-align: center; color: #fff; margin-bottom: 20px;" data-i18n="aiChatTitle">💬 Try AI Tour Guide</h3>
+                <p style="text-align: center; color: #a0aec0; margin-bottom: 15px;" data-i18n="aiChatHint">Click a question below to see AI in action!</p>
 
                 <div class="preset-questions" style="display: flex; gap: 10px; justify-content: center; margin-bottom: 20px;">
                     <button class="preset-question">📍 What's special here?</button>
@@ -927,6 +986,162 @@
     </div>
 
     <script>
+        // ===== TRANSLATIONS =====
+        const translations = {
+            en: {
+                badge: "Open Source VR Platform",
+                tagline: "AI-Powered Virtual Tourism Experience",
+                videoTitle: "▶ VR Demo",
+                sizeSmall: "Small",
+                sizeMedium: "Medium",
+                sizeLarge: "Large",
+                infoTitle: "Experience the Future of Tourism",
+                info1Title: "AI Tour Guide",
+                info1Desc: "Intelligent conversation system powered by GPT with personalized attraction explanations",
+                info2Title: "Immersive VR",
+                info2Desc: "High-quality virtual tourism experience on PICO VR headsets with 90 FPS",
+                info3Title: "Natural Interaction",
+                info3Desc: "Voice dialogue, VR controller input, and spatial UI for intuitive control",
+                info4Title: "Rich Knowledge",
+                info4Desc: "Deep tourism knowledge with historical and cultural insights for each destination",
+                techStackTitle: "Technology Stack",
+                statsTitle: "Project Metrics",
+                stat1Label: "FPS Target",
+                stat2Label: "ms Latency",
+                stat3Label: "AI Services",
+                stat4Label: "Languages",
+                featuresTitle: "Key Features",
+                feature1Title: "Virtual Attractions",
+                feature1Desc: "Explore worldwide destinations from home with photorealistic environments and detailed 3D models",
+                feature2Title: "Smart Conversations",
+                feature2Desc: "Natural dialogue with AI tour guides that understand context and provide personalized responses",
+                feature3Title: "Rich Knowledge",
+                feature3Desc: "Deep historical and cultural insights with multimedia content including images and audio",
+                feature4Title: "VR Interactions",
+                feature4Desc: "Intuitive controller input with haptic feedback and gesture recognition system",
+                aiTitle: "🤖 AI-Powered Experience",
+                aiIntro: "Experience our intelligent tour guide system that combines natural language understanding with rich knowledge graphs",
+                aiChatTitle: "💬 Try AI Tour Guide",
+                aiChatHint: "Click a question below to see AI in action!",
+                question1: "📍 What's special here?",
+                question2: "🏛️ Tell me about history",
+                question3: "🎨 Recommend nearby attractions",
+                question4: "💡 How do I get there?",
+                question5: "🌐 What's the weather like?",
+                aiWelcome: "Hi! I'm your AI tour guide. Ask me anything about this virtual destination!",
+                aiTryAsking: "Try asking:",
+                aiTry1: "\"What's special about this place?\"",
+                aiTry2: "\"Tell me about history\"",
+                aiTry3: "\"Recommend nearby attractions\"",
+                questionLabel: "Question:",
+                cap1Title: "Natural Language",
+                cap1Desc: "Understands context and provides relevant, personalized responses",
+                cap2Title: "Knowledge Graph",
+                cap2Desc: "Rich database of historical facts, cultural insights, and travel tips",
+                cap3Title: "Voice Interaction",
+                cap3Desc: "Natural speech input with AI-powered conversation",
+                cap4Title: "Multi-Language",
+                cap4Desc: "Support for English, Chinese, Japanese, and more with real-time translation",
+                cta1: "⭐ Star on GitHub",
+                cta2: "📖 View Architecture",
+                footer1: "GitHub",
+                footer2: "Documentation",
+                footer3: "Report Issue",
+                copyright: "© 2025 TripMeta. MIT License. Built with ❤️ by open-source community."
+            },
+            zh: {
+                badge: "开源VR平台",
+                tagline: "AI驱动的虚拟旅游体验",
+                videoTitle: "▶ VR演示",
+                sizeSmall: "小",
+                sizeMedium: "中",
+                sizeLarge: "大",
+                infoTitle: "体验旅游的未来",
+                info1Title: "AI导游",
+                info1Desc: "由GPT驱动的智能对话系统，提供个性化的景点讲解",
+                info2Title: "沉浸式VR",
+                info2Desc: "在PICO VR头显上体验高质量虚拟旅游，帧率达90FPS",
+                info3Title: "自然交互",
+                info3Desc: "语音对话、VR控制器输入和直观的空间UI控制",
+                info4Title: "丰富知识",
+                info4Desc: "深厚的旅游知识，为每个目的地提供历史和文化见解",
+                techStackTitle: "技术栈",
+                statsTitle: "项目指标",
+                stat1Label: "目标帧率",
+                stat2Label: "毫秒延迟",
+                stat3Label: "AI服务",
+                stat4Label: "支持语言",
+                featuresTitle: "核心功能",
+                feature1Title: "虚拟景点",
+                feature1Desc: "在家探索世界各地的目的地，具有逼真的环境和精细的3D模型",
+                feature2Title: "智能对话",
+                feature2Desc: "与AI导游进行自然对话，理解上下文并提供个性化响应",
+                feature3Title: "丰富知识",
+                feature3Desc: "包含图片和音频的深度历史和文化见解",
+                feature4Title: "VR交互",
+                feature4Desc: "直观的控制器输入，具有触觉反馈和手势识别系统",
+                aiTitle: "🤖 AI驱动的体验",
+                aiIntro: "体验我们智能导游系统，结合自然语言理解和丰富的知识图谱",
+                aiChatTitle: "💬 试用AI导游",
+                aiChatHint: "点击下方问题查看AI的实际效果！",
+                question1: "📍 这里有什么特别的？",
+                question2: "🏛️ 讲讲历史",
+                question3: "🎨 推荐附近景点",
+                question4: "💡 我怎么去那里？",
+                question5: "🌐 天气怎么样？",
+                aiWelcome: "你好！我是你的AI导游。问我关于这个虚拟目的地的任何问题！",
+                aiTryAsking: "试试问：",
+                aiTry1: "\"这里有什么特别的？\"",
+                aiTry2: "\"讲讲历史\"",
+                aiTry3: "\"推荐附近的景点\"",
+                questionLabel: "问题：",
+                cap1Title: "自然语言理解",
+                cap1Desc: "理解上下文并提供相关、个性化的响应",
+                cap2Title: "知识图谱",
+                cap2Desc: "包含历史事实、文化见解和旅行贴士的丰富数据库",
+                cap3Title: "语音交互",
+                cap3Desc: "自然语音输入和AI驱动的对话",
+                cap4Title: "多语言支持",
+                cap4Desc: "支持英语、中文、日语等多种语言的实时翻译",
+                cta1: "⭐ 在GitHub上加星标",
+                cta2: "📖 查看架构文档",
+                footer1: "GitHub",
+                footer2: "文档",
+                footer3: "反馈问题",
+                copyright: "© 2025 TripMeta. MIT许可证. 由开源社区用❤️构建."
+            }
+        };
+
+        // Current language
+        let currentLang = localStorage.getItem('language') || 'en';
+
+        // Language switcher function
+        function setLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('language', lang);
+
+            // Update language buttons
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.lang === lang) {
+                    btn.classList.add('active');
+                }
+            });
+
+            // Update all translatable elements
+            applyTranslations();
+        }
+
+        // Apply translations to all elements with data-i18n attribute
+        function applyTranslations() {
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[currentLang] && translations[currentLang][key]) {
+                    el.textContent = translations[currentLang][key];
+                }
+            });
+        }
+
         // Video size control
         function setVideoSize(size) {
             const container = document.getElementById('videoContainer');
@@ -950,10 +1165,15 @@
             localStorage.setItem('videoSize', size);
         }
 
-        // Load saved size preference
+        // Load saved preferences
         document.addEventListener('DOMContentLoaded', () => {
+            // Load video size preference
             const savedSize = localStorage.getItem('videoSize') || 'medium';
             setVideoSize(savedSize);
+
+            // Load language preference
+            const savedLang = localStorage.getItem('language') || 'en';
+            setLanguage(savedLang);
         });
 
         // Video event tracking
