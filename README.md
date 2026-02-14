@@ -26,10 +26,14 @@
 | 🌐 **Live Demo** | [trip-meta.github.io/TripMeta/site](https://trip-meta.github.io/TripMeta/site/) |
 | 📖 **Documentation** | [TripMeta/docs](./docs) |
 | 📹 **Source Code** | [github.com/trip-meta/TripMeta](https://github.com/trip-meta/TripMeta) |
-| 🎬 **Demo Video** | [Watch on GitHub Pages](https://trip-meta.github.io/TripMeta/site/) |
+| 🎬 **Demo Video** | [Watch VR Demo](https://trip-meta.github.io/TripMeta/site/vr.mp4) |
 | 🐛 **Issue Tracker** | [GitHub Issues](../../issues) |
 | 💬 **Discussions** | [GitHub Discussions](../../discussions) |
 | 📜 **Changelog** | [Releases](../../releases) |
+
+## Demo Video
+
+https://trip-meta.github.io/TripMeta/site/vr.mp4
 
 ---
 

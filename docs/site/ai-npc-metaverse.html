@@ -1,10 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="TripMeta - AI NPC Metaverse Tourism Platform with intelligent virtual tour guides">
+    <meta name="description" content="TripMeta AI NPC Metaverse - Intelligent virtual tour guides with specialized AI NPCs for immersive tourism experiences">
+    <meta property="og:title" content="TripMeta - AI NPC Metaverse Tourism Platform">
+    <meta property="og:description" content="Intelligent virtual tour guides with specialized AI NPCs for immersive tourism experiences">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://trip-meta.github.io/TripMeta/ai-npc-metaverse.html">
     <title>TripMeta - AI NPC Metaverse</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23667eea' stroke-width='2'%3E%3Cpath d='M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z'/%3E%3C/svg%3E">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -32,7 +40,7 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-medium) 50%, var(--bg-light) 100%);
             background-attachment: fixed;
             min-height: 100vh;
@@ -73,6 +81,11 @@
             max-width: 700px;
             margin: 0 auto;
             line-height: 1.8;
+        }
+
+        .hero strong {
+            color: var(--primary);
+            font-weight: 600;
         }
 
         .section {
@@ -285,6 +298,7 @@
             background: transparent;
             border: 2px solid var(--primary);
             color: var(--primary);
+            box-shadow: none;
         }
 
         .cta-btn.secondary:hover {
@@ -304,6 +318,43 @@
             color: var(--primary);
         }
 
+        /* Language Switcher */
+        .lang-switcher {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            gap: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 6px;
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .lang-btn {
+            padding: 8px 16px;
+            background: transparent;
+            border: none;
+            border-radius: 16px;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .lang-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-white);
+        }
+
+        .lang-btn.active {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: var(--text-white);
+        }
+
         @media (max-width: 768px) {
             .npc-grid {
                 grid-template-columns: 1fr;
@@ -317,105 +368,94 @@
             .hero h1 {
                 font-size: 2rem;
             }
+            .lang-switcher {
+                top: 10px;
+                right: 10px;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Language Switcher -->
+    <div class="lang-switcher">
+        <button class="lang-btn" onclick="setLanguage('zh')" data-lang="zh">中文</button>
+        <button class="lang-btn" onclick="setLanguage('en')" data-lang="en">EN</button>
+    </div>
+
     <div class="container">
         <!-- Hero Section -->
         <div class="hero">
-            <h1>🤖 AI NPC 元宇宙旅游平台</h1>
-            <p>
-                在虚拟世界中与智能AI NPC对话，获取个性化旅游攻略、深度文化讲解和真实社交体验。
-                这不是传统VR旅游——这是**活的元宇宙**。
-            </p>
+            <h1 data-i18n="heroTitle">AI NPC 元宇宙旅游平台</h1>
+            <p data-i18n="heroDesc">在虚拟世界中与智能AI NPC对话，获取个性化旅游攻略、深度文化讲解和真实社交体验。这不是传统VR旅游——这是活的元宇宙。</p>
         </div>
 
         <!-- NPC Types Section -->
         <div class="section">
-            <h2 class="section-title">智能NPC向导团队</h2>
+            <h2 class="section-title" data-i18n="npcTeamTitle">智能NPC向导团队</h2>
             <div class="npc-grid">
                 <div class="npc-card" style="--npc-color: var(--npc-historian)">
                     <span class="npc-icon">🏛️</span>
-                    <div class="npc-name">历史学家</div>
-                    <div class="npc-role">Historian</div>
-                    <p class="npc-description">
-                        专精历史背景、建筑故事和文物讲解。了解每个景点背后的历史，
-                        从古埃及金字塔到现代摩天大楼的完整故事链。
-                    </p>
+                    <div class="npc-name" data-i18n="npc1Name">历史学家</div>
+                    <div class="npc-role" data-i18n="npc1Role">历史专家</div>
+                    <p class="npc-description" data-i18n="npc1Desc">专精历史背景、建筑故事和文物讲解。了解每个景点背后的历史，从古埃及金字塔到现代摩天大楼的完整故事链。</p>
                     <div class="dialogue-example">
-                        <div class="user-msg">用户: "这座建筑有什么历史？"</div>
-                        <div class="npc-msg">NPC: "这座建筑建于1889年，当时是为世界博览会而建..."</div>
+                        <div class="user-msg" data-i18n="dialogue1User">用户: "这座建筑有什么历史？"</div>
+                        <div class="npc-msg" data-i18n="dialogue1Npc">NPC: "这座建筑建于1889年，当时是为世界博览会而建..."</div>
                     </div>
                 </div>
 
                 <div class="npc-card" style="--npc-color: var(--npc-food)">
-                    <span class="npc-icon">🍜️</span>
-                    <div class="npc-name">美食向导</div>
-                    <div class="npc-role">Food Guide</div>
-                    <p class="npc-description">
-                        当地美食专家，推荐特色餐厅、街头小吃和美食体验。
-                        从巴黎小馆到大阪烧饼，了解真正的"食"在旅游。
-                    </p>
+                    <span class="npc-icon">🍜</span>
+                    <div class="npc-name" data-i18n="npc2Name">美食向导</div>
+                    <div class="npc-role" data-i18n="npc2Role">烹饪专家</div>
+                    <p class="npc-description" data-i18n="npc2Desc">当地美食专家，推荐特色餐厅、街头小吃和美食体验。从巴黎小馆到大阪烧饼，了解真正的美食旅游。</p>
                     <div class="dialogue-example">
-                        <div class="user-msg">用户: "附近有什么特色菜？"</div>
-                        <div class="npc-msg">NPC: "前方200米有家传承三代的老店..."</div>
+                        <div class="user-msg" data-i18n="dialogue2User">用户: "附近有什么特色菜？"</div>
+                        <div class="npc-msg" data-i18n="dialogue2Npc">NPC: "前方200米有家传承三代的老店..."</div>
                     </div>
                 </div>
 
                 <div class="npc-card" style="--npc-color: var(--npc-culture)">
                     <span class="npc-icon">🎨</span>
-                    <div class="npc-name">文化专家</div>
-                    <div class="npc-role">Culture Expert</div>
-                    <p class="npc-description">
-                        艺术传统、民俗风情和节日庆典专家。参与虚拟文化活动，
-                        了解当地真实的文化传统和艺术形式。
-                    </p>
+                    <div class="npc-name" data-i18n="npc3Name">文化专家</div>
+                    <div class="npc-role" data-i18n="npc3Role">艺术与传统</div>
+                    <p class="npc-description" data-i18n="npc3Desc">艺术传统、民俗风情和节日庆典专家。参与虚拟文化活动，了解当地真实的文化传统和艺术形式。</p>
                     <div class="dialogue-example">
-                        <div class="user-msg">用户: "有什么传统表演？"</div>
-                        <div class="npc-msg">NPC: "每天下午2点有京剧表演，要提醒您吗？"</div>
+                        <div class="user-msg" data-i18n="dialogue3User">用户: "有什么传统表演？"</div>
+                        <div class="npc-msg" data-i18n="dialogue3Npc">NPC: "每天下午2点有京剧表演，要提醒您吗？"</div>
                     </div>
                 </div>
 
                 <div class="npc-card" style="--npc-color: var(--npc-transport)">
                     <span class="npc-icon">🚌</span>
-                    <div class="npc-name">交通顾问</div>
-                    <div class="npc-role">Transport Advisor</div>
-                    <p class="npc-description">
-                        路线规划和交通专家。最优路线推荐、交通方式比较
-                        和实时出行建议，让您轻松游览虚拟城市。
-                    </p>
+                    <div class="npc-name" data-i18n="npc4Name">交通顾问</div>
+                    <div class="npc-role" data-i18n="npc4Role">路线规划</div>
+                    <p class="npc-description" data-i18n="npc4Desc">路线规划和交通专家。最优路线推荐、交通方式比较和实时出行建议，让您轻松游览虚拟城市。</p>
                     <div class="dialogue-example">
-                        <div class="user-msg">用户: "怎么去下一个景点？"</div>
-                        <div class="npc-msg">NPC: "建议步行15分钟，沿途还能看3个景点..."</div>
+                        <div class="user-msg" data-i18n="dialogue4User">用户: "怎么去下一个景点？"</div>
+                        <div class="npc-msg" data-i18n="dialogue4Npc">NPC: "建议步行15分钟，沿途还能看3个景点..."</div>
                     </div>
                 </div>
 
                 <div class="npc-card" style="--npc-color: var(--npc-photo)">
                     <span class="npc-icon">📸</span>
-                    <div class="npc-name">摄影师NPC</div>
-                    <div class="npc-role">Photographer</div>
-                    <p class="npc-description">
-                        最佳拍摄点和摄影技巧向导。虚拟相机设置建议、
-                        黄金时刻推荐和构图指导，拍出完美的虚拟旅行照片。
-                    </p>
+                    <div class="npc-name" data-i18n="npc5Name">摄影师NPC</div>
+                    <div class="npc-role" data-i18n="npc5Role">摄影向导</div>
+                    <p class="npc-description" data-i18n="npc5Desc">最佳拍摄点和摄影技巧向导。虚拟相机设置建议、黄金时刻推荐和构图指导，拍出完美的虚拟旅行照片。</p>
                     <div class="dialogue-example">
-                        <div class="user-msg">用户: "哪里拍照最好看？"</div>
-                        <div class="npc-msg">NPC: "夕阳时分到对面山坡，光线正好..."</div>
+                        <div class="user-msg" data-i18n="dialogue5User">用户: "哪里拍照最好看？"</div>
+                        <div class="npc-msg" data-i18n="dialogue5Npc">NPC: "夕阳时分到对面山坡，光线正好..."</div>
                     </div>
                 </div>
 
                 <div class="npc-card" style="--npc-color: var(--npc-stay)">
                     <span class="npc-icon">🏨</span>
-                    <div class="npc-name">住宿推荐</div>
-                    <div class="npc-role">Accommodation</div>
-                    <p class="npc-description">
-                        酒店评价和民宿推荐专家。根据预算和偏好推荐住宿，
-                        提供真实用户评价和价格对比。
-                    </p>
+                    <div class="npc-name" data-i18n="npc6Name">住宿推荐</div>
+                    <div class="npc-role" data-i18n="npc6Role">住宿专家</div>
+                    <p class="npc-description" data-i18n="npc6Desc">酒店评价和民宿推荐专家。根据预算和偏好推荐住宿，提供真实用户评价和价格对比。</p>
                     <div class="dialogue-example">
-                        <div class="user-msg">用户: "附近有什么好的住宿？"</div>
-                        <div class="npc-msg">NPC: "推荐这家传统旅馆，评分4.8，每晚$120..."</div>
+                        <div class="user-msg" data-i18n="dialogue6User">用户: "附近有什么好的住宿？"</div>
+                        <div class="npc-msg" data-i18n="dialogue6Npc">NPC: "推荐这家传统旅馆，评分4.8，每晚$120..."</div>
                     </div>
                 </div>
             </div>
@@ -423,70 +463,70 @@
 
         <!-- Experience Scenarios -->
         <div class="section">
-            <h2 class="section-title">元宇宙体验场景</h2>
+            <h2 class="section-title" data-i18n="scenarioTitle">元宇宙体验场景</h2>
 
             <div class="scenario-card">
-                <h3 class="scenario-title">🏮️ 场景1：虚拟城市漫步</h3>
+                <h3 class="scenario-title" data-i18n="scenario1Title">场景1：虚拟城市漫步</h3>
                 <div class="scenario-steps">
                     <div class="step">
-                        <div class="step-label">Step 1</div>
-                        <div class="step-content">用户在虚拟巴黎街道漫步，遇见AI NPC</div>
+                        <div class="step-label" data-i18n="scenario1Step1Label">步骤 1</div>
+                        <div class="step-content" data-i18n="scenario1Step1Content">用户在虚拟巴黎街道漫步，遇见AI NPC</div>
                     </div>
                     <div class="step">
-                        <div class="step-label">Step 2</div>
-                        <div class="step-content">自然语音对话："埃菲尔铁塔有什么故事？"</div>
+                        <div class="step-label" data-i18n="scenario1Step2Label">步骤 2</div>
+                        <div class="step-content" data-i18n="scenario1Step2Content">自然语音对话："埃菲尔铁塔有什么故事？"</div>
                     </div>
                     <div class="step">
-                        <div class="step-label">Step 3</div>
-                        <div class="step-content">AI实时讲述历史，附带虚拟信息弹窗</div>
+                        <div class="step-label" data-i18n="scenario1Step3Label">步骤 3</div>
+                        <div class="step-content" data-i18n="scenario1Step3Content">AI实时讲述历史，附带虚拟信息弹窗</div>
                     </div>
                     <div class="step">
-                        <div class="step-label">Step 4</div>
-                        <div class="step-content">用户继续探索，触发其他NPC对话</div>
+                        <div class="step-label" data-i18n="scenario1Step4Label">步骤 4</div>
+                        <div class="step-content" data-i18n="scenario1Step4Content">用户继续探索，触发其他NPC对话</div>
                     </div>
                 </div>
             </div>
 
             <div class="scenario-card">
-                <h3 class="scenario-title">🍜️ 场景2：美食探索之旅</h3>
+                <h3 class="scenario-title" data-i18n="scenario2Title">场景2：美食探索之旅</h3>
                 <div class="scenario-steps">
                     <div class="step">
-                        <div class="step-label">Discover</div>
-                        <div class="step-content">在虚拟大阪道顿堀，跟随美食向导"樱花"</div>
+                        <div class="step-label" data-i18n="scenario2Step1Label">发现</div>
+                        <div class="step-content" data-i18n="scenario2Step1Content">在虚拟大阪道顿堀，跟随美食向导</div>
                     </div>
                     <div class="step">
-                        <div class="step-label">Order</div>
-                        <div class="step-content">用户："我想吃正宗大阪烧饼！"</div>
+                        <div class="step-label" data-i18n="scenario2Step2Label">点餐</div>
+                        <div class="step-content" data-i18n="scenario2Step2Content">用户："我想吃正宗大阪烧饼！"</div>
                     </div>
                     <div class="step">
-                        <div class="step-label">Navigate</div>
-                        <div class="step-content">AI推荐3家必吃店铺并在地图标记路径</div>
+                        <div class="step-label" data-i18n="scenario2Step3Label">导航</div>
+                        <div class="step-content" data-i18n="scenario2Step3Content">AI推荐3家必吃店铺并在地图标记路径</div>
                     </div>
                     <div class="step">
-                        <div class="step-label">Experience</div>
-                        <div class="step-content">到达店铺，触发虚拟试吃体验</div>
+                        <div class="step-label" data-i18n="scenario2Step4Label">体验</div>
+                        <div class="step-content" data-i18n="scenario2Step4Content">到达店铺，触发虚拟试吃体验</div>
                     </div>
                 </div>
             </div>
 
             <div class="scenario-card">
-                <h3 class="scenario-title">👥 场景3：多人元宇宙社交</h3>
+                <h3 class="scenario-title" data-i18n="scenario3Title">场景3：多人元宇宙社交</h3>
                 <div class="scenario-steps">
                     <div class="step">
-                        <div class="step-label">Invite</div>
-                        <div class="step-content">朋友发来消息："我也在TripMeta！"</div>
+                        <div class="step-label" data-i18n="scenario3Step1Label">邀请</div>
+                        <div class="step-content" data-i18n="scenario3Step1Content">朋友发来消息："我也在TripMeta！"</div>
                     </div>
                     <div class="step">
-                        <div class="step-label">Teleport</div>
-                        <div class="step-content">用户点击邀请，朋友瞬间传送到身边</div>
+                        <div class="step-label" data-i18n="scenario3Step2Label">传送</div>
+                        <div class="step-content" data-i18n="scenario3Step2Content">用户点击邀请，朋友瞬间传送到身边</div>
                     </div>
                     <div class="step">
-                        <div class="step-label">Interact</div>
-                        <div class="step-content">多个AI NPC同时为用户服务</div>
+                        <div class="step-label" data-i18n="scenario3Step3Label">互动</div>
+                        <div class="step-content" data-i18n="scenario3Step3Content">多个AI NPC同时为用户服务</div>
                     </div>
                     <div class="step">
-                        <div class="step-label">Achieve</div>
-                        <div class="step-content">完成"京都达人"成就，解锁限定虚拟纪念品</div>
+                        <div class="step-label" data-i18n="scenario3Step4Label">成就</div>
+                        <div class="step-content" data-i18n="scenario3Step4Content">完成"京都达人"成就，解锁限定虚拟纪念品</div>
                     </div>
                 </div>
             </div>
@@ -494,43 +534,43 @@
 
         <!-- Roadmap -->
         <div class="section">
-            <h2 class="section-title">发展路线图</h2>
+            <h2 class="section-title" data-i18n="roadmapTitle">发展路线图</h2>
             <div class="roadmap">
                 <div class="roadmap-grid">
                     <div class="roadmap-item">
-                        <div class="roadmap-phase">Phase 1: MVP</div>
+                        <div class="roadmap-phase" data-i18n="roadmap1Phase">阶段 1：MVP</div>
                         <ul>
-                            <li>基础VR场景渲染</li>
-                            <li>单一AI NPC对话</li>
-                            <li>语音输入支持</li>
-                            <li>基础知识库</li>
+                            <li data-i18n="roadmap1Item1">基础VR场景渲染</li>
+                            <li data-i18n="roadmap1Item2">单一AI NPC对话</li>
+                            <li data-i18n="roadmap1Item3">语音输入支持</li>
+                            <li data-i18n="roadmap1Item4">基础知识库</li>
                         </ul>
                     </div>
                     <div class="roadmap-item">
-                        <div class="roadmap-phase">Phase 2: 核心功能</div>
+                        <div class="roadmap-phase" data-i18n="roadmap2Phase">阶段 2：核心功能</div>
                         <ul>
-                            <li>多NPC类型（历史、美食、文化）</li>
-                            <li>NPC地图导航标记</li>
-                            <li>用户偏好记忆</li>
-                            <li>对话历史记录</li>
+                            <li data-i18n="roadmap2Item1">多NPC类型（历史、美食、文化）</li>
+                            <li data-i18n="roadmap2Item2">NPC地图导航标记</li>
+                            <li data-i18n="roadmap2Item3">用户偏好记忆</li>
+                            <li data-i18n="roadmap2Item4">对话历史记录</li>
                         </ul>
                     </div>
                     <div class="roadmap-item">
-                        <div class="roadmap-phase">Phase 3: 增强体验</div>
+                        <div class="roadmap-phase" data-i18n="roadmap3Phase">阶段 3：增强体验</div>
                         <ul>
-                            <li>NPC个性化和情感表达</li>
-                            <li>多用户同时对话</li>
-                            <li>AR信息叠加</li>
-                            <li>虚拟商品购买</li>
+                            <li data-i18n="roadmap3Item1">NPC个性化和情感表达</li>
+                            <li data-i18n="roadmap3Item2">多用户同时对话</li>
+                            <li data-i18n="roadmap3Item3">AR信息叠加</li>
+                            <li data-i18n="roadmap3Item4">虚拟商品购买</li>
                         </ul>
                     </div>
                     <div class="roadmap-item">
-                        <div class="roadmap-phase">Phase 4: 元宇宙生态</div>
+                        <div class="roadmap-phase" data-i18n="roadmap4Phase">阶段 4：元宇宙生态</div>
                         <ul>
-                            <li>UGC内容创作</li>
-                            <li>跨世界传送</li>
-                            <li>虚拟活动系统</li>
-                            <li>社交功能完善</li>
+                            <li data-i18n="roadmap4Item1">UGC内容创作</li>
+                            <li data-i18n="roadmap4Item2">跨世界传送</li>
+                            <li data-i18n="roadmap4Item3">虚拟活动系统</li>
+                            <li data-i18n="roadmap4Item4">社交功能完善</li>
                         </ul>
                     </div>
                 </div>
@@ -540,16 +580,229 @@
         <!-- CTA -->
         <div class="cta-section">
             <a href="https://github.com/trip-meta/TripMeta" target="_blank" class="cta-btn">
-                ⭐ GitHub Star
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/>
+                </svg>
+                <span data-i18n="cta1">GitHub 加星标</span>
             </a>
             <a href="index.html" class="cta-btn secondary">
-                🚀 返回演示页面
+                <span data-i18n="cta2">返回演示</span>
             </a>
         </div>
 
         <div style="text-align: center;">
-            <a href="index.html" class="back-link">← 返回主演示页面</a>
+            <a href="index.html" class="back-link" data-i18n="backLink">&larr; 返回主演示页面</a>
         </div>
     </div>
+
+    <script>
+        var translations = {
+            en: {
+                heroTitle: "AI NPC Metaverse Tourism Platform",
+                heroDesc: "Experience intelligent conversations with AI NPCs in the virtual world, get personalized travel guides, in-depth cultural explanations, and authentic social experiences. This is not traditional VR tourism \u2014 this is a living Metaverse.",
+                npcTeamTitle: "Intelligent NPC Tour Guide Team",
+                npc1Name: "Historian",
+                npc1Role: "Historical Expert",
+                npc1Desc: "Specializes in historical background, architectural stories, and artifact explanations. Understand the history behind each attraction, from the Great Pyramids of Egypt to modern skyscrapers.",
+                dialogue1User: "User: \"What's the history of this building?\"",
+                dialogue1Npc: "NPC: \"This building was constructed in 1889 for the World's Fair...\"",
+                npc2Name: "Food Guide",
+                npc2Role: "Culinary Expert",
+                npc2Desc: "Local cuisine expert, recommending specialty restaurants, street food, and dining experiences. From Parisian bistros to Osaka okonomiyaki, discover true food tourism.",
+                dialogue2User: "User: \"What's good to eat nearby?\"",
+                dialogue2Npc: "NPC: \"There's a third-generation family restaurant 200m ahead...\"",
+                npc3Name: "Culture Expert",
+                npc3Role: "Art & Traditions",
+                npc3Desc: "Expert in art traditions, folk customs, and festival celebrations. Participate in virtual cultural events and understand authentic local traditions and art forms.",
+                dialogue3User: "User: \"Any traditional performances?\"",
+                dialogue3Npc: "NPC: \"Peking Opera at 2 PM daily, should I remind you?\"",
+                npc4Name: "Transport Advisor",
+                npc4Role: "Route Planner",
+                npc4Desc: "Route planning and transport expert. Optimal route recommendations, transport method comparisons, and real-time travel advice for easy virtual city exploration.",
+                dialogue4User: "User: \"How do I get to the next spot?\"",
+                dialogue4Npc: "NPC: \"Suggest 15-minute walk, you'll see 3 attractions along the way...\"",
+                npc5Name: "Photographer",
+                npc5Role: "Photo Guide",
+                npc5Desc: "Best photo spots and photography techniques guide. Virtual camera settings advice, golden hour recommendations, and composition guidance for perfect virtual travel photos.",
+                dialogue5User: "User: \"Where's the best photo spot?\"",
+                dialogue5Npc: "NPC: \"At sunset, go to the opposite hillside, the light is perfect...\"",
+                npc6Name: "Accommodation",
+                npc6Role: "Stay Expert",
+                npc6Desc: "Hotel reviews and lodging recommendation expert. Recommends accommodations based on budget and preferences with real user reviews and price comparisons.",
+                dialogue6User: "User: \"Any good places to stay nearby?\"",
+                dialogue6Npc: "NPC: \"Recommend this traditional inn, rating 4.8, $120 per night...\"",
+                scenarioTitle: "Metaverse Experience Scenarios",
+                scenario1Title: "Scenario 1: Virtual City Walking",
+                scenario1Step1Label: "Step 1",
+                scenario1Step1Content: "User walks in virtual Paris streets, encounters AI NPC",
+                scenario1Step2Label: "Step 2",
+                scenario1Step2Content: "Natural voice dialogue: \"Tell me about the Eiffel Tower?\"",
+                scenario1Step3Label: "Step 3",
+                scenario1Step3Content: "AI explains history in real-time with virtual info popups",
+                scenario1Step4Label: "Step 4",
+                scenario1Step4Content: "User continues exploring, triggers other NPC conversations",
+                scenario2Title: "Scenario 2: Food Discovery Journey",
+                scenario2Step1Label: "Discover",
+                scenario2Step1Content: "In virtual Osaka Dotonbori, follow the food guide",
+                scenario2Step2Label: "Order",
+                scenario2Step2Content: "User: \"I want authentic Okonomiyaki!\"",
+                scenario2Step3Label: "Navigate",
+                scenario2Step3Content: "AI recommends 3 must-try restaurants and marks route on map",
+                scenario2Step4Label: "Experience",
+                scenario2Step4Content: "Arrive at restaurant, trigger virtual taste experience",
+                scenario3Title: "Scenario 3: Multi-user Metaverse Social",
+                scenario3Step1Label: "Invite",
+                scenario3Step1Content: "Friend sends message: \"I'm also on TripMeta!\"",
+                scenario3Step2Label: "Teleport",
+                scenario3Step2Content: "User clicks invite, friend instantly teleports to your side",
+                scenario3Step3Label: "Interact",
+                scenario3Step3Content: "Multiple AI NPCs serve users simultaneously",
+                scenario3Step4Label: "Achieve",
+                scenario3Step4Content: "Complete \"Kyoto Master\" achievement, unlock limited virtual souvenir",
+                roadmapTitle: "Development Roadmap",
+                roadmap1Phase: "Phase 1: MVP",
+                roadmap1Item1: "Basic VR scene rendering",
+                roadmap1Item2: "Single AI NPC dialogue",
+                roadmap1Item3: "Voice input support",
+                roadmap1Item4: "Basic knowledge base",
+                roadmap2Phase: "Phase 2: Core Features",
+                roadmap2Item1: "Multiple NPC types (History, Food, Culture)",
+                roadmap2Item2: "NPC map navigation markers",
+                roadmap2Item3: "User preference memory",
+                roadmap2Item4: "Dialogue history records",
+                roadmap3Phase: "Phase 3: Enhanced Experience",
+                roadmap3Item1: "NPC personalization and emotional expression",
+                roadmap3Item2: "Multi-user simultaneous dialogue",
+                roadmap3Item3: "AR information overlay",
+                roadmap3Item4: "Virtual goods purchasing",
+                roadmap4Phase: "Phase 4: Metaverse Ecosystem",
+                roadmap4Item1: "UGC content creation",
+                roadmap4Item2: "Cross-world teleportation",
+                roadmap4Item3: "Virtual event system",
+                roadmap4Item4: "Social features completion",
+                cta1: "GitHub Star",
+                cta2: "Back to Demo",
+                backLink: "\u2190 Back to main page"
+            },
+            zh: {
+                heroTitle: "AI NPC 元宇宙旅游平台",
+                heroDesc: "在虚拟世界中与智能AI NPC对话，获取个性化旅游攻略、深度文化讲解和真实社交体验。这不是传统VR旅游——这是活的元宇宙。",
+                npcTeamTitle: "智能NPC向导团队",
+                npc1Name: "历史学家",
+                npc1Role: "历史专家",
+                npc1Desc: "专精历史背景、建筑故事和文物讲解。了解每个景点背后的历史，从古埃及金字塔到现代摩天大楼的完整故事链。",
+                dialogue1User: "用户: \"这座建筑有什么历史？\"",
+                dialogue1Npc: "NPC: \"这座建筑建于1889年，当时是为世界博览会而建...\"",
+                npc2Name: "美食向导",
+                npc2Role: "烹饪专家",
+                npc2Desc: "当地美食专家，推荐特色餐厅、街头小吃和美食体验。从巴黎小馆到大阪烧饼，了解真正的美食旅游。",
+                dialogue2User: "用户: \"附近有什么特色菜？\"",
+                dialogue2Npc: "NPC: \"前方200米有家传承三代的老店...\"",
+                npc3Name: "文化专家",
+                npc3Role: "艺术与传统",
+                npc3Desc: "艺术传统、民俗风情和节日庆典专家。参与虚拟文化活动，了解当地真实的文化传统和艺术形式。",
+                dialogue3User: "用户: \"有什么传统表演？\"",
+                dialogue3Npc: "NPC: \"每天下午2点有京剧表演，要提醒您吗？\"",
+                npc4Name: "交通顾问",
+                npc4Role: "路线规划",
+                npc4Desc: "路线规划和交通专家。最优路线推荐、交通方式比较和实时出行建议，让您轻松游览虚拟城市。",
+                dialogue4User: "用户: \"怎么去下一个景点？\"",
+                dialogue4Npc: "NPC: \"建议步行15分钟，沿途还能看3个景点...\"",
+                npc5Name: "摄影师NPC",
+                npc5Role: "摄影向导",
+                npc5Desc: "最佳拍摄点和摄影技巧向导。虚拟相机设置建议、黄金时刻推荐和构图指导，拍出完美的虚拟旅行照片。",
+                dialogue5User: "用户: \"哪里拍照最好看？\"",
+                dialogue5Npc: "NPC: \"夕阳时分到对面山坡，光线正好...\"",
+                npc6Name: "住宿推荐",
+                npc6Role: "住宿专家",
+                npc6Desc: "酒店评价和民宿推荐专家。根据预算和偏好推荐住宿，提供真实用户评价和价格对比。",
+                dialogue6User: "用户: \"附近有什么好的住宿？\"",
+                dialogue6Npc: "NPC: \"推荐这家传统旅馆，评分4.8，每晚$120...\"",
+                scenarioTitle: "元宇宙体验场景",
+                scenario1Title: "场景1：虚拟城市漫步",
+                scenario1Step1Label: "步骤 1",
+                scenario1Step1Content: "用户在虚拟巴黎街道漫步，遇见AI NPC",
+                scenario1Step2Label: "步骤 2",
+                scenario1Step2Content: "自然语音对话：\"埃菲尔铁塔有什么故事？\"",
+                scenario1Step3Label: "步骤 3",
+                scenario1Step3Content: "AI实时讲述历史，附带虚拟信息弹窗",
+                scenario1Step4Label: "步骤 4",
+                scenario1Step4Content: "用户继续探索，触发其他NPC对话",
+                scenario2Title: "场景2：美食探索之旅",
+                scenario2Step1Label: "发现",
+                scenario2Step1Content: "在虚拟大阪道顿堀，跟随美食向导",
+                scenario2Step2Label: "点餐",
+                scenario2Step2Content: "用户：\"我想吃正宗大阪烧饼！\"",
+                scenario2Step3Label: "导航",
+                scenario2Step3Content: "AI推荐3家必吃店铺并在地图标记路径",
+                scenario2Step4Label: "体验",
+                scenario2Step4Content: "到达店铺，触发虚拟试吃体验",
+                scenario3Title: "场景3：多人元宇宙社交",
+                scenario3Step1Label: "邀请",
+                scenario3Step1Content: "朋友发来消息：\"我也在TripMeta！\"",
+                scenario3Step2Label: "传送",
+                scenario3Step2Content: "用户点击邀请，朋友瞬间传送到身边",
+                scenario3Step3Label: "互动",
+                scenario3Step3Content: "多个AI NPC同时为用户服务",
+                scenario3Step4Label: "成就",
+                scenario3Step4Content: "完成\"京都达人\"成就，解锁限定虚拟纪念品",
+                roadmapTitle: "发展路线图",
+                roadmap1Phase: "阶段 1：MVP",
+                roadmap1Item1: "基础VR场景渲染",
+                roadmap1Item2: "单一AI NPC对话",
+                roadmap1Item3: "语音输入支持",
+                roadmap1Item4: "基础知识库",
+                roadmap2Phase: "阶段 2：核心功能",
+                roadmap2Item1: "多NPC类型（历史、美食、文化）",
+                roadmap2Item2: "NPC地图导航标记",
+                roadmap2Item3: "用户偏好记忆",
+                roadmap2Item4: "对话历史记录",
+                roadmap3Phase: "阶段 3：增强体验",
+                roadmap3Item1: "NPC个性化和情感表达",
+                roadmap3Item2: "多用户同时对话",
+                roadmap3Item3: "AR信息叠加",
+                roadmap3Item4: "虚拟商品购买",
+                roadmap4Phase: "阶段 4：元宇宙生态",
+                roadmap4Item1: "UGC内容创作",
+                roadmap4Item2: "跨世界传送",
+                roadmap4Item3: "虚拟活动系统",
+                roadmap4Item4: "社交功能完善",
+                cta1: "GitHub 加星标",
+                cta2: "返回演示",
+                backLink: "\u2190 返回主演示页面"
+            }
+        };
+
+        var currentLang = localStorage.getItem('language') || 'zh';
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('language', lang);
+            document.documentElement.lang = lang;
+
+            document.querySelectorAll('.lang-btn').forEach(function(btn) {
+                btn.classList.remove('active');
+                if (btn.dataset.lang === lang) {
+                    btn.classList.add('active');
+                }
+            });
+
+            applyTranslations();
+        }
+
+        function applyTranslations() {
+            document.querySelectorAll('[data-i18n]').forEach(function(el) {
+                var key = el.getAttribute('data-i18n');
+                if (translations[currentLang] && translations[currentLang][key]) {
+                    el.textContent = translations[currentLang][key];
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var savedLang = localStorage.getItem('language') || 'zh';
+            setLanguage(savedLang);
+        });
+    </script>
 </body>
 </html>
