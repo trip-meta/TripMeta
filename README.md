@@ -51,62 +51,7 @@ TripMeta is an innovative VR tourism platform combining AI technology with virtu
 
 ### System Architecture
 
-```mermaid
-flowchart TB
-    subgraph AI["🤖 AI Services Layer"]
-        GPT["GPT-4 API\nConversational AI"]
-        AzureSpeech["Azure Speech Services\nVoice Recognition & TTS"]
-        AzureVision["Azure Computer Vision\nObject Detection & AR"]
-        KG["Knowledge Graph\nHistorical & Cultural Data"]
-    end
-
-    subgraph VR["🥽 VR Platform Layer"]
-        Unity["Unity 2021.3.11f1\nGame Engine"]
-        PICO["PICO 4 SDK\nVR Headset Integration"]
-        URP["Universal Render Pipeline\n90 FPS Graphics"]
-        XR["XR Interaction Toolkit\nHand Tracking"]
-    end
-
-    subgraph Core["⚙️ Core Systems Layer"]
-        DI["Dependency Injection\nService Locator"]
-        Config["Configuration Manager\nScriptableObjects"]
-        Event["Event Bus\nMessage Broker"]
-        Error["Error Handling\nException Management"]
-    end
-
-    subgraph Features["✨ Feature Modules"]
-        Guide["AI Tour Guide\nConversation & Personalization"]
-        Social["Social Module\nMulti-user Sessions"]
-        Nav["Navigation System\nWaypoints & POI"]
-        Video["Video Recording\nCapture & Export"]
-    end
-
-    subgraph Interaction["🎯 Interaction Layer"]
-        Voice["Voice Commands\nNatural Language Input"]
-        Controller["VR Controllers\nHand Tracking"]
-        UI["Spatial UI\nFloating Interfaces"]
-        Haptic["Haptic Feedback\nTouch Sensations"]
-    end
-
-    subgraph Presentation["🎨 Presentation Layer"]
-        Scene["Scene Management\nLevel Streaming"]
-        Assets["3D Assets\nPOLYGON City, Sci-Fi Pack"]
-        Audio["Audio System\nSpatial Audio"]
-    end
-
-    AI --> Core
-    VR --> Core
-    Core --> Features
-    Features --> Interaction
-    Interaction --> Presentation
-
-    style AI fill:#e1bee7,stroke:#8e24aa,stroke-width:2px
-    style VR fill:#bbdefb,stroke:#1976d2,stroke-width:2px
-    style Core fill:#c8e6c9,stroke:#388e3c,stroke-width:2px
-    style Features fill:#ffe0b2,stroke:#f57c00,stroke-width:2px
-    style Interaction fill:#b2dfdb,stroke:#00796b,stroke-width:2px
-    style Presentation fill:#f8bbd9,stroke:#c2185b,stroke-width:2px
-```
+![TripMeta System Architecture](./docs/architecture-diagram.png)
 
 **Architecture Highlights:**
 
@@ -333,62 +278,7 @@ TripMeta 是一个创新的 VR 旅游平台，结合 AI 技术和虚拟现实，
 
 ### 系统架构
 
-```mermaid
-flowchart TB
-    subgraph AI["🤖 AI 服务层"]
-        GPT["GPT-4 API\n对话式 AI"]
-        AzureSpeech["Azure 语音服务\n语音识别与合成"]
-        AzureVision["Azure 计算机视觉\n物体检测与 AR"]
-        KG["知识图谱\n历史文化数据"]
-    end
-
-    subgraph VR["🥽 VR 平台层"]
-        Unity["Unity 2021.3.11f1\n游戏引擎"]
-        PICO["PICO 4 SDK\nVR 头显集成"]
-        URP["通用渲染管线 URP\n90 FPS 图形"]
-        XR["XR 交互工具包\n手部追踪"]
-    end
-
-    subgraph Core["⚙️ 核心系统层"]
-        DI["依赖注入\n服务定位器"]
-        Config["配置管理\nScriptableObjects"]
-        Event["事件总线\n消息代理"]
-        Error["错误处理\n异常管理"]
-    end
-
-    subgraph Features["✨ 功能模块"]
-        Guide["AI 智能导游\n对话与个性化"]
-        Social["社交模块\n多用户会话"]
-        Nav["导航系统\n路径点与兴趣点"]
-        Video["视频录制\n捕获与导出"]
-    end
-
-    subgraph Interaction["🎯 交互层"]
-        Voice["语音命令\n自然语言输入"]
-        Controller["VR 控制器\n手部追踪"]
-        UI["空间 UI\n悬浮界面"]
-        Haptic["触觉反馈\n触摸感知"]
-    end
-
-    subgraph Presentation["🎨 表现层"]
-        Scene["场景管理\n关卡流式加载"]
-        Assets["3D 资源\nPOLYGON 城市, Sci-Fi 包"]
-        Audio["音频系统\n空间音频"]
-    end
-
-    AI --> Core
-    VR --> Core
-    Core --> Features
-    Features --> Interaction
-    Interaction --> Presentation
-
-    style AI fill:#e1bee7,stroke:#8e24aa,stroke-width:2px
-    style VR fill:#bbdefb,stroke:#1976d2,stroke-width:2px
-    style Core fill:#c8e6c9,stroke:#388e3c,stroke-width:2px
-    style Features fill:#ffe0b2,stroke:#f57c00,stroke-width:2px
-    style Interaction fill:#b2dfdb,stroke:#00796b,stroke-width:2px
-    style Presentation fill:#f8bbd9,stroke:#c2185b,stroke-width:2px
-```
+![TripMeta 系统架构图](./docs/architecture-diagram.png)
 
 **架构亮点:**
 
