@@ -62,10 +62,26 @@ TripMeta is an innovative VR tourism platform combining AI technology with virtu
 ## Key Features
 
 ### 🤖 AI Tour Guide
-- **GPT-Powered Conversations**: Natural language understanding and generation
+- **GPT-4o Powered Conversations**: Natural language understanding and generation
 - **Personalized Responses**: Context-aware explanations based on user interests
 - **Multi-language Support**: English, Chinese, Japanese, and more
 - **Rich Knowledge Base**: Historical facts, cultural insights, and travel tips
+- **Streaming Responses**: Real-time SSE streaming for faster interaction
+
+### 🎭 AI NPC System
+- **Multi-NPC Support**: Multiple AI characters with unique personalities
+- **Character Personalities**: Configurable via ScriptableObject (tour guide, merchant, resident, scholar)
+- **Independent Contexts**: Each NPC maintains separate conversation history
+- **Behavior Tree**: Autonomous behaviors (patrol, greeting, conversing, farewell)
+- **Token Tracking**: Per-minute and per-hour token usage monitoring
+- **Request Queue**: Concurrent request management (max 3 simultaneous)
+- **Conversation Persistence**: Auto-save dialogue history to disk
+
+### 🔄 LLM Fallback System
+- **OpenAI GPT-4o**: Primary cloud LLM with streaming support
+- **Ollama Local LLM**: Fallback to local models (llama3.2, etc.)
+- **Automatic Failover**: Switch to Ollama if OpenAI API fails
+- **Dual Streaming**: SSE streaming support for both OpenAI and Ollama
 
 ### 🥽 Immersive VR Experience
 - **PICO 4 Support**: Optimized for PICO VR headsets
