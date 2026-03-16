@@ -25,7 +25,7 @@ namespace TripMeta.AI
         [Header("API设置")]
         public string apiKey = "";
         public string apiEndpoint = "https://api.openai.com/v1/chat/completions";
-        public string model = "gpt-4";
+        public string model = "gpt-4o"; // 升级到GPT-4o
         
         [Header("生成参数")]
         public int maxTokens = 2000;
@@ -38,6 +38,11 @@ namespace TripMeta.AI
         public int maxRequestsPerMinute = 60;
         public float requestTimeout = 30f;
         public int maxConversationLength = 20;
+        
+        [Header("Fallback配置")]
+        public bool enableFallback = true;
+        public string ollamaEndpoint = "http://localhost:11434/api/generate";
+        public string ollamaModel = "llama3.2";
     }
     
     /// <summary>

@@ -10,7 +10,7 @@ using TripMeta.Core.ErrorHandling;
 namespace TripMeta.AI
 {
     /// <summary>
-    /// GPT服务 - OpenAI GPT-4集成
+    /// GPT服务 - OpenAI GPT-4o集成（支持流式响应和Ollama fallback）
     /// </summary>
     public class GPTService : IGPTService
     {
@@ -23,9 +23,16 @@ namespace TripMeta.AI
         private int requestCount = 0;
         private DateTime lastRequestTime = DateTime.MinValue;
         
+        // Ollama fallback 配置
+        private string ollamaEndpoint = "http://localhost:11434/api/generate";
+        private string ollamaModel = "llama3.2";
+        private bool useOllama = false;
+        
         public bool IsInitialized => isInitialized;
+        public bool UseOllama => useOllama;
         public event Action<string, string> OnResponseReceived;
         public event Action<string> OnError;
+        public event Action<string, string> OnStreamChunk; // 流式响应事件
         
         public GPTService(GPTConfig config)
         {
@@ -135,7 +142,7 @@ namespace TripMeta.AI
         }
         
         /// <summary>
-        /// 流式聊天
+        /// 流式聊天（支持真实的SSE流式响应）
         /// </summary>
         public async Task SendStreamChatAsync(string message, Action<string> onPartialResponse, string conversationId = null)
         {
@@ -149,18 +156,230 @@ namespace TripMeta.AI
                 var conversation = GetOrCreateConversation(conversationId);
                 conversation.AddMessage("user", message);
                 
-                var request = CreateStreamChatRequest(conversation);
-                
-                await SendStreamRequestAsync(request, onPartialResponse);
+                // 尝试OpenAI流式请求
+                if (!useOllama)
+                {
+                    await SendOpenAIStreamRequestAsync(conversation, onPartialResponse);
+                }
+                else
+                {
+                    // 使用Ollama流式请求
+                    await SendOllamaStreamRequestAsync(conversation, onPartialResponse);
+                }
                 
                 Logger.LogInfo($"GPT流式聊天完成: {message.Substring(0, Math.Min(50, message.Length))}...", "GPT");
             }
             catch (Exception ex)
             {
                 Logger.LogException(ex, "GPT流式聊天失败");
+                
+                // 如果OpenAI失败，尝试切换到Ollama
+                if (!useOllama && config.enableFallback)
+                {
+                    Logger.LogWarning("OpenAI failed, switching to Ollama fallback", "GPT");
+                    useOllama = true;
+                    
+                    // 重试
+                    try
+                    {
+                        var conversation = GetOrCreateConversation(conversationId);
+                        await SendOllamaStreamRequestAsync(conversation, onPartialResponse);
+                        return;
+                    }
+                    catch (Exception fallbackEx)
+                    {
+                        Logger.LogException(fallbackEx, "Ollama fallback also failed");
+                    }
+                }
+                
                 OnError?.Invoke(ex.Message);
                 throw;
             }
+        }
+        
+        /// <summary>
+        /// 设置Ollama配置
+        /// </summary>
+        public void SetOllamaConfig(string endpoint, string model)
+        {
+            ollamaEndpoint = endpoint ?? "http://localhost:11434/api/generate";
+            ollamaModel = model ?? "llama3.2";
+        }
+        
+        /// <summary>
+        /// 启用/禁用Ollama
+        /// </summary>
+        public void SetUseOllama(bool enable)
+        {
+            useOllama = enable;
+            Logger.LogInfo($"Ollama mode: {(enable ? "enabled" : "disabled")}", "GPT");
+        }
+        
+        /// <summary>
+        /// 发送OpenAI流式请求（SSE）
+        /// </summary>
+        private async Task SendOpenAIStreamRequestAsync(GPTConversation conversation, Action<string> onPartialResponse)
+        {
+            var request = CreateStreamChatRequest(conversation);
+            var json = JsonConvert.SerializeObject(request);
+            var bytes = Encoding.UTF8.GetBytes(json);
+            
+            using (var webRequest = new UnityWebRequest(config.apiEndpoint, "POST"))
+            {
+                webRequest.uploadHandler = new UploadHandlerRaw(bytes);
+                webRequest.downloadHandler = new DownloadHandlerBuffer();
+                webRequest.SetRequestHeader("Content-Type", "application/json");
+                webRequest.SetRequestHeader("Authorization", $"Bearer {config.apiKey}");
+                webRequest.timeout = (int)config.requestTimeout;
+                
+                var operation = webRequest.SendWebRequest();
+                
+                // 实时读取流式响应
+                var fullContent = "";
+                var lastLength = 0;
+                
+                while (!operation.isDone)
+                {
+                    await Task.Delay(50);
+                    
+                    // 检查是否有新数据
+                    if (webRequest.downloadHandler != null)
+                    {
+                        var currentText = webRequest.downloadHandler.text;
+                        if (currentText.Length > lastLength)
+                        {
+                            var newData = currentText.Substring(lastLength);
+                            lastLength = currentText.Length;
+                            
+                            // 解析SSE数据
+                            var lines = newData.Split('\n');
+                            foreach (var line in lines)
+                            {
+                                if (line.StartsWith("data: "))
+                                {
+                                    var jsonLine = line.Substring(6);
+                                    if (jsonLine == "[DONE]") continue;
+                                    
+                                    try
+                                    {
+                                        var chunk = JsonConvert.DeserializeObject<dynamic>(jsonLine);
+                                        if (chunk?.choices?[0]?.delta?.content != null)
+                                        {
+                                            var content = chunk.choices[0].delta.content.ToString();
+                                            fullContent += content;
+                                            onPartialResponse?.Invoke(fullContent);
+                                            OnStreamChunk?.Invoke(conversation.Id, content);
+                                        }
+                                    }
+                                    catch
+                                    {
+                                        // 忽略解析错误
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                if (webRequest.result != UnityWebRequest.Result.Success)
+                {
+                    throw new Exception($"OpenAI stream request failed: {webRequest.error}");
+                }
+                
+                // 添加完整响应到对话
+                conversation.AddMessage("assistant", fullContent);
+            }
+        }
+        
+        /// <summary>
+        /// 发送Ollama流式请求
+        /// </summary>
+        private async Task SendOllamaStreamRequestAsync(GPTConversation conversation, Action<string> onPartialResponse)
+        {
+            var messages = conversation.GetMessages();
+            var prompt = BuildPromptFromMessages(messages);
+            
+            var request = new
+            {
+                model = ollamaModel,
+                prompt = prompt,
+                stream = true
+            };
+            
+            var json = JsonConvert.SerializeObject(request);
+            var bytes = Encoding.UTF8.GetBytes(json);
+            
+            using (var webRequest = new UnityWebRequest(ollamaEndpoint, "POST"))
+            {
+                webRequest.uploadHandler = new UploadHandlerRaw(bytes);
+                webRequest.downloadHandler = new DownloadHandlerBuffer();
+                webRequest.SetRequestHeader("Content-Type", "application/json");
+                webRequest.timeout = (int)config.requestTimeout;
+                
+                var operation = webRequest.SendWebRequest();
+                
+                var fullContent = "";
+                var lastLength = 0;
+                
+                while (!operation.isDone)
+                {
+                    await Task.Delay(50);
+                    
+                    if (webRequest.downloadHandler != null)
+                    {
+                        var currentText = webRequest.downloadHandler.text;
+                        if (currentText.Length > lastLength)
+                        {
+                            var newData = currentText.Substring(lastLength);
+                            lastLength = currentText.Length;
+                            
+                            // Ollama返回JSON行
+                            var lines = newData.Split('\n');
+                            foreach (var line in lines)
+                            {
+                                if (string.IsNullOrWhiteSpace(line)) continue;
+                                
+                                try
+                                {
+                                    var chunk = JsonConvert.DeserializeObject<dynamic>(line);
+                                    if (chunk?.response != null)
+                                    {
+                                        var content = chunk.response.ToString();
+                                        fullContent += content;
+                                        onPartialResponse?.Invoke(fullContent);
+                                        OnStreamChunk?.Invoke(conversation.Id, content);
+                                    }
+                                }
+                                catch
+                                {
+                                    // 忽略解析错误
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                if (webRequest.result != UnityWebRequest.Result.Success)
+                {
+                    throw new Exception($"Ollama request failed: {webRequest.error}");
+                }
+                
+                conversation.AddMessage("assistant", fullContent);
+            }
+        }
+        
+        /// <summary>
+        /// 从消息列表构建提示词（用于Ollama）
+        /// </summary>
+        private string BuildPromptFromMessages(List<GPTMessage> messages)
+        {
+            var prompt = "";
+            foreach (var msg in messages)
+            {
+                prompt += $"{msg.role}: {msg.content}\n";
+            }
+            prompt += "assistant: ";
+            return prompt;
         }
         
         /// <summary>

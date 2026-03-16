@@ -85,12 +85,14 @@ TripMeta is an innovative VR tourism platform combining AI technology with virtu
 |-----------|----------|---------|
 | **Game Engine** | Unity 2021.3.11f1 | Core development platform |
 | **VR Platform** | PICO 4 | Target VR headset |
-| **Render Pipeline** | Universal Render Pipeline (URP) | High-performance graphics |
-| **Input System** | Unity Input System | Modern input handling |
-| **AI Engine** | GPT-4 via OpenAI API | Conversational AI |
+| **Render Pipeline** | URP 17.0.3 | High-performance graphics |
+| **XR Interaction** | XR Interaction Toolkit 3.0.7 | VR interaction system |
+| **Input System** | Unity Input System 1.11.2 | Modern input handling |
+| **AI Engine** | GPT-4o via OpenAI API | Conversational AI |
 | **Speech** | Azure Cognitive Services | Voice recognition & TTS |
 | **Vision** | Azure Computer Vision | Object detection & AR |
-| **Networking** | Unity Netcode for GameObjects | Multiplayer support |
+| **Networking** | Netcode for GameObjects 2.1.1 | Multiplayer support |
+| **ML Agents** | Unity ML Agents 3.0.0 | AI behavior training |
 
 ## Project Structure
 
