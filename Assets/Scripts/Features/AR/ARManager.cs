@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using Unity.XR.CoreUtils;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 
@@ -14,7 +15,7 @@ namespace TripMeta.Features.AR
     {
         [Header("AR组件")]
         [SerializeField] private ARSession arSession;
-        [SerializeField] private ARSessionOrigin arOrigin;
+        [SerializeField] private XROrigin xrOrigin;
         [SerializeField] private ARRaycastManager raycastManager;
         [SerializeField] private ARCameraManager cameraManager;
 
@@ -106,22 +107,22 @@ namespace TripMeta.Features.AR
                 }
             }
 
-            if (arOrigin == null)
+            if (xrOrigin == null)
             {
-                arOrigin = FindObjectOfType<ARSessionOrigin>();
-                if (arOrigin == null)
+                xrOrigin = FindObjectOfType<XROrigin>();
+                if (xrOrigin == null)
                 {
-                    var originGO = new GameObject("ARSessionOrigin");
-                    arOrigin = originGO.AddComponent<ARSessionOrigin>();
+                    var originGO = new GameObject("XROrigin");
+                    xrOrigin = originGO.AddComponent<XROrigin>();
                 }
             }
 
             if (raycastManager == null)
             {
-                raycastManager = arOrigin.GetComponent<ARRaycastManager>();
+                raycastManager = xrOrigin.GetComponent<ARRaycastManager>();
                 if (raycastManager == null)
                 {
-                    raycastManager = arOrigin.gameObject.AddComponent<ARRaycastManager>();
+                    raycastManager = xrOrigin.gameObject.AddComponent<ARRaycastManager>();
                 }
             }
 

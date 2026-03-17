@@ -258,7 +258,7 @@ Built with amazing open-source technologies:
 - [x] Multi-user VR sessions (新增：基于 Unity Netcode 的多人VR同步)
 - [x] AR attraction overlays (新增：Azure Computer Vision AR 景点识别)
 - [x] Mobile app companion (新增：iOS/Android 配套移动应用)
-- [ ] Unity 2022.3 upgrade
+- [x] Unity 2022.3 upgrade (新增：升级到 Unity 2022.3 LTS)
 
 ---
 
