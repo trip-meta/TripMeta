@@ -8,6 +8,7 @@ using TripMeta.Infrastructure.Resources;
 using TripMeta.Features.TourGuide;
 using TripMeta.Features.SceneGeneration;
 using TripMeta.AI;
+using TripMeta.AI.Services;
 
 namespace TripMeta.Core.DependencyInjection
 {
@@ -129,11 +130,57 @@ namespace TripMeta.Core.DependencyInjection
         {
             // 注册AI服务管理器
             container.RegisterSingleton<IAIServiceManager, AIServiceManager>();
-            
+
             // 注册AI导游
             container.RegisterSingleton<IAITourGuide, AITourGuide>();
-            
+
+            // 注册翻译服务
+            InstallTranslationService(container);
+
             Logger.LogInfo("AI服务安装完成", "ServiceInstaller");
+        }
+
+        /// <summary>
+        /// 安装翻译服务
+        /// </summary>
+        private static void InstallTranslationService(IServiceContainer container)
+        {
+            // 加载翻译配置
+            TranslationConfig translationConfig = null;
+            if (Resources.Load<TranslationConfig>("Config/TranslationConfig") != null)
+            {
+                translationConfig = Resources.Load<TranslationConfig>("Config/TranslationConfig");
+            }
+            else
+            {
+                // 创建默认配置
+                translationConfig = ScriptableObject.CreateInstance<TranslationConfig>();
+                translationConfig.SubscriptionKey = System.Environment.GetEnvironmentVariable("AZURE_TRANSLATOR_KEY") ?? "";
+                translationConfig.Region = System.Environment.GetEnvironmentVariable("AZURE_TRANSLATOR_REGION") ?? "eastasia";
+                Debug.LogWarning("[ServiceInstaller] 未找到 TranslationConfig，使用默认配置。请创建配置资源。");
+            }
+
+            container.RegisterSingleton<TranslationConfig>(translationConfig);
+
+            // 注册翻译服务
+            if (!string.IsNullOrEmpty(translationConfig.SubscriptionKey))
+            {
+                var translationService = new TranslationService(
+                    translationConfig.SubscriptionKey,
+                    translationConfig.Region,
+                    translationConfig.Endpoint
+                );
+                translationService.SetTranslationOptions(translationConfig.ToTranslationOptions());
+                container.RegisterSingleton<ITranslationService>(translationService);
+                Logger.LogInfo("翻译服务安装完成", "ServiceInstaller");
+            }
+            else
+            {
+                // 如果没有配置密钥，注册一个模拟服务
+                var mockService = new MockTranslationService();
+                container.RegisterSingleton<ITranslationService>(mockService);
+                Logger.LogWarning("翻译服务使用模拟实现，请配置 Azure Translator 密钥以启用真实翻译功能", "ServiceInstaller");
+            }
         }
         
         /// <summary>
