@@ -8,6 +8,7 @@ using TripMeta.Infrastructure.Resources;
 using TripMeta.Features.TourGuide;
 using TripMeta.Features.SceneGeneration;
 using TripMeta.Features.Multiplayer;
+using TripMeta.Features.AR;
 using TripMeta.AI;
 using TripMeta.AI.Services;
 
@@ -198,6 +199,9 @@ namespace TripMeta.Core.DependencyInjection
             // 注册多人游戏服务
             InstallMultiplayerService(container);
 
+            // 注册AR服务
+            InstallARService(container);
+
             Logger.LogInfo("功能服务安装完成", "ServiceInstaller");
         }
 
@@ -235,6 +239,43 @@ namespace TripMeta.Core.DependencyInjection
             container.RegisterSingleton<MultiplayerManager>(multiplayerManager);
 
             Logger.LogInfo("多人游戏服务安装完成", "ServiceInstaller");
+        }
+
+        /// <summary>
+        /// 安装AR服务
+        /// </summary>
+        private static void InstallARService(IServiceContainer container)
+        {
+            // 加载AR配置
+            ARConfig arConfig = null;
+            if (Resources.Load<ARConfig>("Config/ARConfig") != null)
+            {
+                arConfig = Resources.Load<ARConfig>("Config/ARConfig");
+            }
+            else
+            {
+                // 创建默认配置
+                arConfig = ScriptableObject.CreateInstance<ARConfig>();
+                arConfig.VisionApiKey = System.Environment.GetEnvironmentVariable("AZURE_VISION_KEY") ?? "";
+                Debug.LogWarning("[ServiceInstaller] 未找到 ARConfig，使用默认配置。请创建配置资源。");
+            }
+
+            container.RegisterSingleton<ARConfig>(arConfig);
+
+            // 查找或创建 ARManager
+            var arManager = Object.FindObjectOfType<ARManager>();
+            if (arManager == null)
+            {
+                var go = new GameObject("ARManager");
+                arManager = go.AddComponent<ARManager>();
+                Object.DontDestroyOnLoad(go);
+                Debug.Log("[ServiceInstaller] 创建 ARManager GameObject");
+            }
+
+            container.RegisterSingleton<IARService>(arManager);
+            container.RegisterSingleton<ARManager>(arManager);
+
+            Logger.LogInfo("AR服务安装完成", "ServiceInstaller");
         }
         
         /// <summary>

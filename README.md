@@ -256,7 +256,7 @@ Built with amazing open-source technologies:
 - [x] PICO 4 VR support
 - [x] Real-time translation (新增：支持 14+ 语言的文本/语音翻译)
 - [x] Multi-user VR sessions (新增：基于 Unity Netcode 的多人VR同步)
-- [ ] AR attraction overlays
+- [x] AR attraction overlays (新增：Azure Computer Vision AR 景点识别)
 - [ ] Mobile app companion
 - [ ] Unity 2022.3 upgrade
 
