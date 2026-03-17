@@ -9,6 +9,7 @@ using TripMeta.Features.TourGuide;
 using TripMeta.Features.SceneGeneration;
 using TripMeta.Features.Multiplayer;
 using TripMeta.Features.AR;
+using TripMeta.Features.MobileCompanion;
 using TripMeta.AI;
 using TripMeta.AI.Services;
 
@@ -202,6 +203,9 @@ namespace TripMeta.Core.DependencyInjection
             // 注册AR服务
             InstallARService(container);
 
+            // 注册移动伴侣服务
+            InstallMobileCompanionService(container);
+
             Logger.LogInfo("功能服务安装完成", "ServiceInstaller");
         }
 
@@ -277,7 +281,43 @@ namespace TripMeta.Core.DependencyInjection
 
             Logger.LogInfo("AR服务安装完成", "ServiceInstaller");
         }
-        
+
+        /// <summary>
+        /// 安装移动伴侣服务
+        /// </summary>
+        private static void InstallMobileCompanionService(IServiceContainer container)
+        {
+            // 加载移动伴侣配置
+            MobileCompanionConfig companionConfig = null;
+            if (Resources.Load<MobileCompanionConfig>("Config/MobileCompanionConfig") != null)
+            {
+                companionConfig = Resources.Load<MobileCompanionConfig>("Config/MobileCompanionConfig");
+            }
+            else
+            {
+                // 创建默认配置
+                companionConfig = ScriptableObject.CreateInstance<MobileCompanionConfig>();
+                Debug.LogWarning("[ServiceInstaller] 未找到 MobileCompanionConfig，使用默认配置。请创建配置资源。");
+            }
+
+            container.RegisterSingleton<MobileCompanionConfig>(companionConfig);
+
+            // 查找或创建 MobileCompanionManager
+            var companionManager = Object.FindObjectOfType<MobileCompanionManager>();
+            if (companionManager == null)
+            {
+                var go = new GameObject("MobileCompanionManager");
+                companionManager = go.AddComponent<MobileCompanionManager>();
+                Object.DontDestroyOnLoad(go);
+                Debug.Log("[ServiceInstaller] 创建 MobileCompanionManager GameObject");
+            }
+
+            container.RegisterSingleton<IMobileCompanionService>(companionManager);
+            container.RegisterSingleton<MobileCompanionManager>(companionManager);
+
+            Logger.LogInfo("移动伴侣服务安装完成", "ServiceInstaller");
+        }
+
         /// <summary>
         /// 安装VR服务
         /// </summary>

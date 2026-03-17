@@ -257,7 +257,7 @@ Built with amazing open-source technologies:
 - [x] Real-time translation (新增：支持 14+ 语言的文本/语音翻译)
 - [x] Multi-user VR sessions (新增：基于 Unity Netcode 的多人VR同步)
 - [x] AR attraction overlays (新增：Azure Computer Vision AR 景点识别)
-- [ ] Mobile app companion
+- [x] Mobile app companion (新增：iOS/Android 配套移动应用)
 - [ ] Unity 2022.3 upgrade
 
 ---
