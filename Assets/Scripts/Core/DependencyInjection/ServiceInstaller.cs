@@ -7,6 +7,7 @@ using TripMeta.Infrastructure.Cache;
 using TripMeta.Infrastructure.Resources;
 using TripMeta.Features.TourGuide;
 using TripMeta.Features.SceneGeneration;
+using TripMeta.Features.Multiplayer;
 using TripMeta.AI;
 using TripMeta.AI.Services;
 
@@ -190,11 +191,50 @@ namespace TripMeta.Core.DependencyInjection
         {
             // 注册导游服务
             container.RegisterSingleton<ITourGuideService, TourGuideService>();
-            
+
             // 注册场景生成服务
             container.RegisterSingleton<ISceneGenerationService, SceneGenerationService>();
-            
+
+            // 注册多人游戏服务
+            InstallMultiplayerService(container);
+
             Logger.LogInfo("功能服务安装完成", "ServiceInstaller");
+        }
+
+        /// <summary>
+        /// 安装多人游戏服务
+        /// </summary>
+        private static void InstallMultiplayerService(IServiceContainer container)
+        {
+            // 加载多人游戏配置
+            MultiplayerConfig multiplayerConfig = null;
+            if (Resources.Load<MultiplayerConfig>("Config/MultiplayerConfig") != null)
+            {
+                multiplayerConfig = Resources.Load<MultiplayerConfig>("Config/MultiplayerConfig");
+            }
+            else
+            {
+                // 创建默认配置
+                multiplayerConfig = ScriptableObject.CreateInstance<MultiplayerConfig>();
+                Debug.LogWarning("[ServiceInstaller] 未找到 MultiplayerConfig，使用默认配置。请创建配置资源。");
+            }
+
+            container.RegisterSingleton<MultiplayerConfig>(multiplayerConfig);
+
+            // 查找或创建 MultiplayerManager
+            var multiplayerManager = Object.FindObjectOfType<MultiplayerManager>();
+            if (multiplayerManager == null)
+            {
+                var go = new GameObject("MultiplayerManager");
+                multiplayerManager = go.AddComponent<MultiplayerManager>();
+                Object.DontDestroyOnLoad(go);
+                Debug.Log("[ServiceInstaller] 创建 MultiplayerManager GameObject");
+            }
+
+            container.RegisterSingleton<IMultiplayerService>(multiplayerManager);
+            container.RegisterSingleton<MultiplayerManager>(multiplayerManager);
+
+            Logger.LogInfo("多人游戏服务安装完成", "ServiceInstaller");
         }
         
         /// <summary>
