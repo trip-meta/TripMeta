@@ -14,6 +14,7 @@ using TripMeta.AI;
 using TripMeta.AI.Services;
 using TripMeta.Interaction;
 using TripMeta.VR.Platform;
+using TripMeta.VR.WebXR;
 
 namespace TripMeta.Core.DependencyInjection
 {
@@ -525,6 +526,9 @@ namespace TripMeta.Core.DependencyInjection
             // 安装 Vision Pro 适配器 (Phase 2: Apple Vision Pro 适配)
             InstallVisionProAdapter(container);
 
+            // 安装 WebXR 服务 (Phase 2: WebXR 跨平台)
+            InstallWebXRService(container);
+
             Logger.LogInfo("VR服务安装完成", "ServiceInstaller");
         }
 
@@ -557,8 +561,38 @@ namespace TripMeta.Core.DependencyInjection
             container.RegisterSingleton<VisionProAdapter>(visionProAdapter);
             Logger.LogInfo("Vision Pro 适配器安装完成 (空间计算API、手势交互、混合现实)", "ServiceInstaller");
         }
+
+        /// <summary>
+        /// 安装 WebXR 服务 (Phase 2: WebXR 跨平台)
+        /// 浏览器 VR 体验、WebAssembly 优化、云渲染
+        /// </summary>
+        private static void InstallWebXRService(IServiceContainer container)
+        {
+            // 查找或创建 WebXRManager
+            var webXRManager = Object.FindObjectOfType<WebXRManager>();
+            if (webXRManager == null)
+            {
+                var go = new GameObject("WebXRManager");
+                webXRManager = go.AddComponent<WebXRManager>();
+                webXRManager.autoInitialize = true;
+                webXRManager.enableWebAssembly = true;
+                webXRManager.enableCompression = true;
+                webXRManager.enableCaching = true;
+                webXRManager.targetFrameRate = 72;
+                webXRManager.renderScale = 1.0f;
+                webXRManager.enableHandTracking = true;
+                webXRManager.enableGamepadInput = true;
+                webXRManager.signallingServerUrl = "wss://tripmeta.io/signalling";
+                webXRManager.enableCloudRendering = false;
+                Object.DontDestroyOnLoad(go);
+                Debug.Log("[ServiceInstaller] 创建 WebXRManager GameObject");
+            }
+
+            container.RegisterSingleton<WebXRManager>(webXRManager);
+            Logger.LogInfo("WebXR 服务安装完成 (浏览器VR、WebAssembly、云渲染)", "ServiceInstaller");
+        }
     }
-    
+
     // 临时实现类，用于服务注册
     public class NetworkService : INetworkService
     {
