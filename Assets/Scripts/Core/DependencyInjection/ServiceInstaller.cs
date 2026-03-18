@@ -13,6 +13,7 @@ using TripMeta.Features.MobileCompanion;
 using TripMeta.AI;
 using TripMeta.AI.Services;
 using TripMeta.Interaction;
+using TripMeta.VR.Platform;
 
 namespace TripMeta.Core.DependencyInjection
 {
@@ -516,12 +517,45 @@ namespace TripMeta.Core.DependencyInjection
             {
                 container.RegisterSingleton<VRManager>(vrManager);
             }
-            
+
             // 注册VR性能优化器
-            container.RegisterSingleton<VRPerformanceOptimizer>(Object.FindObjectOfType<VRPerformanceOptimizer>() ?? 
+            container.RegisterSingleton<VRPerformanceOptimizer>(Object.FindObjectOfType<VRPerformanceOptimizer>() ??
                 new GameObject("VRPerformanceOptimizer").AddComponent<VRPerformanceOptimizer>());
-            
+
+            // 安装 Vision Pro 适配器 (Phase 2: Apple Vision Pro 适配)
+            InstallVisionProAdapter(container);
+
             Logger.LogInfo("VR服务安装完成", "ServiceInstaller");
+        }
+
+        /// <summary>
+        /// 安装 Vision Pro 适配器 (Phase 2: Apple Vision Pro 适配)
+        /// 空间计算API集成、手势交互、混合现实渲染
+        /// </summary>
+        private static void InstallVisionProAdapter(IServiceContainer container)
+        {
+            // 查找或创建 VisionProAdapter
+            var visionProAdapter = Object.FindObjectOfType<VisionProAdapter>();
+            if (visionProAdapter == null)
+            {
+                var go = new GameObject("VisionProAdapter");
+                visionProAdapter = go.AddComponent<VisionProAdapter>();
+                visionProAdapter.enableHandTracking = true;
+                visionProAdapter.enableEyeTracking = true;
+                visionProAdapter.enableMixedReality = true;
+                visionProAdapter.enableSpatialAudio = true;
+                visionProAdapter.enableFoveatedRendering = true;
+                visionProAdapter.gestureThreshold = 0.8f;
+                visionProAdapter.pinchThreshold = 0.02f;
+                visionProAdapter.passthroughOpacity = 0.5f;
+                visionProAdapter.foveationLevel = 2;
+                Object.DontDestroyOnLoad(go);
+                Debug.Log("[ServiceInstaller] 创建 VisionProAdapter GameObject");
+            }
+
+            container.RegisterSingleton<IVRPlatformAdapter>(visionProAdapter);
+            container.RegisterSingleton<VisionProAdapter>(visionProAdapter);
+            Logger.LogInfo("Vision Pro 适配器安装完成 (空间计算API、手势交互、混合现实)", "ServiceInstaller");
         }
     }
     
