@@ -200,6 +200,35 @@ namespace TripMeta.Core.DependencyInjection
 
             container.RegisterSingleton<EdgeAIInferenceManager>(edgeAIManager);
             Logger.LogInfo("边缘AI推理服务安装完成 (ONNX Runtime + TensorRT)", "ServiceInstaller");
+
+            // 安装情感计算服务 (Phase 1: 情感计算系统)
+            InstallEmotionRecognitionService(container);
+        }
+
+        /// <summary>
+        /// 安装情感计算服务 (Phase 1: 情感计算系统)
+        /// </summary>
+        private static void InstallEmotionRecognitionService(IServiceContainer container)
+        {
+            // 查找或创建 EmotionRecognitionManager
+            var emotionManager = Object.FindObjectOfType<EmotionRecognitionManager>();
+            if (emotionManager == null)
+            {
+                var go = new GameObject("EmotionRecognitionManager");
+                emotionManager = go.AddComponent<EmotionRecognitionManager>();
+                emotionManager.enableVoiceEmotionRecognition = true;
+                emotionManager.enableTextEmotionAnalysis = true;
+                emotionManager.enableBehavioralEmotionDetection = true;
+                emotionManager.emotionAnalysisInterval = 5f;
+                emotionManager.emotionHistorySize = 10;
+                emotionManager.emotionConfidenceThreshold = 0.7f;
+                emotionManager.enableDebugLogs = false;
+                Object.DontDestroyOnLoad(go);
+                Debug.Log("[ServiceInstaller] 创建 EmotionRecognitionManager GameObject");
+            }
+
+            container.RegisterSingleton<EmotionRecognitionManager>(emotionManager);
+            Logger.LogInfo("情感计算服务安装完成", "ServiceInstaller");
         }
 
         /// <summary>
