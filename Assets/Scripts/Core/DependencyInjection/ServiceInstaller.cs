@@ -12,6 +12,7 @@ using TripMeta.Features.AR;
 using TripMeta.Features.MobileCompanion;
 using TripMeta.AI;
 using TripMeta.AI.Services;
+using TripMeta.Interaction;
 
 namespace TripMeta.Core.DependencyInjection
 {
@@ -203,6 +204,9 @@ namespace TripMeta.Core.DependencyInjection
 
             // 安装情感计算服务 (Phase 1: 情感计算系统)
             InstallEmotionRecognitionService(container);
+
+            // 安装多模态交互服务 (Phase 1: 多模态交互增强)
+            InstallMultimodalInteractionService(container);
         }
 
         /// <summary>
@@ -229,6 +233,34 @@ namespace TripMeta.Core.DependencyInjection
 
             container.RegisterSingleton<EmotionRecognitionManager>(emotionManager);
             Logger.LogInfo("情感计算服务安装完成", "ServiceInstaller");
+        }
+
+        /// <summary>
+        /// 安装多模态交互服务 (Phase 1: 多模态交互增强)
+        /// 手势识别、视线追踪、语音合成
+        /// </summary>
+        private static void InstallMultimodalInteractionService(IServiceContainer container)
+        {
+            // 查找或创建 MultimodalInteractionManager
+            var multimodalManager = Object.FindObjectOfType<MultimodalInteractionManager>();
+            if (multimodalManager == null)
+            {
+                var go = new GameObject("MultimodalInteractionManager");
+                multimodalManager = go.AddComponent<MultimodalInteractionManager>();
+                multimodalManager.enableGestureRecognition = true;
+                multimodalManager.enableEyeTracking = true;
+                multimodalManager.enableVoiceSynthesis = true;
+                multimodalManager.enableMultimodalFusion = true;
+                multimodalManager.gestureConfidenceThreshold = 0.8f;
+                multimodalManager.gazeDwellTime = 1.5f;
+                multimodalManager.speechSpeed = 1.0f;
+                multimodalManager.speechVolume = 0.8f;
+                Object.DontDestroyOnLoad(go);
+                Debug.Log("[ServiceInstaller] 创建 MultimodalInteractionManager GameObject");
+            }
+
+            container.RegisterSingleton<MultimodalInteractionManager>(multimodalManager);
+            Logger.LogInfo("多模态交互服务安装完成 (手势识别、视线追踪、语音合成)", "ServiceInstaller");
         }
 
         /// <summary>
