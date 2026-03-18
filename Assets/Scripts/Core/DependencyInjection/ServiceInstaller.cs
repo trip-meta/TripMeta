@@ -137,10 +137,80 @@ namespace TripMeta.Core.DependencyInjection
             // 注册AI导游
             container.RegisterSingleton<IAITourGuide, AITourGuide>();
 
+            // 安装双引擎LLM服务 (Phase 1: AI双引擎架构)
+            InstallDualEngineLLMService(container);
+
             // 注册翻译服务
             InstallTranslationService(container);
 
             Logger.LogInfo("AI服务安装完成", "ServiceInstaller");
+        }
+
+        /// <summary>
+        /// 安装双引擎LLM服务 (GPT-4 + Claude-3.5)
+        /// </summary>
+        private static void InstallDualEngineLLMService(IServiceContainer container)
+        {
+            // 加载GPT配置
+            GPTConfig gptConfig = null;
+            if (Resources.Load<GPTConfig>("Config/GPTConfig") != null)
+            {
+                gptConfig = Resources.Load<GPTConfig>("Config/GPTConfig");
+            }
+            else
+            {
+                gptConfig = ScriptableObject.CreateInstance<GPTConfig>();
+                gptConfig.apiKey = System.Environment.GetEnvironmentVariable("OPENAI_API_KEY") ?? "";
+                gptConfig.model = "gpt-4";
+                Debug.LogWarning("[ServiceInstaller] 未找到 GPTConfig，使用环境变量或默认配置。");
+            }
+
+            // 加载Claude配置
+            ClaudeConfig claudeConfig = null;
+            if (Resources.Load<ClaudeConfig>("Config/ClaudeConfig") != null)
+            {
+                claudeConfig = Resources.Load<ClaudeConfig>("Config/ClaudeConfig");
+            }
+            else
+            {
+                claudeConfig = ScriptableObject.CreateInstance<ClaudeConfig>();
+                claudeConfig.apiKey = System.Environment.GetEnvironmentVariable("ANTHROPIC_API_KEY") ?? "";
+                claudeConfig.model = "claude-3-5-sonnet-20241022";
+                Debug.LogWarning("[ServiceInstaller] 未找到 ClaudeConfig，使用环境变量或默认配置。");
+            }
+
+            // 加载双引擎配置
+            DualEngineConfig dualConfig = null;
+            if (Resources.Load<DualEngineConfig>("Config/DualEngineConfig") != null)
+            {
+                dualConfig = Resources.Load<DualEngineConfig>("Config/DualEngineConfig");
+            }
+            else
+            {
+                dualConfig = ScriptableObject.CreateInstance<DualEngineConfig>();
+                dualConfig.defaultStrategy = AIEngineSelectionStrategy.Intelligent;
+                dualConfig.enablePerformanceTracking = true;
+            }
+
+            container.RegisterSingleton<GPTConfig>(gptConfig);
+            container.RegisterSingleton<ClaudeConfig>(claudeConfig);
+            container.RegisterSingleton<DualEngineConfig>(dualConfig);
+
+            // 注册AI引擎选择器 (MonoBehaviour)
+            var selectorObject = new GameObject("AIEngineSelector");
+            var engineSelector = selectorObject.AddComponent<AIEngineSelector>();
+            engineSelector.gptConfig = gptConfig;
+            engineSelector.claudeConfig = claudeConfig;
+            engineSelector.selectionStrategy = dualConfig.defaultStrategy;
+            Object.DontDestroyOnLoad(selectorObject);
+            container.RegisterSingleton<AIEngineSelector>(engineSelector);
+
+            // 注册双引擎LLM服务
+            var dualEngineService = new DualEngineLLMService(gptConfig, claudeConfig, dualConfig);
+            container.RegisterSingleton<IGPTService>(dualEngineService);
+            container.RegisterSingleton<DualEngineLLMService>(dualEngineService);
+
+            Logger.LogInfo("双引擎LLM服务安装完成 (GPT-4 + Claude-3.5)", "ServiceInstaller");
         }
 
         /// <summary>
