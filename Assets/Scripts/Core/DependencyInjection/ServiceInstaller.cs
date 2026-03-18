@@ -18,6 +18,7 @@ using TripMeta.VR.WebXR;
 using TripMeta.VR.Rendering;
 using TripMeta.VR.Haptics;
 using TripMeta.Performance;
+using TripMeta.UGC;
 
 namespace TripMeta.Core.DependencyInjection
 {
@@ -53,6 +54,9 @@ namespace TripMeta.Core.DependencyInjection
 
             // 注册性能监控仪表板服务 (Phase 3: 性能监控仪表板)
             InstallPerformanceDashboardService(container);
+
+            // 注册UGC创作工具服务 (Phase 3: UGC创作工具)
+            InstallUGCService(container);
 
             Logger.LogInfo("服务安装完成", "ServiceInstaller");
         }
@@ -741,6 +745,33 @@ namespace TripMeta.Core.DependencyInjection
 
             container.RegisterSingleton<PerformanceDashboard>(performanceDashboard);
             Logger.LogInfo("性能监控仪表板服务安装完成 (实时FPS/延迟/内存监控)", "ServiceInstaller");
+        }
+
+        /// <summary>
+        /// 安装UGC创作工具服务 (Phase 3: UGC创作工具)
+        /// 可视化场景编辑器，让用户创建自定义景点
+        /// </summary>
+        private static void InstallUGCService(IServiceContainer container)
+        {
+            // 查找或创建 SceneEditorManager
+            var sceneEditor = Object.FindObjectOfType<SceneEditorManager>();
+            if (sceneEditor == null)
+            {
+                var go = new GameObject("SceneEditorManager");
+                sceneEditor = go.AddComponent<SceneEditorManager>();
+                sceneEditor.enableAutoSave = true;
+                sceneEditor.autoSaveInterval = 30f;
+                sceneEditor.maxUndoSteps = 50;
+                sceneEditor.scenesSavePath = "UserScenes/";
+                sceneEditor.snapMode = SnapMode.Grid;
+                sceneEditor.snapGridSize = 1f;
+                sceneEditor.snapAngle = 15f;
+                Object.DontDestroyOnLoad(go);
+                Debug.Log("[ServiceInstaller] 创建 SceneEditorManager GameObject");
+            }
+
+            container.RegisterSingleton<SceneEditorManager>(sceneEditor);
+            Logger.LogInfo("UGC创作工具服务安装完成 (可视化场景编辑器)", "ServiceInstaller");
         }
     }
 
