@@ -16,6 +16,7 @@ using TripMeta.Interaction;
 using TripMeta.VR.Platform;
 using TripMeta.VR.WebXR;
 using TripMeta.VR.Rendering;
+using TripMeta.VR.Haptics;
 
 namespace TripMeta.Core.DependencyInjection
 {
@@ -533,7 +534,40 @@ namespace TripMeta.Core.DependencyInjection
             // 安装注视点渲染服务 (Phase 2: 注视点渲染)
             InstallFoveatedRenderingService(container);
 
+            // 安装触觉反馈服务 (Phase 2: 触觉反馈集成)
+            InstallHapticFeedbackService(container);
+
             Logger.LogInfo("VR服务安装完成", "ServiceInstaller");
+        }
+
+        /// <summary>
+        /// 安装触觉反馈服务 (Phase 2: 触觉反馈集成)
+        /// 支持全身触觉反馈设备
+        /// </summary>
+        private static void InstallHapticFeedbackService(IServiceContainer container)
+        {
+            // 查找或创建 HapticFeedbackManager
+            var hapticManager = Object.FindObjectOfType<HapticFeedbackManager>();
+            if (hapticManager == null)
+            {
+                var go = new GameObject("HapticFeedbackManager");
+                hapticManager = go.AddComponent<HapticFeedbackManager>();
+                hapticManager.enableHaptics = true;
+                hapticManager.globalIntensity = 1.0f;
+                hapticManager.defaultPriority = HapticPriority.Normal;
+                hapticManager.enableHead = true;
+                hapticManager.enableTorso = true;
+                hapticManager.enableArms = true;
+                hapticManager.enableHands = true;
+                hapticManager.enableLegs = true;
+                hapticManager.enableFeet = true;
+                hapticManager.autoConnect = true;
+                Object.DontDestroyOnLoad(go);
+                Debug.Log("[ServiceInstaller] 创建 HapticFeedbackManager GameObject");
+            }
+
+            container.RegisterSingleton<HapticFeedbackManager>(hapticManager);
+            Logger.LogInfo("触觉反馈服务安装完成 (支持全身触觉设备)", "ServiceInstaller");
         }
 
         /// <summary>
