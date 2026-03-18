@@ -17,6 +17,7 @@ using TripMeta.VR.Platform;
 using TripMeta.VR.WebXR;
 using TripMeta.VR.Rendering;
 using TripMeta.VR.Haptics;
+using TripMeta.Performance;
 
 namespace TripMeta.Core.DependencyInjection
 {
@@ -49,7 +50,10 @@ namespace TripMeta.Core.DependencyInjection
             
             // 注册VR服务
             InstallVRServices(container);
-            
+
+            // 注册性能监控仪表板服务 (Phase 3: 性能监控仪表板)
+            InstallPerformanceDashboardService(container);
+
             Logger.LogInfo("服务安装完成", "ServiceInstaller");
         }
         
@@ -677,6 +681,66 @@ namespace TripMeta.Core.DependencyInjection
 
             container.RegisterSingleton<EyeFatigueDetector>(fatigueDetector);
             Logger.LogInfo("注视点渲染服务安装完成 (性能提升30%，视觉疲劳监测)", "ServiceInstaller");
+        }
+
+        /// <summary>
+        /// 安装性能监控仪表板服务 (Phase 3: 性能监控仪表板)
+        /// 实时 FPS、延迟、内存监控和分析
+        /// </summary>
+        private static void InstallPerformanceDashboardService(IServiceContainer container)
+        {
+            // 查找或创建 PerformanceMonitor
+            var performanceMonitor = Object.FindObjectOfType<PerformanceMonitor>();
+            if (performanceMonitor == null)
+            {
+                var go = new GameObject("PerformanceMonitor");
+                performanceMonitor = go.AddComponent<PerformanceMonitor>();
+                performanceMonitor.enableMonitoring = true;
+                performanceMonitor.updateInterval = 1.0f;
+                performanceMonitor.maxHistorySize = 300;
+                performanceMonitor.trackFPS = true;
+                performanceMonitor.targetFPS = 72f;
+                performanceMonitor.warningFPS = 60f;
+                performanceMonitor.criticalFPS = 45f;
+                performanceMonitor.trackLatency = true;
+                performanceMonitor.warningLatency = 20f;
+                performanceMonitor.criticalLatency = 50f;
+                performanceMonitor.trackMemory = true;
+                performanceMonitor.warningMemoryMB = 2048;
+                performanceMonitor.criticalMemoryMB = 3072;
+                performanceMonitor.trackRendering = true;
+                performanceMonitor.warningDrawCalls = 2000;
+                performanceMonitor.criticalDrawCalls = 3000;
+                Object.DontDestroyOnLoad(go);
+                Debug.Log("[ServiceInstaller] 创建 PerformanceMonitor GameObject");
+            }
+
+            container.RegisterSingleton<PerformanceMonitor>(performanceMonitor);
+
+            // 查找或创建 PerformanceDashboard
+            var performanceDashboard = Object.FindObjectOfType<PerformanceDashboard>();
+            if (performanceDashboard == null)
+            {
+                // 创建仪表板 Canvas
+                var canvasGo = new GameObject("PerformanceDashboardCanvas");
+                var canvas = canvasGo.AddComponent<Canvas>();
+                canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+                canvas.sortingOrder = 9999;
+                canvasGo.AddComponent<CanvasScaler>();
+                canvasGo.AddComponent<GraphicRaycaster>();
+
+                performanceDashboard = canvasGo.AddComponent<PerformanceDashboard>();
+                performanceDashboard.showOnStart = false;
+                performanceDashboard.toggleKey = KeyCode.F12;
+                performanceDashboard.dashboardCanvas = canvas;
+
+                // 添加图表组件引用（将在UI设置时连接）
+                Object.DontDestroyOnLoad(canvasGo);
+                Debug.Log("[ServiceInstaller] 创建 PerformanceDashboard Canvas");
+            }
+
+            container.RegisterSingleton<PerformanceDashboard>(performanceDashboard);
+            Logger.LogInfo("性能监控仪表板服务安装完成 (实时FPS/延迟/内存监控)", "ServiceInstaller");
         }
     }
 

@@ -158,6 +158,20 @@ public class CrossPlatformVRManager : MonoBehaviour
 
 ### Phase 3: 生态系统建设 (2025 Q3-Q4)
 
+#### 📊 性能监控与分析
+**目标：实时监控和优化VR应用性能**
+
+**核心功能开发：**
+- **[x] 性能监控仪表板** - ✅ 已完成 (2025-03)
+  - 实时 FPS、延迟、内存监控
+  - 5分钟历史数据 (300采样点)
+  - 警报系统 (FPS/内存/延迟/DrawCalls)
+  - 性能报告生成与评分算法
+  - 可视化图表 (FPS/内存/延迟趋势)
+  - F12 快捷键切换显示
+  - **性能**: 监控开销 < 1ms/帧
+  - **代码位置**: `Assets/Scripts/Performance/PerformanceMonitor.cs`
+
 #### 🌍 内容创作平台
 **目标：构建全球最大的VR旅游内容生态**
 
