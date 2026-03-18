@@ -20,6 +20,7 @@ using TripMeta.VR.Haptics;
 using TripMeta.Performance;
 using TripMeta.UGC;
 using TripMeta.Web3;
+using TripMeta.CloudRendering;
 
 namespace TripMeta.Core.DependencyInjection
 {
@@ -61,6 +62,9 @@ namespace TripMeta.Core.DependencyInjection
 
             // 注册Web3服务 (Phase 3: Web3集成)
             InstallWeb3Service(container);
+
+            // 注册云渲染服务 (Phase 3: 云渲染流媒体)
+            InstallCloudRenderingService(container);
 
             Logger.LogInfo("服务安装完成", "ServiceInstaller");
         }
@@ -802,6 +806,34 @@ namespace TripMeta.Core.DependencyInjection
 
             container.RegisterSingleton<Web3Manager>(web3Manager);
             Logger.LogInfo("Web3服务安装完成 (NFT、代币、市场、质押)", "ServiceInstaller");
+        }
+
+        /// <summary>
+        /// 安装云渲染服务 (Phase 3: 云渲染流媒体)
+        /// 让低端设备也能体验高质量 VR
+        /// </summary>
+        private static void InstallCloudRenderingService(IServiceContainer container)
+        {
+            // 查找或创建 CloudRenderingManager
+            var cloudManager = Object.FindObjectOfType<CloudRenderingManager>();
+            if (cloudManager == null)
+            {
+                var go = new GameObject("CloudRenderingManager");
+                cloudManager = go.AddComponent<CloudRenderingManager>();
+                cloudManager.enableCloudRendering = true;
+                cloudManager.targetResolutionX = 1920;
+                cloudManager.targetResolutionY = 1080;
+                cloudManager.targetFrameRate = 60;
+                cloudManager.bitrateKbps = 20000;
+                cloudManager.enableAdaptiveBitrate = true;
+                cloudManager.enableInputPrediction = true;
+                cloudManager.signallingServerUrl = "wss://tripmeta-cloud-render.com/signalling";
+                Object.DontDestroyOnLoad(go);
+                Debug.Log("[ServiceInstaller] 创建 CloudRenderingManager GameObject");
+            }
+
+            container.RegisterSingleton<CloudRenderingManager>(cloudManager);
+            Logger.LogInfo("云渲染服务安装完成 (WebRTC流媒体，支持低端设备)", "ServiceInstaller");
         }
     }
 
