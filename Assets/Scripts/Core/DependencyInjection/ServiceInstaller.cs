@@ -19,6 +19,7 @@ using TripMeta.VR.Rendering;
 using TripMeta.VR.Haptics;
 using TripMeta.Performance;
 using TripMeta.UGC;
+using TripMeta.Web3;
 
 namespace TripMeta.Core.DependencyInjection
 {
@@ -57,6 +58,9 @@ namespace TripMeta.Core.DependencyInjection
 
             // 注册UGC创作工具服务 (Phase 3: UGC创作工具)
             InstallUGCService(container);
+
+            // 注册Web3服务 (Phase 3: Web3集成)
+            InstallWeb3Service(container);
 
             Logger.LogInfo("服务安装完成", "ServiceInstaller");
         }
@@ -772,6 +776,32 @@ namespace TripMeta.Core.DependencyInjection
 
             container.RegisterSingleton<SceneEditorManager>(sceneEditor);
             Logger.LogInfo("UGC创作工具服务安装完成 (可视化场景编辑器)", "ServiceInstaller");
+        }
+
+        /// <summary>
+        /// 安装Web3服务 (Phase 3: Web3集成)
+        /// NFT数字资产、虚拟经济系统
+        /// </summary>
+        private static void InstallWeb3Service(IServiceContainer container)
+        {
+            // 查找或创建 Web3Manager
+            var web3Manager = Object.FindObjectOfType<Web3Manager>();
+            if (web3Manager == null)
+            {
+                var go = new GameObject("Web3Manager");
+                web3Manager = go.AddComponent<Web3Manager>();
+                web3Manager.defaultNetwork = BlockchainNetwork.Ethereum;
+                web3Manager.enableNFT = true;
+                web3Manager.enableToken = true;
+                web3Manager.enableMarketplace = true;
+                web3Manager.enableStaking = true;
+                web3Manager.ipfsGateway = "https://ipfs.io/ipfs/";
+                Object.DontDestroyOnLoad(go);
+                Debug.Log("[ServiceInstaller] 创建 Web3Manager GameObject");
+            }
+
+            container.RegisterSingleton<Web3Manager>(web3Manager);
+            Logger.LogInfo("Web3服务安装完成 (NFT、代币、市场、质押)", "ServiceInstaller");
         }
     }
 
