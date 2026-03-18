@@ -140,10 +140,66 @@ namespace TripMeta.Core.DependencyInjection
             // 安装双引擎LLM服务 (Phase 1: AI双引擎架构)
             InstallDualEngineLLMService(container);
 
+            // 安装边缘AI推理服务 (Phase 1: 边缘AI推理)
+            InstallEdgeAIServices(container);
+
             // 注册翻译服务
             InstallTranslationService(container);
 
             Logger.LogInfo("AI服务安装完成", "ServiceInstaller");
+        }
+
+        /// <summary>
+        /// 安装边缘AI推理服务 (ONNX Runtime + TensorRT)
+        /// </summary>
+        private static void InstallEdgeAIServices(IServiceContainer container)
+        {
+            // 查找或创建 EdgeAIInferenceManager
+            var edgeAIManager = Object.FindObjectOfType<EdgeAIInferenceManager>();
+            if (edgeAIManager == null)
+            {
+                var go = new GameObject("EdgeAIInferenceManager");
+                edgeAIManager = go.AddComponent<EdgeAIInferenceManager>();
+                edgeAIManager.inferenceThreads = 4;
+                edgeAIManager.maxConcurrentInferences = 3;
+                edgeAIManager.enableTensorRT = true;
+                edgeAIManager.enableModelCaching = true;
+                edgeAIManager.enablePerformanceMonitoring = true;
+
+                // 配置默认模型
+                edgeAIManager.modelConfigs = new System.Collections.Generic.List<EdgeAIModelConfig>
+                {
+                    new EdgeAIModelConfig
+                    {
+                        modelId = "intent-recognition",
+                        modelName = "Intent Recognition",
+                        modelPath = "Models/intent_recognition.onnx",
+                        modelType = EdgeAIModelType.IntentRecognition,
+                        preloadAtStartup = true,
+                        enableQuantization = true,
+                        quantizationType = QuantizationType.INT8,
+                        inputSize = 224,
+                        labels = new string[] { "greeting", "question", "command", "navigation", "general" }
+                    },
+                    new EdgeAIModelConfig
+                    {
+                        modelId = "emotion-recognition",
+                        modelName = "Emotion Recognition",
+                        modelPath = "Models/emotion_recognition.onnx",
+                        modelType = EdgeAIModelType.EmotionRecognition,
+                        preloadAtStartup = false,
+                        enableQuantization = true,
+                        quantizationType = QuantizationType.INT8,
+                        labels = new string[] { "neutral", "happy", "sad", "angry", "surprised", "fearful" }
+                    }
+                };
+
+                Object.DontDestroyOnLoad(go);
+                Debug.Log("[ServiceInstaller] 创建 EdgeAIInferenceManager GameObject");
+            }
+
+            container.RegisterSingleton<EdgeAIInferenceManager>(edgeAIManager);
+            Logger.LogInfo("边缘AI推理服务安装完成 (ONNX Runtime + TensorRT)", "ServiceInstaller");
         }
 
         /// <summary>
