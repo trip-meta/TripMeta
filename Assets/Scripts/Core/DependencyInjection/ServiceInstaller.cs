@@ -23,6 +23,7 @@ using TripMeta.Web3;
 using TripMeta.CloudRendering;
 using TripMeta.Localization;
 using TripMeta.Commerce;
+using TripMeta.Analytics;
 
 namespace TripMeta.Core.DependencyInjection
 {
@@ -73,6 +74,9 @@ namespace TripMeta.Core.DependencyInjection
 
             // 注册商业化服务 (Phase 5: 商业化与前沿技术)
             InstallCommerceService(container);
+
+            // 注册分析服务 (Phase 5: 分析与数据平台)
+            InstallAnalyticsService(container);
 
             Logger.LogInfo("服务安装完成", "ServiceInstaller");
         }
@@ -912,6 +916,33 @@ namespace TripMeta.Core.DependencyInjection
 
             container.RegisterSingleton<SubscriptionManager>(subscriptionManager);
             Logger.LogInfo("商业化服务安装完成 (订阅管理、支付网关、优惠券)", "ServiceInstaller");
+        }
+
+        /// <summary>
+        /// 安装分析服务 (Phase 5: 分析与数据平台)
+        /// 用户行为分析、A/B测试、商业智能仪表板
+        /// </summary>
+        private static void InstallAnalyticsService(IServiceContainer container)
+        {
+            // 查找或创建 AnalyticsManager
+            var analyticsManager = Object.FindObjectOfType<AnalyticsManager>();
+            if (analyticsManager == null)
+            {
+                var go = new GameObject("AnalyticsManager");
+                analyticsManager = go.AddComponent<AnalyticsManager>();
+                analyticsManager.enableRealTimeAnalytics = true;
+                analyticsManager.trackUserSessions = true;
+                analyticsManager.trackVRInteractions = true;
+                analyticsManager.trackPerformanceMetrics = true;
+                analyticsManager.enableABTesting = true;
+                analyticsManager.trackConversionFunnel = true;
+                analyticsManager.eventBatchInterval = 30f;
+                Object.DontDestroyOnLoad(go);
+                Debug.Log("[ServiceInstaller] 创建 AnalyticsManager GameObject");
+            }
+
+            container.RegisterSingleton<AnalyticsManager>(analyticsManager);
+            Logger.LogInfo("分析服务安装完成 (用户行为分析、A/B测试、BI仪表板)", "ServiceInstaller");
         }
     }
 
