@@ -21,6 +21,7 @@ using TripMeta.Performance;
 using TripMeta.UGC;
 using TripMeta.Web3;
 using TripMeta.CloudRendering;
+using TripMeta.Localization;
 
 namespace TripMeta.Core.DependencyInjection
 {
@@ -65,6 +66,9 @@ namespace TripMeta.Core.DependencyInjection
 
             // 注册云渲染服务 (Phase 3: 云渲染流媒体)
             InstallCloudRenderingService(container);
+
+            // 注册多语言本地化服务 (Phase 4: 全球化扩展)
+            InstallLocalizationService(container);
 
             Logger.LogInfo("服务安装完成", "ServiceInstaller");
         }
@@ -834,6 +838,31 @@ namespace TripMeta.Core.DependencyInjection
 
             container.RegisterSingleton<CloudRenderingManager>(cloudManager);
             Logger.LogInfo("云渲染服务安装完成 (WebRTC流媒体，支持低端设备)", "ServiceInstaller");
+        }
+
+        /// <summary>
+        /// 安装多语言本地化服务 (Phase 4: 全球化扩展)
+        /// 支持50+语言，本地化AI导游，文化适配
+        /// </summary>
+        private static void InstallLocalizationService(IServiceContainer container)
+        {
+            // 查找或创建 MultilingualGuideManager
+            var localizationManager = Object.FindObjectOfType<MultilingualGuideManager>();
+            if (localizationManager == null)
+            {
+                var go = new GameObject("MultilingualGuideManager");
+                localizationManager = go.AddComponent<MultilingualGuideManager>();
+                localizationManager.autoDetectLanguage = true;
+                localizationManager.defaultLanguage = LanguageCode.en_US;
+                localizationManager.enableCulturalAdaptation = true;
+                localizationManager.enableFormalityAdjustment = true;
+                localizationManager.useLocalizedModels = true;
+                Object.DontDestroyOnLoad(go);
+                Debug.Log("[ServiceInstaller] 创建 MultilingualGuideManager GameObject");
+            }
+
+            container.RegisterSingleton<MultilingualGuideManager>(localizationManager);
+            Logger.LogInfo("多语言本地化服务安装完成 (50+语言支持，文化适配)", "ServiceInstaller");
         }
     }
 
