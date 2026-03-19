@@ -862,7 +862,25 @@ namespace TripMeta.Core.DependencyInjection
             }
 
             container.RegisterSingleton<MultilingualGuideManager>(localizationManager);
-            Logger.LogInfo("多语言本地化服务安装完成 (50+语言支持，文化适配)", "ServiceInstaller");
+
+            // 查找或创建 RegionalContentManager
+            var regionalManager = Object.FindObjectOfType<RegionalContentManager>();
+            if (regionalManager == null)
+            {
+                var go = new GameObject("RegionalContentManager");
+                regionalManager = go.AddComponent<RegionalContentManager>();
+                regionalManager.autoDetectRegion = true;
+                regionalManager.defaultRegion = RegionType.AsiaPacific;
+                regionalManager.enableContentFiltering = true;
+                regionalManager.enableCulturalCompliance = true;
+                regionalManager.enableRegionalPricing = true;
+                regionalManager.enableLocalEvents = true;
+                Object.DontDestroyOnLoad(go);
+                Debug.Log("[ServiceInstaller] 创建 RegionalContentManager GameObject");
+            }
+
+            container.RegisterSingleton<RegionalContentManager>(regionalManager);
+            Logger.LogInfo("多语言本地化服务安装完成 (50+语言支持，6大区域，文化适配)", "ServiceInstaller");
         }
     }
 
