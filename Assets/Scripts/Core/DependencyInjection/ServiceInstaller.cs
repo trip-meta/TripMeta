@@ -22,6 +22,7 @@ using TripMeta.UGC;
 using TripMeta.Web3;
 using TripMeta.CloudRendering;
 using TripMeta.Localization;
+using TripMeta.Commerce;
 
 namespace TripMeta.Core.DependencyInjection
 {
@@ -69,6 +70,9 @@ namespace TripMeta.Core.DependencyInjection
 
             // 注册多语言本地化服务 (Phase 4: 全球化扩展)
             InstallLocalizationService(container);
+
+            // 注册商业化服务 (Phase 5: 商业化与前沿技术)
+            InstallCommerceService(container);
 
             Logger.LogInfo("服务安装完成", "ServiceInstaller");
         }
@@ -881,6 +885,33 @@ namespace TripMeta.Core.DependencyInjection
 
             container.RegisterSingleton<RegionalContentManager>(regionalManager);
             Logger.LogInfo("多语言本地化服务安装完成 (50+语言支持，6大区域，文化适配)", "ServiceInstaller");
+        }
+
+        /// <summary>
+        /// 安装商业化服务 (Phase 5: 商业化与前沿技术)
+        /// 订阅管理、支付处理、优惠券、退款
+        /// </summary>
+        private static void InstallCommerceService(IServiceContainer container)
+        {
+            // 查找或创建 SubscriptionManager
+            var subscriptionManager = Object.FindObjectOfType<SubscriptionManager>();
+            if (subscriptionManager == null)
+            {
+                var go = new GameObject("SubscriptionManager");
+                subscriptionManager = go.AddComponent<SubscriptionManager>();
+                subscriptionManager.defaultTierId = "basic";
+                subscriptionManager.enableFreeTrial = true;
+                subscriptionManager.freeTrialDays = 7;
+                subscriptionManager.enableCoupons = true;
+                subscriptionManager.enableReferralProgram = true;
+                subscriptionManager.autoRenewalDefault = true;
+                subscriptionManager.supportedCurrencies = new System.Collections.Generic.List<string> { "USD", "EUR", "CNY", "JPY" };
+                Object.DontDestroyOnLoad(go);
+                Debug.Log("[ServiceInstaller] 创建 SubscriptionManager GameObject");
+            }
+
+            container.RegisterSingleton<SubscriptionManager>(subscriptionManager);
+            Logger.LogInfo("商业化服务安装完成 (订阅管理、支付网关、优惠券)", "ServiceInstaller");
         }
     }
 
