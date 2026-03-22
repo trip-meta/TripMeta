@@ -24,6 +24,7 @@ using TripMeta.CloudRendering;
 using TripMeta.Localization;
 using TripMeta.Commerce;
 using TripMeta.Analytics;
+using TripMeta.SDK;
 
 namespace TripMeta.Core.DependencyInjection
 {
@@ -77,6 +78,9 @@ namespace TripMeta.Core.DependencyInjection
 
             // 注册分析服务 (Phase 5: 分析与数据平台)
             InstallAnalyticsService(container);
+
+            // 注册SDK服务 (Phase 5: 开发者SDK)
+            InstallSDKService(container);
 
             Logger.LogInfo("服务安装完成", "ServiceInstaller");
         }
@@ -943,6 +947,45 @@ namespace TripMeta.Core.DependencyInjection
 
             container.RegisterSingleton<AnalyticsManager>(analyticsManager);
             Logger.LogInfo("分析服务安装完成 (用户行为分析、A/B测试、BI仪表板)", "ServiceInstaller");
+        }
+
+        /// <summary>
+        /// 安装SDK服务 (Phase 5: 开发者SDK)
+        /// 第三方插件系统、API开放平台、开发者门户
+        /// </summary>
+        private static void InstallSDKService(IServiceContainer container)
+        {
+            // 查找或创建 PluginManager
+            var pluginManager = Object.FindObjectOfType<PluginManager>();
+            if (pluginManager == null)
+            {
+                var go = new GameObject("PluginManager");
+                pluginManager = go.AddComponent<PluginManager>();
+                pluginManager.sandboxPlugins = true;
+                pluginManager.verifyPluginSignatures = true;
+                pluginManager.enableHotReload = true;
+                pluginManager.maxPluginMemoryMB = 512;
+                Object.DontDestroyOnLoad(go);
+                Debug.Log("[ServiceInstaller] 创建 PluginManager GameObject");
+            }
+
+            container.RegisterSingleton<PluginManager>(pluginManager);
+
+            // 查找或创建 APIManager
+            var apiManager = Object.FindObjectOfType<APIManager>();
+            if (apiManager == null)
+            {
+                var go = new GameObject("APIManager");
+                apiManager = go.AddComponent<APIManager>();
+                apiManager.apiBaseUrl = "https://api.tripmeta.com/v1";
+                apiManager.maxRequestsPerMinute = 60;
+                apiManager.maxRetries = 3;
+                Object.DontDestroyOnLoad(go);
+                Debug.Log("[ServiceInstaller] 创建 APIManager GameObject");
+            }
+
+            container.RegisterSingleton<APIManager>(apiManager);
+            Logger.LogInfo("SDK服务安装完成 (插件系统、API平台、开发者门户)", "ServiceInstaller");
         }
     }
 
