@@ -25,6 +25,7 @@ using TripMeta.Localization;
 using TripMeta.Commerce;
 using TripMeta.Analytics;
 using TripMeta.SDK;
+using TripMeta.Enterprise;
 
 namespace TripMeta.Core.DependencyInjection
 {
@@ -81,6 +82,9 @@ namespace TripMeta.Core.DependencyInjection
 
             // 注册SDK服务 (Phase 5: 开发者SDK)
             InstallSDKService(container);
+
+            // 注册企业级服务 (Phase 5: 企业级功能)
+            InstallEnterpriseService(container);
 
             Logger.LogInfo("服务安装完成", "ServiceInstaller");
         }
@@ -986,6 +990,39 @@ namespace TripMeta.Core.DependencyInjection
 
             container.RegisterSingleton<APIManager>(apiManager);
             Logger.LogInfo("SDK服务安装完成 (插件系统、API平台、开发者门户)", "ServiceInstaller");
+        }
+
+        /// <summary>
+        /// 安装企业级服务 (Phase 5: 企业级功能)
+        /// SSO/SAML、团队管理、高级安全、审计日志
+        /// </summary>
+        private static void InstallEnterpriseService(IServiceContainer container)
+        {
+            var enterpriseManager = Object.FindObjectOfType<EnterpriseManager>();
+            if (enterpriseManager == null)
+            {
+                var go = new GameObject("EnterpriseManager");
+                enterpriseManager = go.AddComponent<EnterpriseManager>();
+                enterpriseManager.enableSSO = true;
+                enterpriseManager.enableSAML = true;
+                enterpriseManager.enableOIDC = true;
+                enterpriseManager.enableRoleManagement = true;
+                enterpriseManager.enableAuditLogging = true;
+                enterpriseManager.enable2FA = true;
+                enterpriseManager.enforcePasswordPolicy = true;
+                enterpriseManager.passwordMinLength = 12;
+                enterpriseManager.sessionTimeoutMinutes = 480;
+                enterpriseManager.enableIPWhitelist = true;
+                enterpriseManager.encryptDataAtRest = true;
+                enterpriseManager.encryptDataInTransit = true;
+                enterpriseManager.logRetentionDays = 365;
+                enterpriseManager.maxTeamSize = 100;
+                Object.DontDestroyOnLoad(go);
+                Debug.Log("[ServiceInstaller] 创建 EnterpriseManager GameObject");
+            }
+
+            container.RegisterSingleton<EnterpriseManager>(enterpriseManager);
+            Logger.LogInfo("企业级服务安装完成 (SSO/SAML、团队管理、高级安全、审计日志)", "ServiceInstaller");
         }
     }
 
