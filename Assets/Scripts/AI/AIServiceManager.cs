@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using UnityEngine;
 using Newtonsoft.Json;
@@ -94,21 +95,38 @@ namespace TripMeta.AI
         }
         
         /// <summary>
-        /// 初始化大语言模型服务
+        /// 初始化大语言模型服务 — 使用智谱AI GLM（三级降级：GLM → Ollama → Mock）
         /// </summary>
         private async Task InitializeLLMService()
         {
             try
             {
                 var gptConfig = aiConfig?.openAIConfig ?? new GPTConfig();
-                var llmService = new OpenAIService(gptConfig);
+
+                // 从 secrets.json 补充 API Key（如果配置中为空）
+                if (string.IsNullOrEmpty(gptConfig.apiKey))
+                {
+                    var secretsPath = Path.Combine(Application.dataPath, "..", "secrets.json");
+                    if (File.Exists(secretsPath))
+                    {
+                        try
+                        {
+                            var json = File.ReadAllText(secretsPath);
+                            var secrets = JsonConvert.DeserializeObject<dynamic>(json);
+                            gptConfig.apiKey = secrets?.glm_api_key?.ToString() ?? "";
+                        }
+                        catch { }
+                    }
+                }
+
+                var llmService = new GLMService(gptConfig);
                 await llmService.InitializeAsync();
 
                 services[AIServiceType.LLM] = llmService;
                 serviceStatus.llmStatus = true;
 
                 OnServiceStatusChanged?.Invoke(AIServiceType.LLM, true);
-                Debug.Log("[AIServiceManager] LLM服务初始化成功");
+                Debug.Log($"[AIServiceManager] LLM服务初始化成功 (backend: {llmService.ActiveBackend})");
             }
             catch (Exception e)
             {

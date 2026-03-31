@@ -62,7 +62,7 @@ TripMeta 是一个创新的 VR 旅游平台，结合 AI 技术和虚拟现实，
 ## 核心特性
 
 ### 🤖 AI 智能导游
-- **GPT 驱动对话**：自然语言理解和生成
+- **GLM 驱动对话**：自然语言理解和生成（智谱AI）
 - **个性化响应**：基于用户兴趣的上下文解说
 - **多语言支持**：英语、中文、日语等
 - **丰富知识库**：历史事实、文化洞察和旅行建议
@@ -87,7 +87,7 @@ TripMeta 是一个创新的 VR 旅游平台，结合 AI 技术和虚拟现实，
 | **VR 平台** | PICO 4 | 目标 VR 头显 |
 | **渲染管线** | Universal Render Pipeline (URP) | 高性能图形 |
 | **输入系统** | Unity Input System | 现代输入处理 |
-| **AI 引擎** | GPT-4 via OpenAI API | 对话式 AI |
+| **AI 引擎** | GLM 系列 via 智谱AI API | 对话式 AI |
 | **语音** | Azure Cognitive Services | 语音识别和 TTS |
 | **视觉** | Azure Computer Vision | 物体检测和 AR |
 | **网络** | Unity Netcode for GameObjects | 多人支持 |

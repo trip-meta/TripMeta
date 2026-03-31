@@ -1,5 +1,7 @@
 using System;
+using System.IO;
 using UnityEngine;
+using Newtonsoft.Json;
 using TripMeta.Core.DependencyInjection;
 using TripMeta.Core.ErrorHandling;
 using TripMeta.AI.NPC;
@@ -20,13 +22,13 @@ namespace TripMeta.AI
             {
                 Logger.LogInfo("Installing AI services...", "AIServiceInstaller");
                 
-                // 注册GPT服务
+                // 注册LLM服务 — 使用智谱AI GLM（实现IGPTService接口）
                 if (!container.IsRegistered<IGPTService>())
                 {
                     var gptConfig = LoadGPTConfig();
-                    var gptService = new GPTService(gptConfig);
-                    container.RegisterSingleton<IGPTService>(gptService);
-                    Logger.LogInfo("GPT Service registered", "AIServiceInstaller");
+                    var glmService = new GLMService(gptConfig);
+                    container.RegisterSingleton<IGPTService>(glmService);
+                    Logger.LogInfo("GLM Service registered as IGPTService", "AIServiceInstaller");
                 }
                 
                 // 注册Azure语音服务
@@ -92,18 +94,45 @@ namespace TripMeta.AI
         private static GPTConfig LoadGPTConfig()
         {
             var config = new GPTConfig();
-            
-            // 从配置文件加载（如果有）
+
+            // 优先从 ScriptableObject 加载
             var appSettings = Resources.Load<AppSettings>("Config/AppSettings");
             if (appSettings != null && appSettings.aiSettings != null)
             {
                 config.apiKey = appSettings.aiSettings.openAIApiKey;
-                config.model = appSettings.aiSettings.gptModel ?? "gpt-4o";
+                config.model = appSettings.aiSettings.gptModel ?? "glm-4-flash-250414";
                 config.maxTokens = appSettings.aiSettings.maxTokens;
                 config.temperature = appSettings.aiSettings.temperature;
             }
-            
+
+            // 从 secrets.json 加载 API Key（gitignored，不进版本控制）
+            if (string.IsNullOrEmpty(config.apiKey))
+            {
+                config.apiKey = LoadApiKeyFromSecrets();
+            }
+
             return config;
+        }
+
+        private static string LoadApiKeyFromSecrets()
+        {
+            var secretsPath = Path.Combine(Application.dataPath, "..", "secrets.json");
+            if (!File.Exists(secretsPath)) return "";
+
+            try
+            {
+                var json = File.ReadAllText(secretsPath);
+                var secrets = JsonConvert.DeserializeObject<dynamic>(json);
+                var key = secrets?.glm_api_key?.ToString() ?? "";
+                if (!string.IsNullOrEmpty(key))
+                    Logger.LogInfo("API Key loaded from secrets.json", "AIServiceInstaller");
+                return key;
+            }
+            catch (Exception ex)
+            {
+                Logger.LogWarning($"Failed to load secrets.json: {ex.Message}", "AIServiceInstaller");
+                return "";
+            }
         }
         
         /// <summary>

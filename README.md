@@ -56,13 +56,13 @@ TripMeta is an innovative VR tourism platform combining AI technology with virtu
 |--------|--------|--------|
 | **Frame Rate** | 90 FPS | ✅ PICO 4 Ready |
 | **Latency** | <20ms | ✅ Motion-to-photon |
-| **AI Response** | <2s | ✅ GPT-4 Optimized |
+| **AI Response** | <2s | ✅ GLM Optimized |
 | **Memory Budget** | <4GB | ✅ Optimized |
 
 ## Key Features
 
 ### 🤖 AI Tour Guide
-- **GPT-4o Powered Conversations**: Natural language understanding and generation
+- **GLM Powered Conversations**: Natural language understanding and generation (ZhipuAI)
 - **Personalized Responses**: Context-aware explanations based on user interests
 - **Multi-language Support**: English, Chinese, Japanese, and more
 - **Rich Knowledge Base**: Historical facts, cultural insights, and travel tips
@@ -78,7 +78,7 @@ TripMeta is an innovative VR tourism platform combining AI technology with virtu
 - **Conversation Persistence**: Auto-save dialogue history to disk
 
 ### 🔄 LLM Fallback System
-- **OpenAI GPT-4o**: Primary cloud LLM with streaming support
+- **ZhipuAI GLM**: Primary cloud LLM with streaming support (OpenAI-compatible API)
 - **Ollama Local LLM**: Fallback to local models (llama3.2, etc.)
 - **Automatic Failover**: Switch to Ollama if OpenAI API fails
 - **Dual Streaming**: SSE streaming support for both OpenAI and Ollama
@@ -104,7 +104,7 @@ TripMeta is an innovative VR tourism platform combining AI technology with virtu
 | **Render Pipeline** | URP 17.0.3 | High-performance graphics |
 | **XR Interaction** | XR Interaction Toolkit 3.0.7 | VR interaction system |
 | **Input System** | Unity Input System 1.11.2 | Modern input handling |
-| **AI Engine** | GPT-4o via OpenAI API | Conversational AI |
+| **AI Engine** | GLM via ZhipuAI API | Conversational AI |
 | **Speech** | Azure Cognitive Services | Voice recognition & TTS |
 | **Vision** | Azure Computer Vision | Object detection & AR |
 | **Networking** | Netcode for GameObjects 2.1.1 | Multiplayer support |

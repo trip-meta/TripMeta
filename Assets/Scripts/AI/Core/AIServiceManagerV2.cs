@@ -11,7 +11,7 @@ namespace TripMeta.AI
     /// <summary>
     /// AI服务管理器 - 统一管理所有AI服务
     /// </summary>
-    public class AIServiceManager : MonoBehaviour, IAIServiceManager
+    public class AIServiceManagerV2 : MonoBehaviour, IAIServiceManager
     {
         [Header("AI服务配置")]
         [SerializeField] private AIServiceConfig config;
@@ -80,11 +80,11 @@ namespace TripMeta.AI
         {
             try
             {
-                gptService = new GPTService(config.gptConfig);
+                gptService = new GLMService(config.gptConfig);
                 await gptService.InitializeAsync();
                 RegisterService(gptService);
-                
-                Logger.LogInfo("GPT服务初始化完成", "AI");
+
+                Logger.LogInfo("GLM服务初始化完成", "AI");
             }
             catch (Exception ex)
             {
@@ -265,9 +265,9 @@ namespace TripMeta.AI
             {
                 gptConfig = new GPTConfig
                 {
-                    apiKey = "your-openai-api-key",
-                    model = "gpt-4",
-                    maxTokens = 2000,
+                    apiKey = "",
+                    model = "glm-4-flash-250414",
+                    maxTokens = 2048,
                     temperature = 0.7f,
                     requestTimeout = 30f
                 },

@@ -17,30 +17,32 @@ namespace TripMeta.AI
     }
     
     /// <summary>
-    /// GPT配置
+    /// LLM配置 — 默认使用智谱AI GLM系列（OpenAI兼容格式）
     /// </summary>
     [Serializable]
     public class GPTConfig
     {
         [Header("API设置")]
         public string apiKey = "";
-        public string apiEndpoint = "https://api.openai.com/v1/chat/completions";
-        public string model = "gpt-4o"; // 升级到GPT-4o
-        
+        public string apiEndpoint = "https://open.bigmodel.cn/api/paas/v4/chat/completions";
+        public string model = "glm-4-flash-250414";
+
         [Header("生成参数")]
-        public int maxTokens = 2000;
+        public int maxTokens = 2048;
         public float temperature = 0.7f;
         public float topP = 1.0f;
         public float frequencyPenalty = 0.0f;
         public float presencePenalty = 0.0f;
-        
+
         [Header("限制设置")]
-        public int maxRequestsPerMinute = 60;
+        public int maxRequestsPerMinute = 30;
         public float requestTimeout = 30f;
         public int maxConversationLength = 20;
-        
+        public int maxConcurrentRequests = 3;
+
         [Header("Fallback配置")]
         public bool enableFallback = true;
+        public int fallbackRetryCount = 3;
         public string ollamaEndpoint = "http://localhost:11434/api/generate";
         public string ollamaModel = "llama3.2";
     }
@@ -135,11 +137,13 @@ namespace TripMeta.AI
         {
             messages.Add(new GPTMessage { role = role, content = content });
             LastUpdated = DateTime.Now;
-            
-            // 保持对话长度限制
+
+            // 保持对话长度限制：保留 system prompt + 最近 N 条消息
             while (messages.Count > maxLength)
             {
-                messages.RemoveAt(0);
+                // 跳过 index 0 如果它是 system prompt
+                var removeIndex = (messages.Count > 1 && messages[0].role == "system") ? 1 : 0;
+                messages.RemoveAt(removeIndex);
             }
         }
         
