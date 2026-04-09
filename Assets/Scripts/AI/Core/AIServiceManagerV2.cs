@@ -33,9 +33,15 @@ namespace TripMeta.AI
             DontDestroyOnLoad(gameObject);
         }
         
-        private async void Start()
+        private void Start()
         {
-            await InitializeAsync();
+            InitializeAsync().ContinueWith(t =>
+            {
+                if (t.IsFaulted)
+                {
+                    Logger.LogException(t.Exception, "AI Service Manager initialization failed");
+                }
+            }, TaskScheduler.FromCurrentSynchronizationContext());
         }
         
         /// <summary>

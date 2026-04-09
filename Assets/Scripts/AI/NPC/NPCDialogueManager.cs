@@ -338,15 +338,28 @@ namespace TripMeta.AI.NPC
         /// <summary>
         /// 处理队列
         /// </summary>
-        private async void ProcessQueue()
+        private void ProcessQueue()
         {
             if (requestQueue.Count == 0 || currentConcurrentRequests >= maxConcurrentRequests)
             {
                 return;
             }
-            
+
             var request = requestQueue.Dequeue();
-            _ = ProcessRequestImmediately(request);
+            currentConcurrentRequests++;
+
+            ProcessRequestImmediately(request).ContinueWith(t =>
+            {
+                currentConcurrentRequests--;
+
+                if (t.IsFaulted)
+                {
+                    Logger.LogException(t.Exception, "Request processing failed");
+                }
+
+                // 继续处理队列中的下一个请求
+                ProcessQueue();
+            }, TaskScheduler.FromCurrentSynchronizationContext());
         }
         
         /// <summary>

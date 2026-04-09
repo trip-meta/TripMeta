@@ -177,7 +177,7 @@ namespace TripMeta.AI
             return ParseChatResponse(responseText);
         }
 
-        private async Task<string> SendGLMStreamRequestAsync(GPTConversation conversation, Action<string> onPartialResponse)
+        private async Task<string> SendGLMStreamRequestAsync(GPTConversation conversation, Action<string> onPartialResponse, System.Threading.CancellationToken cancellationToken = default)
         {
             var requestBody = BuildChatRequestBody(conversation, stream: true);
             var json = JsonConvert.SerializeObject(requestBody);
@@ -191,12 +191,12 @@ namespace TripMeta.AI
             webRequest.timeout = (int)_config.requestTimeout;
 
             var operation = webRequest.SendWebRequest();
-            var fullContent = new StringBuilder();
+            var fullContent = new StringBuilder(1024);
             var lastLength = 0;
 
             while (!operation.isDone)
             {
-                await Task.Delay(50);
+                await Task.Delay(50, cancellationToken);
 
                 if (webRequest.downloadHandler == null) continue;
                 var currentText = webRequest.downloadHandler.text;
@@ -212,12 +212,16 @@ namespace TripMeta.AI
                 throw new Exception($"GLM stream request failed: {webRequest.error}");
 
             // Parse any remaining data after completion
-            var finalText = webRequest.downloadHandler.text;
-            if (finalText.Length > lastLength)
+            var finalText = webRequest.downloadHandler?.text;
+            if (!string.IsNullOrEmpty(finalText) && finalText.Length > lastLength)
             {
                 var remaining = finalText.Substring(lastLength);
                 ParseSSEChunks(remaining, fullContent, onPartialResponse, conversation.Id);
             }
+
+            // Explicitly dispose handlers to prevent memory leaks
+            webRequest.uploadHandler?.Dispose();
+            webRequest.downloadHandler?.Dispose();
 
             return fullContent.ToString();
         }
@@ -375,22 +379,31 @@ namespace TripMeta.AI
             return true; // retry same backend
         }
 
+        private const int MAX_FALLBACK_DEPTH = 3;
+
         private async Task<string> HandleFailureWithFallback(
             Exception ex, string message, GPTConversation conversation,
-            Func<GPTConversation, Task<string>> retryFunc)
+            Func<GPTConversation, Task<string>> retryFunc, int retryCount = 0)
         {
-            Logger.LogException(ex, $"LLM请求失败 (backend: {_activeBackend})");
+            Logger.LogException(ex, $"LLM请求失败 (backend: {_activeBackend}, retry: {retryCount})");
+
+            if (retryCount >= MAX_FALLBACK_DEPTH)
+            {
+                Logger.LogError($"达到最大降级深度 {MAX_FALLBACK_DEPTH}，放弃重试", "GLM");
+                OnError?.Invoke("服务暂时不可用，请稍后重试");
+                throw new InvalidOperationException("All LLM backends failed after maximum retries", ex);
+            }
 
             if (_config.enableFallback && TryDegradeBackend())
             {
-                Logger.LogWarning($"降级到 {_activeBackend}，重试", "GLM");
+                Logger.LogWarning($"降级到 {_activeBackend}，重试 (attempt: {retryCount + 1})", "GLM");
                 try
                 {
                     return await retryFunc(conversation);
                 }
                 catch (Exception retryEx)
                 {
-                    return await HandleFailureWithFallback(retryEx, message, conversation, retryFunc);
+                    return await HandleFailureWithFallback(retryEx, message, conversation, retryFunc, retryCount + 1);
                 }
             }
 

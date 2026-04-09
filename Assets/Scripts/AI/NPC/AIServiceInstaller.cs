@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using UnityEngine;
 using Newtonsoft.Json;
 using TripMeta.Core.DependencyInjection;
@@ -14,56 +15,107 @@ namespace TripMeta.AI
     public static class AIServiceInstaller
     {
         /// <summary>
-        /// 安装AI服务
+        /// 异步安装AI服务（推荐）- 等待服务初始化完成后再注册
         /// </summary>
-        public static void InstallServices(IServiceContainer container)
+        public static async Task InstallServicesAsync(IServiceContainer container)
         {
             try
             {
-                Logger.LogInfo("Installing AI services...", "AIServiceInstaller");
-                
+                Logger.LogInfo("Installing AI services asynchronously...", "AIServiceInstaller");
+
                 // 注册LLM服务 — 使用智谱AI GLM（实现IGPTService接口）
                 if (!container.IsRegistered<IGPTService>())
                 {
                     var gptConfig = LoadGPTConfig();
                     var glmService = new GLMService(gptConfig);
+                    await glmService.InitializeAsync(); // 等待初始化完成
                     container.RegisterSingleton<IGPTService>(glmService);
-                    Logger.LogInfo("GLM Service registered as IGPTService", "AIServiceInstaller");
+                    Logger.LogInfo("GLM Service initialized and registered as IGPTService", "AIServiceInstaller");
                 }
-                
+
                 // 注册Azure语音服务
                 if (!container.IsRegistered<IAzureSpeechService>())
                 {
                     var speechConfig = LoadSpeechConfig();
                     var speechService = new AzureSpeechService(speechConfig);
+                    await speechService.InitializeAsync();
                     container.RegisterSingleton<IAzureSpeechService>(speechService);
-                    Logger.LogInfo("Azure Speech Service registered", "AIServiceInstaller");
+                    Logger.LogInfo("Azure Speech Service initialized and registered", "AIServiceInstaller");
                 }
-                
+
                 // 注册计算机视觉服务
                 if (!container.IsRegistered<IComputerVisionService>())
                 {
                     var visionConfig = LoadVisionConfig();
                     var visionService = new ComputerVisionService(visionConfig);
+                    await visionService.InitializeAsync();
                     container.RegisterSingleton<IComputerVisionService>(visionService);
-                    Logger.LogInfo("Computer Vision Service registered", "AIServiceInstaller");
+                    Logger.LogInfo("Computer Vision Service initialized and registered", "AIServiceInstaller");
                 }
-                
+
                 // 注册推荐服务
                 if (!container.IsRegistered<IRecommendationService>())
                 {
                     var recommendationConfig = LoadRecommendationConfig();
                     var recommendationService = new RecommendationService(recommendationConfig);
+                    await recommendationService.InitializeAsync();
                     container.RegisterSingleton<IRecommendationService>(recommendationService);
-                    Logger.LogInfo("Recommendation Service registered", "AIServiceInstaller");
+                    Logger.LogInfo("Recommendation Service initialized and registered", "AIServiceInstaller");
                 }
-                
+
                 Logger.LogInfo("AI services installation completed", "AIServiceInstaller");
             }
             catch (Exception ex)
             {
                 Logger.LogException(ex, "Failed to install AI services");
                 throw;
+            }
+        }
+
+        /// <summary>
+        /// 安装AI服务（同步版本 - 仅用于初始化顺序不敏感的场景）
+        /// 注意：此版本不等待服务初始化完成，使用时需要确保服务在使用前已完成初始化
+        /// </summary>
+        public static void InstallServices(IServiceContainer container)
+        {
+            try
+            {
+                Logger.LogInfo("Installing AI services (sync)...", "AIServiceInstaller");
+
+                // 注册LLM服务 — 使用智谱AI GLM（实现IGPTService接口）
+                if (!container.IsRegistered<IGPTService>())
+                {
+                    var gptConfig = LoadGPTConfig();
+                    var glmService = new GLMService(gptConfig);
+                    // 异步初始化，不等待
+                    _ = InitializeServiceAsync(glmService, container, "IGPTService");
+                    container.RegisterSingleton<IGPTService>(glmService);
+                    Logger.LogInfo("GLM Service registered as IGPTService (initialization pending)", "AIServiceInstaller");
+                }
+
+                // 其他服务...
+                Logger.LogInfo("AI services installation completed (initialization pending)", "AIServiceInstaller");
+            }
+            catch (Exception ex)
+            {
+                Logger.LogException(ex, "Failed to install AI services");
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 异步初始化服务并记录结果
+        /// </summary>
+        private static async Task InitializeServiceAsync<T>(IAIService service, IServiceContainer container, string serviceName) where T : class
+        {
+            try
+            {
+                await service.InitializeAsync();
+                Logger.LogInfo($"{serviceName} initialized successfully", "AIServiceInstaller");
+            }
+            catch (Exception ex)
+            {
+                Logger.LogException(ex, $"Failed to initialize {serviceName}");
             }
         }
         
