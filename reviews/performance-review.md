@@ -72,10 +72,10 @@ var renderers = FindObjectsOfType<Renderer>();
 ---
 
 #### 2. 字符串拼接和分配
-**文件**: `GLMService.cs`, `ClaudeService.cs`, `GPTService.cs`, `Logger.cs`
+**文件**: `ArkService.cs`, `ClaudeService.cs`, `GPTService.cs`, `Logger.cs`
 
 **问题描述**:
-- `GLMService.cs:147` - 流式响应中使用 `currentText += word + " "` 进行字符串拼接
+- `ArkService.cs:147` - 流式响应中使用 `currentText += word + " "` 进行字符串拼接
 - `Logger.cs:82-85` - 每帧格式化日志字符串
 - `ClaudeService.cs:83` - 使用字符串插值 `$"..."`
 - `DualEngineLLMService.cs:318-323` - 性能报告字符串拼接
@@ -109,11 +109,11 @@ return sb.ToString();
 ---
 
 #### 3. UnityWebRequest 资源管理
-**文件**: `GLMService.cs`, `ClaudeService.cs`, `GPTService.cs`
+**文件**: `ArkService.cs`, `ClaudeService.cs`, `GPTService.cs`
 
 **问题描述**:
 - 多个 AI 服务类创建 `UnityWebRequest` 但不使用 `using` 语句确保释放
-- `GLMService.cs:186-222` - 流式请求中创建多个临时对象
+- `ArkService.cs:186-222` - 流式请求中创建多个临时对象
 - `DownloadHandlerBuffer` 和 `UploadHandlerRaw` 需要显式释放
 
 **性能影响**:
@@ -281,7 +281,7 @@ private IEnumerator MonitoringCoroutine()
 
 | 位置 | 风险等级 | 描述 |
 |------|----------|------|
-| `GLMService._conversations` | 中 | 对话字典持续增长，需要清理策略 |
+| `ArkService._conversations` | 中 | 对话字典持续增长，需要清理策略 |
 | `ClaudeService.conversations` | 中 | 同上 |
 | `AIEngineSelector.performanceMetrics` | 低 | 性能指标累积，但增长缓慢 |
 | `FoveatedRenderingManager.eyeTextures` | 高 | RenderTexture 需要正确释放 |
@@ -324,7 +324,7 @@ private IEnumerator MonitoringCoroutine()
 
 ### 当前实现分析
 
-**AI 服务 (`GLMService`, `ClaudeService`, `GPTService`)**:
+**AI 服务 (`ArkService`, `ClaudeService`, `GPTService`)**:
 - 已实现请求队列和速率限制
 - 支持流式响应
 - 有降级策略 (Fallback)
@@ -464,7 +464,7 @@ TripMeta VR 项目在架构设计上具有良好的基础，但在性能关键�
 - `/Assets/Scripts/VR/Rendering/FoveatedRenderingManager.cs`
 
 **AI 服务文件**:
-- `/Assets/Scripts/AI/Services/GLMService.cs`
+- `/Assets/Scripts/AI/Services/ArkService.cs`
 - `/Assets/Scripts/AI/Services/ClaudeService.cs`
 - `/Assets/Scripts/AI/Services/GPTService.cs`
 - `/Assets/Scripts/AI/Services/DualEngineLLMService.cs`

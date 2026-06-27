@@ -56,13 +56,13 @@ TripMeta 是一个创新的 VR 旅游平台，结合 AI 技术和虚拟现实，
 |------|------|--------|
 | **帧率** | 90 FPS | ✅ PICO 4 就绪 |
 | **延迟** | <20ms | ✅ 动作到光子 |
-| **AI 响应** | <2s | ✅ GPT-4 优化 |
+| **AI 响应** | <2s | ✅ Ark 优化 |
 | **内存预算** | <4GB | ✅ 已优化 |
 
 ## 核心特性
 
 ### 🤖 AI 智能导游
-- **GLM 驱动对话**：自然语言理解和生成（智谱AI）
+- **Ark 驱动对话**：通过火山方舟 CodingPlan 进行自然语言理解和生成
 - **个性化响应**：基于用户兴趣的上下文解说
 - **多语言支持**：英语、中文、日语等
 - **丰富知识库**：历史事实、文化洞察和旅行建议
@@ -87,7 +87,7 @@ TripMeta 是一个创新的 VR 旅游平台，结合 AI 技术和虚拟现实，
 | **VR 平台** | PICO 4 | 目标 VR 头显 |
 | **渲染管线** | Universal Render Pipeline (URP) | 高性能图形 |
 | **输入系统** | Unity Input System | 现代输入处理 |
-| **AI 引擎** | GLM 系列 via 智谱AI API | 对话式 AI |
+| **AI 引擎** | 火山方舟 Ark CodingPlan | 对话式 AI |
 | **语音** | Azure Cognitive Services | 语音识别和 TTS |
 | **视觉** | Azure Computer Vision | 物体检测和 AR |
 | **网络** | Unity Netcode for GameObjects | 多人支持 |
@@ -247,7 +247,7 @@ MIT 许可证
 
 - [Unity Technologies](https://unity.com/) - 游戏引擎
 - [PICO Interactive](https://www.pico-interactive.com/) - VR 平台
-- [OpenAI](https://openai.com/) - AI 服务
+- [火山方舟 Ark](https://www.volcengine.com/product/ark) - AI 服务
 - [Microsoft Azure](https://azure.microsoft.com/) - 云服务
 
 ## 开发路线图

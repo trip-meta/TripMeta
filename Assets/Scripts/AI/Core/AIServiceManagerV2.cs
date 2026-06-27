@@ -86,11 +86,11 @@ namespace TripMeta.AI
         {
             try
             {
-                gptService = new GLMService(config.gptConfig);
+                gptService = new ArkService(config.gptConfig);
                 await gptService.InitializeAsync();
                 RegisterService(gptService);
 
-                Logger.LogInfo("GLM服务初始化完成", "AI");
+                Logger.LogInfo("Ark服务初始化完成", "AI");
             }
             catch (Exception ex)
             {
@@ -272,7 +272,8 @@ namespace TripMeta.AI
                 gptConfig = new GPTConfig
                 {
                     apiKey = "",
-                    model = "glm-4-flash-250414",
+                    apiEndpoint = GPTConfig.DefaultArkChatEndpoint,
+                    model = GPTConfig.DefaultArkModel,
                     maxTokens = 2048,
                     temperature = 0.7f,
                     requestTimeout = 30f

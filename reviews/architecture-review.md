@@ -122,15 +122,15 @@ if (vrManagerInstance != null) {
 
 ### 2.4 策略模式 (评分: 85/100)
 
-**优秀示例**: `GLMService` 的三级降级策略
+**优秀示例**: `ArkService` 的三级降级策略
 
 ```csharp
-private enum LLMBackend { GLM, Ollama, Mock }
-private LLMBackend _activeBackend = LLMBackend.GLM;
+private enum LLMBackend { Ark, Ollama, Mock }
+private LLMBackend _activeBackend = LLMBackend.Ark;
 
 // 运行时切换策略
 var response = _activeBackend switch {
-    LLMBackend.GLM => await SendGLMRequestAsync(conversation),
+    LLMBackend.Ark => await SendArkRequestAsync(conversation),
     LLMBackend.Ollama => await SendOllamaRequestAsync(conversation),
     _ => GetMockResponse(message)
 };
@@ -178,7 +178,7 @@ var response = _activeBackend switch {
 ```
 TripMeta
 ├── Core              # 核心系统 (DI、配置、错误处理)
-├── AI                # AI服务 (GLM、语音、视觉)
+├── AI                # AI服务 (Ark、语音、视觉)
 ├── VR                # VR系统 (交互、渲染、平台适配)
 ├── Features          # 功能模块 (导游、多人、AR)
 ├── Infrastructure    # 基础设施 (网络、缓存、资源)
@@ -218,7 +218,7 @@ Infrastructure (Network, Cache, Resources)
     ↑
 Features (TourGuide, Multiplayer, AR, MobileCompanion)
     ↑
-AI (GLMService, Speech, Vision)
+AI (ArkService, Speech, Vision)
     ↑
 VR (Platform, Interaction, Rendering)
     ↑
@@ -263,9 +263,9 @@ Presentation → Features → AI/Infrastructure → Core
    - 负责注册所有服务，过于庞大
    - 应该按模块拆分 (CoreInstaller, AIInstaller, VRInstaller等)
 
-2. **`GLMService`** (628行)
-   - 同时处理GLM API、Ollama fallback、Mock响应、流式解析
-   - 建议拆分为: `GLMClient`, `OllamaClient`, `LLMResponseParser`
+2. **`ArkService`** (628行)
+   - 同时处理Ark API、Ollama fallback、Mock响应、流式解析
+   - 建议拆分为: `ArkClient`, `OllamaClient`, `LLMResponseParser`
 
 3. **`GameManager`** (316行)
    - 初始化配置、DI、错误处理、VR系统
@@ -402,7 +402,7 @@ public abstract class SingletonBehaviour<T> : MonoBehaviour where T : MonoBehavi
 
 **潜在问题**:
 - `ServiceContainer` 使用反射进行构造函数注入，运行时开销
-- `GLMService` 的SSE流式解析使用字符串操作，可能产生GC压力
+- `ArkService` 的SSE流式解析使用字符串操作，可能产生GC压力
 - 多处使用 `FindObjectOfType`，场景大时性能差
 
 **建议**:
@@ -414,7 +414,7 @@ public abstract class SingletonBehaviour<T> : MonoBehaviour where T : MonoBehavi
 
 **发现**:
 - API密钥通过配置文件传递，需要确保不提交到版本控制
-- `GLMService` 正确处理了API密钥，没有硬编码
+- `ArkService` 正确处理了API密钥，没有硬编码
 
 ---
 
@@ -445,7 +445,7 @@ public abstract class SingletonBehaviour<T> : MonoBehaviour where T : MonoBehavi
    - 改为构造函数注入
 
 2. **Manager类瘦身**
-   - 将 `GLMService` 拆分为多个小类
+   - 将 `ArkService` 拆分为多个小类
    - 将 `GameManager` 的初始化逻辑提取到专用类
 
 3. **引入CQRS模式**
@@ -535,7 +535,7 @@ TripMeta项目展现了**良好的架构基础**，特别是在:
 
 ### 需要重构的文件 (按优先级)
 1. `ServiceInstaller.cs` (1119行) - 过大
-2. `GLMService.cs` (628行) - 职责过多
+2. `ArkService.cs` (628行) - 职责过多
 3. `GameManager.cs` (316行) - 初始化逻辑复杂
 4. `VRControllerManager.cs` (259行) - 单例模式
 

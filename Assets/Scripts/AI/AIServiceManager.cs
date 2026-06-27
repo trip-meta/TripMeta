@@ -95,7 +95,7 @@ namespace TripMeta.AI
         }
         
         /// <summary>
-        /// 初始化大语言模型服务 — 使用智谱AI GLM（三级降级：GLM → Ollama → Mock）
+        /// 初始化大语言模型服务 — 使用火山方舟 Ark（三级降级：Ark → Ollama → Mock）
         /// </summary>
         private async Task InitializeLLMService()
         {
@@ -113,13 +113,13 @@ namespace TripMeta.AI
                         {
                             var json = File.ReadAllText(secretsPath);
                             var secrets = JsonConvert.DeserializeObject<dynamic>(json);
-                            gptConfig.apiKey = secrets?.glm_api_key?.ToString() ?? "";
+                            gptConfig.apiKey = secrets?.ark_api_key?.ToString() ?? "";
                         }
                         catch { }
                     }
                 }
 
-                var llmService = new GLMService(gptConfig);
+                var llmService = new ArkService(gptConfig);
                 await llmService.InitializeAsync();
 
                 services[AIServiceType.LLM] = llmService;

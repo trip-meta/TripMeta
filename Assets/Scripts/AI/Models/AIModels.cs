@@ -17,15 +17,19 @@ namespace TripMeta.AI
     }
     
     /// <summary>
-    /// LLM配置 — 默认使用智谱AI GLM系列（OpenAI兼容格式）
+    /// LLM配置 — 默认使用火山方舟 Ark CodingPlan（OpenAI兼容格式）
     /// </summary>
     [Serializable]
     public class GPTConfig
     {
+        public const string DefaultArkBaseUrl = "https://ark.cn-beijing.volces.com/api/coding/v3";
+        public const string DefaultArkChatEndpoint = DefaultArkBaseUrl + "/chat/completions";
+        public const string DefaultArkModel = "doubao-seed-2-0-code-preview-260215";
+
         [Header("API设置")]
         public string apiKey = "";
-        public string apiEndpoint = "https://open.bigmodel.cn/api/paas/v4/chat/completions";
-        public string model = "glm-4-flash-250414";
+        public string apiEndpoint = DefaultArkChatEndpoint;
+        public string model = DefaultArkModel;
 
         [Header("生成参数")]
         public int maxTokens = 2048;

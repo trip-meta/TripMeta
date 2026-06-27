@@ -11,7 +11,7 @@
 
 | 文件 | 评分 | 状态 |
 |------|------|------|
-| GLMService.cs | 7/10 | 需要改进 |
+| ArkService.cs | 7/10 | 需要改进 |
 | GPTService.cs | 6/10 | 需要改进 |
 | AIServiceManager.cs | 5/10 | 需要重构 |
 | AIServiceManagerV2.cs | 7/10 | 可接受 |
@@ -24,9 +24,9 @@
 
 ---
 
-## 1. GLMService.cs 详细审查
+## 1. ArkService.cs 详细审查
 
-**文件路径**: `Assets/Scripts/AI/Services/GLMService.cs`
+**文件路径**: `Assets/Scripts/AI/Services/ArkService.cs`
 **评分**: 7/10
 
 ### 1.1 发现的问题
@@ -63,7 +63,7 @@ private async Task<string> HandleFailureWithFallback(
 
 | 问题 | 行号 | 描述 |
 |------|------|------|
-| UnityWebRequest 未正确释放 | 186-223 | `SendGLMStreamRequestAsync` 中 `using` 语句使用正确，但 `downloadHandler` 在循环中被重复访问，可能导致访问已释放资源 |
+| UnityWebRequest 未正确释放 | 186-223 | `SendArkStreamRequestAsync` 中 `using` 语句使用正确，但 `downloadHandler` 在循环中被重复访问，可能导致访问已释放资源 |
 | 流式响应解析不完整 | 225-250 | `ParseSSEChunks` 方法处理不完整的 JSON chunk 时只是跳过，可能导致数据丢失 |
 | 速率限制实现有缺陷 | 535-557 | 窗口重置逻辑在多线程环境下不安全 |
 
@@ -86,7 +86,7 @@ var currentText = webRequest.downloadHandler.text;  // 可能访问已释放资�
 
 | 问题 | 行号 | 描述 |
 |------|------|------|
-| 日志标签不一致 | 多处 | 有些用 "GLM"，有些用 "GLMService" |
+| 日志标签不一致 | 多处 | 有些用 "Ark"，有些用 "ArkService" |
 | 配置验证不完整 | 512-520 | 缺少对 `apiEndpoint` 格式的验证 |
 | 缺少 XML 文档 | 私有方法 | 多个复杂私有方法缺少文档注释 |
 
@@ -142,9 +142,9 @@ onPartialResponse?.Invoke(fullContent.ToString());
 
 | 问题 | 行号 | 描述 |
 |------|------|------|
-| 代码重复严重 | 整体 | 与 `GLMService.cs` 有大量重复代码，违反 DRY 原则 |
+| 代码重复严重 | 整体 | 与 `ArkService.cs` 有大量重复代码，违反 DRY 原则 |
 
-**说明**: `GPTService` 和 `GLMService` 都实现了 `IGPTService` 接口，但代码重复度超过 70%。应该使用组合或继承来复用代码。
+**说明**: `GPTService` 和 `ArkService` 都实现了 `IGPTService` 接口，但代码重复度超过 70%。应该使用组合或继承来复用代码。
 
 #### High (4)
 
@@ -180,7 +180,7 @@ fullContent += content;  // O(n^2) 复杂度
 
 ### 2.2 改进建议
 
-1. **合并 GPTService 和 GLMService**:
+1. **合并 GPTService 和 ArkService**:
 ```csharp
 // 创建一个基类
 public abstract class LLMServiceBase : IGPTService
@@ -189,7 +189,7 @@ public abstract class LLMServiceBase : IGPTService
     // 共享的流式处理、错误处理、重试逻辑
 }
 
-public class GLMService : LLMServiceBase { ... }
+public class ArkService : LLMServiceBase { ... }
 public class GPTService : LLMServiceBase { ... }
 ```
 
@@ -349,10 +349,10 @@ private async Task InitializeGPTService()
 {
     try
     {
-        gptService = new GLMService(config.gptConfig);
+        gptService = new ArkService(config.gptConfig);
         await gptService.InitializeAsync();
         RegisterService(gptService);
-        Logger.LogInfo("GLM服务初始化完成", "AI");
+        Logger.LogInfo("Ark服务初始化完成", "AI");
     }
     catch (Exception ex)
     {
@@ -456,13 +456,13 @@ Models/
 
 | 问题 | 行号 | 描述 |
 |------|------|------|
-| 服务未初始化就注册 | 28-31 | `GLMService` 在 `InstallServices` 中创建并立即注册，但没有等待 `InitializeAsync` |
+| 服务未初始化就注册 | 28-31 | `ArkService` 在 `InstallServices` 中创建并立即注册，但没有等待 `InitializeAsync` |
 
 **代码片段**:
 ```csharp
-var glmService = new GLMService(gptConfig);
-// 缺少 await glmService.InitializeAsync();
-container.RegisterSingleton<IGPTService>(glmService);
+var arkService = new ArkService(gptConfig);
+// 缺少 await arkService.InitializeAsync();
+container.RegisterSingleton<IGPTService>(arkService);
 ```
 
 #### Medium (2)
@@ -484,9 +484,9 @@ container.RegisterSingleton<IGPTService>(glmService);
 ```csharp
 public static async Task InstallServicesAsync(IServiceContainer container)
 {
-    var glmService = new GLMService(gptConfig);
-    await glmService.InitializeAsync();  // 等待初始化完成
-    container.RegisterSingleton<IGPTService>(glmService);
+    var arkService = new ArkService(gptConfig);
+    await arkService.InitializeAsync();  // 等待初始化完成
+    container.RegisterSingleton<IGPTService>(arkService);
 }
 ```
 
@@ -644,7 +644,7 @@ Interfaces/
 
 ### 9.2 LLM 服务重复实现
 
-**问题**: `GLMService` 和 `GPTService` 代码重复度超过 70%
+**问题**: `ArkService` 和 `GPTService` 代码重复度超过 70%
 
 **建议**:
 ```csharp
@@ -659,7 +659,7 @@ public abstract class OpenAICompatibleService : IGPTService
     protected async Task StreamRequestAsync(...) { ... }
 }
 
-public class GLMService : OpenAICompatibleService { ... }
+public class ArkService : OpenAICompatibleService { ... }
 public class GPTService : OpenAICompatibleService { ... }
 ```
 
@@ -752,7 +752,7 @@ public class InputValidator
 
 ```csharp
 [TestFixture]
-public class GLMServiceTests
+public class ArkServiceTests
 {
     [Test]
     public async Task SendChatAsync_WithValidMessage_ReturnsResponse() { }
@@ -764,7 +764,7 @@ public class GLMServiceTests
     public async Task SendStreamChatAsync_CallsCallbackMultipleTimes() { }
 
     [Test]
-    public async Task Fallback_WhenGLMFails_SwitchesToOllama() { }
+    public async Task Fallback_WhenArkFails_SwitchesToOllama() { }
 
     [Test]
     public void RateLimit_ExceedsLimit_WaitsBeforeNextRequest() { }
@@ -791,13 +791,13 @@ public class AIServiceIntegrationTests
 
 ### P0 (立即修复)
 
-1. 修复 `HandleFailureWithFallback` 的无限递归风险 (GLMService.cs:393)
+1. 修复 `HandleFailureWithFallback` 的无限递归风险 (ArkService.cs:393)
 2. 修复 `async void ProcessQueue` (NPCDialogueManager.cs:341)
-3. 修复 `GLMService` 在 `AIServiceInstaller` 中未初始化就注册的问题
+3. 修复 `ArkService` 在 `AIServiceInstaller` 中未初始化就注册的问题
 
 ### P1 (本周修复)
 
-1. 合并 `GLMService` 和 `GPTService` 的重复代码
+1. 合并 `ArkService` 和 `GPTService` 的重复代码
 2. 决定保留哪个服务管理器并删除另一个
 3. 修复所有 `async void` 方法
 4. 添加 `CancellationToken` 支持

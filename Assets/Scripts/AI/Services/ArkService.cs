@@ -10,10 +10,10 @@ using TripMeta.Core.ErrorHandling;
 namespace TripMeta.AI
 {
     /// <summary>
-    /// GLM服务 — 智谱AI GLM系列模型集成（OpenAI兼容格式）
-    /// 支持流式SSE响应，三级降级：GLM → Ollama → Mock
+    /// Ark服务 — 火山方舟 CodingPlan 模型集成（OpenAI兼容格式）
+    /// 支持流式SSE响应，三级降级：Ark → Ollama → Mock
     /// </summary>
-    public class GLMService : IGPTService
+    public class ArkService : IGPTService
     {
         private readonly GPTConfig _config;
         private readonly Dictionary<string, GPTConversation> _conversations = new Dictionary<string, GPTConversation>();
@@ -24,7 +24,7 @@ namespace TripMeta.AI
         private DateTime _windowStart = DateTime.UtcNow;
 
         // Fallback state
-        private LLMBackend _activeBackend = LLMBackend.GLM;
+        private LLMBackend _activeBackend = LLMBackend.Ark;
         private int _consecutiveFailures;
 
         public bool IsInitialized => _isInitialized;
@@ -34,9 +34,9 @@ namespace TripMeta.AI
         public event Action<string> OnError;
         public event Action<string, string> OnStreamChunk;
 
-        private enum LLMBackend { GLM, Ollama, Mock }
+        public enum LLMBackend { Ark, Ollama, Mock }
 
-        public GLMService(GPTConfig config)
+        public ArkService(GPTConfig config)
         {
             _config = config ?? throw new ArgumentNullException(nameof(config));
         }
@@ -45,23 +45,23 @@ namespace TripMeta.AI
         {
             try
             {
-                Logger.LogInfo("初始化GLM服务...", "GLM");
+                Logger.LogInfo("初始化Ark服务...", "Ark");
                 ValidateConfig();
                 await TestConnectionAsync();
                 _isInitialized = true;
-                _activeBackend = LLMBackend.GLM;
+                _activeBackend = LLMBackend.Ark;
                 _consecutiveFailures = 0;
-                Logger.LogInfo($"GLM服务初始化完成 (model: {_config.model})", "GLM");
+                Logger.LogInfo($"Ark服务初始化完成 (model: {_config.model})", "Ark");
             }
             catch (Exception ex)
             {
-                Logger.LogWarning($"GLM主服务初始化失败: {ex.Message}，尝试fallback", "GLM");
+                Logger.LogWarning($"Ark主服务初始化失败: {ex.Message}，尝试fallback", "Ark");
 
                 if (_config.enableFallback)
                 {
                     _activeBackend = LLMBackend.Ollama;
                     _isInitialized = true;
-                    Logger.LogInfo("已降级到Ollama后端", "GLM");
+                    Logger.LogInfo("已降级到Ollama后端", "Ark");
                 }
                 else
                 {
@@ -82,7 +82,7 @@ namespace TripMeta.AI
             {
                 var response = _activeBackend switch
                 {
-                    LLMBackend.GLM => await SendGLMRequestAsync(conversation),
+                    LLMBackend.Ark => await SendArkRequestAsync(conversation),
                     LLMBackend.Ollama => await SendOllamaRequestAsync(conversation),
                     _ => GetMockResponse(message)
                 };
@@ -115,7 +115,7 @@ namespace TripMeta.AI
             {
                 var response = _activeBackend switch
                 {
-                    LLMBackend.GLM => await SendGLMRequestAsync(tempConversation, options),
+                    LLMBackend.Ark => await SendArkRequestAsync(tempConversation, options),
                     LLMBackend.Ollama => await SendOllamaRequestAsync(tempConversation),
                     _ => GetMockResponse(prompt)
                 };
@@ -141,8 +141,8 @@ namespace TripMeta.AI
             try
             {
                 string fullResponse;
-                if (_activeBackend == LLMBackend.GLM)
-                    fullResponse = await SendGLMStreamRequestAsync(conversation, onPartialResponse);
+                if (_activeBackend == LLMBackend.Ark)
+                    fullResponse = await SendArkStreamRequestAsync(conversation, onPartialResponse);
                 else if (_activeBackend == LLMBackend.Ollama)
                     fullResponse = await SendOllamaStreamRequestAsync(conversation, onPartialResponse);
                 else
@@ -158,7 +158,7 @@ namespace TripMeta.AI
 
                 if (_config.enableFallback && TryDegradeBackend())
                 {
-                    Logger.LogWarning($"降级到 {_activeBackend}，重试流式请求", "GLM");
+                    Logger.LogWarning($"降级到 {_activeBackend}，重试流式请求", "Ark");
                     await SendStreamChatAsync(message, onPartialResponse, conversationId);
                     return;
                 }
@@ -168,16 +168,16 @@ namespace TripMeta.AI
             }
         }
 
-        #region GLM API (OpenAI-compatible)
+        #region Ark API (OpenAI-compatible)
 
-        private async Task<string> SendGLMRequestAsync(GPTConversation conversation, GPTGenerationOptions options = null)
+        private async Task<string> SendArkRequestAsync(GPTConversation conversation, GPTGenerationOptions options = null)
         {
             var requestBody = BuildChatRequestBody(conversation, stream: false, options: options);
             var responseText = await SendHttpPostAsync(_config.apiEndpoint, requestBody, _config.apiKey);
             return ParseChatResponse(responseText);
         }
 
-        private async Task<string> SendGLMStreamRequestAsync(GPTConversation conversation, Action<string> onPartialResponse, System.Threading.CancellationToken cancellationToken = default)
+        private async Task<string> SendArkStreamRequestAsync(GPTConversation conversation, Action<string> onPartialResponse, System.Threading.CancellationToken cancellationToken = default)
         {
             var requestBody = BuildChatRequestBody(conversation, stream: true);
             var json = JsonConvert.SerializeObject(requestBody);
@@ -209,7 +209,7 @@ namespace TripMeta.AI
             }
 
             if (webRequest.result != UnityWebRequest.Result.Success)
-                throw new Exception($"GLM stream request failed: {webRequest.error}");
+                throw new Exception($"Ark stream request failed: {webRequest.error}");
 
             // Parse any remaining data after completion
             var finalText = webRequest.downloadHandler?.text;
@@ -338,7 +338,7 @@ namespace TripMeta.AI
 
         private string GetMockResponse(string message)
         {
-            Logger.LogWarning("使用Mock响应（所有LLM后端不可用）", "GLM");
+            Logger.LogWarning("使用Mock响应（所有LLM后端不可用）", "Ark");
             return $"[Mock] 感谢您的提问。当前AI服务暂时不可用，请稍后再试。您说的是：\"{message.Substring(0, Math.Min(30, message.Length))}...\"";
         }
 
@@ -361,15 +361,15 @@ namespace TripMeta.AI
             {
                 switch (_activeBackend)
                 {
-                    case LLMBackend.GLM:
+                    case LLMBackend.Ark:
                         _activeBackend = LLMBackend.Ollama;
                         _consecutiveFailures = 0;
-                        Logger.LogWarning("GLM连续失败，降级到Ollama", "GLM");
+                        Logger.LogWarning("Ark连续失败，降级到Ollama", "Ark");
                         return true;
                     case LLMBackend.Ollama:
                         _activeBackend = LLMBackend.Mock;
                         _consecutiveFailures = 0;
-                        Logger.LogWarning("Ollama连续失败，降级到Mock", "GLM");
+                        Logger.LogWarning("Ollama连续失败，降级到Mock", "Ark");
                         return true;
                     case LLMBackend.Mock:
                         return false;
@@ -389,14 +389,14 @@ namespace TripMeta.AI
 
             if (retryCount >= MAX_FALLBACK_DEPTH)
             {
-                Logger.LogError($"达到最大降级深度 {MAX_FALLBACK_DEPTH}，放弃重试", "GLM");
+                Logger.LogError($"达到最大降级深度 {MAX_FALLBACK_DEPTH}，放弃重试", "Ark");
                 OnError?.Invoke("服务暂时不可用，请稍后重试");
                 throw new InvalidOperationException("All LLM backends failed after maximum retries", ex);
             }
 
             if (_config.enableFallback && TryDegradeBackend())
             {
-                Logger.LogWarning($"降级到 {_activeBackend}，重试 (attempt: {retryCount + 1})", "GLM");
+                Logger.LogWarning($"降级到 {_activeBackend}，重试 (attempt: {retryCount + 1})", "Ark");
                 try
                 {
                     return await retryFunc(conversation);
@@ -415,7 +415,7 @@ namespace TripMeta.AI
         {
             return _activeBackend switch
             {
-                LLMBackend.GLM => await SendGLMRequestAsync(conversation),
+                LLMBackend.Ark => await SendArkRequestAsync(conversation),
                 LLMBackend.Ollama => await SendOllamaRequestAsync(conversation),
                 _ => GetMockResponse(conversation.GetMessages()[^1].content)
             };
@@ -436,12 +436,12 @@ namespace TripMeta.AI
             {
                 await TestConnectionAsync();
 
-                // If we were degraded, try to recover to GLM
-                if (_activeBackend != LLMBackend.GLM)
+                // If we were degraded, try to recover to Ark
+                if (_activeBackend != LLMBackend.Ark)
                 {
-                    _activeBackend = LLMBackend.GLM;
+                    _activeBackend = LLMBackend.Ark;
                     _consecutiveFailures = 0;
-                    Logger.LogInfo("GLM服务恢复，切回主后端", "GLM");
+                    Logger.LogInfo("Ark服务恢复，切回主后端", "Ark");
                 }
 
                 return true;
@@ -455,7 +455,7 @@ namespace TripMeta.AI
         public async Task ReinitializeAsync()
         {
             _isInitialized = false;
-            _activeBackend = LLMBackend.GLM;
+            _activeBackend = LLMBackend.Ark;
             _consecutiveFailures = 0;
             await InitializeAsync();
         }
@@ -463,20 +463,20 @@ namespace TripMeta.AI
         public void Pause()
         {
             _isPaused = true;
-            Logger.LogInfo("GLM服务已暂停", "GLM");
+            Logger.LogInfo("Ark服务已暂停", "Ark");
         }
 
         public void Resume()
         {
             _isPaused = false;
-            Logger.LogInfo("GLM服务已恢复", "GLM");
+            Logger.LogInfo("Ark服务已恢复", "Ark");
         }
 
         public async Task DisposeAsync()
         {
             _conversations.Clear();
             _isInitialized = false;
-            Logger.LogInfo("GLM服务资源已释放", "GLM");
+            Logger.LogInfo("Ark服务资源已释放", "Ark");
             await Task.CompletedTask;
         }
 
@@ -495,7 +495,7 @@ namespace TripMeta.AI
             if (_conversations.ContainsKey(id))
             {
                 _conversations[id].Clear();
-                Logger.LogInfo($"已清除对话历史: {id}", "GLM");
+                Logger.LogInfo($"已清除对话历史: {id}", "Ark");
             }
         }
 
@@ -517,17 +517,17 @@ namespace TripMeta.AI
         private void EnsureReady()
         {
             if (!_isInitialized)
-                throw new InvalidOperationException("GLM服务未初始化");
+                throw new InvalidOperationException("Ark服务未初始化");
             if (_isPaused)
-                throw new InvalidOperationException("GLM服务已暂停");
+                throw new InvalidOperationException("Ark服务已暂停");
         }
 
         private void ValidateConfig()
         {
             if (string.IsNullOrEmpty(_config.apiKey))
-                throw new InvalidOperationException("GLM API密钥未配置");
+                throw new InvalidOperationException("Ark API密钥未配置");
             if (string.IsNullOrEmpty(_config.model))
-                throw new InvalidOperationException("GLM模型未配置");
+                throw new InvalidOperationException("Ark模型未配置");
             if (_config.maxTokens <= 0)
                 throw new InvalidOperationException("最大令牌数必须大于0");
         }
@@ -542,7 +542,7 @@ namespace TripMeta.AI
             };
 
             await SendHttpPostAsync(_config.apiEndpoint, testBody, _config.apiKey);
-            Logger.LogInfo("GLM连接测试成功", "GLM");
+            Logger.LogInfo("Ark连接测试成功", "Ark");
         }
 
         private async Task WaitForRateLimit()
@@ -559,7 +559,7 @@ namespace TripMeta.AI
                 var waitSeconds = 60 - (int)(now - _windowStart).TotalSeconds;
                 if (waitSeconds > 0)
                 {
-                    Logger.LogWarning($"达到速率限制，等待 {waitSeconds}s", "GLM");
+                    Logger.LogWarning($"达到速率限制，等待 {waitSeconds}s", "Ark");
                     await Task.Delay(waitSeconds * 1000);
                     _requestCount = 0;
                     _windowStart = DateTime.UtcNow;
@@ -608,7 +608,7 @@ namespace TripMeta.AI
                 // 429 Rate Limited — exponential backoff retry
                 if (request.responseCode == 429 && attempt < maxRetries)
                 {
-                    Logger.LogWarning($"GLM 429 Rate Limited, retry {attempt + 1}/{maxRetries} after {delayMs}ms", "GLM");
+                    Logger.LogWarning($"Ark 429 Rate Limited, retry {attempt + 1}/{maxRetries} after {delayMs}ms", "Ark");
                     await Task.Delay(delayMs);
                     delayMs *= 2; // 1s → 2s → 4s
                     continue;
@@ -624,7 +624,7 @@ namespace TripMeta.AI
         {
             var response = JsonConvert.DeserializeObject<dynamic>(responseJson);
             return response?.choices?[0]?.message?.content?.ToString()
-                ?? throw new Exception("GLM响应格式异常：无法解析content字段");
+                ?? throw new Exception("Ark响应格式异常：无法解析content字段");
         }
 
         private static string BuildPromptFromMessages(List<GPTMessage> messages)

@@ -24,10 +24,26 @@ namespace TripMeta.Core.Configuration
     [System.Serializable]
     public class AIServiceSettings
     {
+        [Header("Ark LLM")]
+        public string arkApiKey;
+        public string arkBaseUrl = TripMeta.AI.GPTConfig.DefaultArkBaseUrl;
+        public string arkChatModel = TripMeta.AI.GPTConfig.DefaultArkModel;
+
+        [Header("Legacy / Compatible")]
         public string openAIApiKey;
+        public int maxTokens = 2048;
+        public float temperature = 0.7f;
+
+        [Header("Azure Speech")]
         public string azureSpeechKey;
         public string azureSpeechRegion;
+
+        [Header("Azure Vision")]
+        public string azureVisionKey;
+        public string azureVisionEndpoint;
         public string googleVisionApiKey;
+
+        [Header("Limits")]
         public int maxRequestsPerMinute = 60;
         public float requestTimeout = 30f;
     }

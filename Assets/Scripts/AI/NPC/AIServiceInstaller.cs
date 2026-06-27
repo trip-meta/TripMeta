@@ -5,6 +5,7 @@ using UnityEngine;
 using Newtonsoft.Json;
 using TripMeta.Core.DependencyInjection;
 using TripMeta.Core.ErrorHandling;
+using TripMeta.Core.Configuration;
 using TripMeta.AI.NPC;
 
 namespace TripMeta.AI
@@ -23,14 +24,14 @@ namespace TripMeta.AI
             {
                 Logger.LogInfo("Installing AI services asynchronously...", "AIServiceInstaller");
 
-                // 注册LLM服务 — 使用智谱AI GLM（实现IGPTService接口）
+                // 注册LLM服务 — 使用火山方舟 Ark（实现IGPTService接口）
                 if (!container.IsRegistered<IGPTService>())
                 {
                     var gptConfig = LoadGPTConfig();
-                    var glmService = new GLMService(gptConfig);
-                    await glmService.InitializeAsync(); // 等待初始化完成
-                    container.RegisterSingleton<IGPTService>(glmService);
-                    Logger.LogInfo("GLM Service initialized and registered as IGPTService", "AIServiceInstaller");
+                    var arkService = new ArkService(gptConfig);
+                    await arkService.InitializeAsync(); // 等待初始化完成
+                    container.RegisterSingleton<IGPTService>(arkService);
+                    Logger.LogInfo("Ark Service initialized and registered as IGPTService", "AIServiceInstaller");
                 }
 
                 // 注册Azure语音服务
@@ -82,15 +83,15 @@ namespace TripMeta.AI
             {
                 Logger.LogInfo("Installing AI services (sync)...", "AIServiceInstaller");
 
-                // 注册LLM服务 — 使用智谱AI GLM（实现IGPTService接口）
+                // 注册LLM服务 — 使用火山方舟 Ark（实现IGPTService接口）
                 if (!container.IsRegistered<IGPTService>())
                 {
                     var gptConfig = LoadGPTConfig();
-                    var glmService = new GLMService(gptConfig);
+                    var arkService = new ArkService(gptConfig);
                     // 异步初始化，不等待
-                    _ = InitializeServiceAsync(glmService, container, "IGPTService");
-                    container.RegisterSingleton<IGPTService>(glmService);
-                    Logger.LogInfo("GLM Service registered as IGPTService (initialization pending)", "AIServiceInstaller");
+                    _ = InitializeServiceAsync<IGPTService>(arkService, container, "IGPTService");
+                    container.RegisterSingleton<IGPTService>(arkService);
+                    Logger.LogInfo("Ark Service registered as IGPTService (initialization pending)", "AIServiceInstaller");
                 }
 
                 // 其他服务...
@@ -151,8 +152,9 @@ namespace TripMeta.AI
             var appSettings = Resources.Load<AppSettings>("Config/AppSettings");
             if (appSettings != null && appSettings.aiSettings != null)
             {
-                config.apiKey = appSettings.aiSettings.openAIApiKey;
-                config.model = appSettings.aiSettings.gptModel ?? "glm-4-flash-250414";
+                config.apiKey = appSettings.aiSettings.arkApiKey;
+                config.apiEndpoint = BuildArkChatEndpoint(appSettings.aiSettings.arkBaseUrl);
+                config.model = FirstNonEmpty(appSettings.aiSettings.arkChatModel, GPTConfig.DefaultArkModel);
                 config.maxTokens = appSettings.aiSettings.maxTokens;
                 config.temperature = appSettings.aiSettings.temperature;
             }
@@ -175,7 +177,7 @@ namespace TripMeta.AI
             {
                 var json = File.ReadAllText(secretsPath);
                 var secrets = JsonConvert.DeserializeObject<dynamic>(json);
-                var key = secrets?.glm_api_key?.ToString() ?? "";
+                var key = secrets?.ark_api_key?.ToString() ?? "";
                 if (!string.IsNullOrEmpty(key))
                     Logger.LogInfo("API Key loaded from secrets.json", "AIServiceInstaller");
                 return key;
@@ -185,6 +187,27 @@ namespace TripMeta.AI
                 Logger.LogWarning($"Failed to load secrets.json: {ex.Message}", "AIServiceInstaller");
                 return "";
             }
+        }
+
+        private static string FirstNonEmpty(params string[] values)
+        {
+            foreach (var value in values)
+            {
+                if (!string.IsNullOrWhiteSpace(value))
+                    return value;
+            }
+            return "";
+        }
+
+        private static string BuildArkChatEndpoint(string baseUrl)
+        {
+            if (string.IsNullOrWhiteSpace(baseUrl))
+                return GPTConfig.DefaultArkChatEndpoint;
+
+            var normalized = baseUrl.TrimEnd('/');
+            return normalized.EndsWith("/chat/completions", StringComparison.Ordinal)
+                ? normalized
+                : $"{normalized}/chat/completions";
         }
         
         /// <summary>

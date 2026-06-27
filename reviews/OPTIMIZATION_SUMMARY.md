@@ -24,7 +24,7 @@
 ## 已完成的P0修复 (已推送)
 
 ### 1. 无限递归风险修复
-- **文件**: `GLMService.cs:393`
+- **文件**: `ArkService.cs:393`
 - **问题**: `HandleFailureWithFallback` 可能无限递归
 - **修复**: 添加 `MAX_FALLBACK_DEPTH = 3` 限制
 - **提交**: 03c735e5
@@ -43,7 +43,7 @@
 - **提交**: 03c735e5
 
 ### 4. WebRequest 资源泄漏预防
-- **文件**: `GLMService.cs:186-222`
+- **文件**: `ArkService.cs:186-222`
 - **修复**: 
   - 添加 `CancellationToken` 支持
   - 显式调用 `uploadHandler?.Dispose()` 和 `downloadHandler?.Dispose()`
@@ -61,7 +61,7 @@
 | TD-001 | 单例与DI混用 | 架构不一致 | 统一使用DI |
 | TD-002 | ServiceInstaller过大 (1119行) | 维护困难 | 按模块拆分 |
 | TD-003 | MonoBehaviour滥用 | 测试困难 | 纯C#类+包装器 |
-| TD-004 | 代码重复 (GLM/GPT) | 70%+重复 | 创建抽象基类 |
+| TD-004 | 代码重复 (Ark/GPT) | 70%+重复 | 创建抽象基类 |
 
 ### 性能问题
 
@@ -69,7 +69,7 @@
    - 建议: 缓存结果或使用依赖注入
    
 2. **字符串拼接 GC 压力**
-   - 建议: 使用 StringBuilder (已在GLMService修复)
+   - 建议: 使用 StringBuilder (已在ArkService修复)
 
 3. **LINQ 分配**
    - 位置: `PerformanceMonitor.cs`, `AIEngineSelector.cs`
@@ -91,7 +91,7 @@
 ### 阶段1: 架构优化 (1-2周)
 
 1. 拆分 ServiceInstaller 为多个模块安装器
-2. 合并 GLMService 和 GPTService 重复代码
+2. 合并 ArkService 和 GPTService 重复代码
 3. 统一 AIServiceManager (删除V1，保留V2)
 4. 提取通用单例基类，消除重复单例代码
 

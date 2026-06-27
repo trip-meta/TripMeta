@@ -56,13 +56,13 @@ TripMeta is an innovative VR tourism platform combining AI technology with virtu
 |--------|--------|--------|
 | **Frame Rate** | 90 FPS | ✅ PICO 4 Ready |
 | **Latency** | <20ms | ✅ Motion-to-photon |
-| **AI Response** | <2s | ✅ GLM Optimized |
+| **AI Response** | <2s | ✅ Ark Optimized |
 | **Memory Budget** | <4GB | ✅ Optimized |
 
 ## Key Features
 
 ### 🤖 AI Tour Guide
-- **GLM Powered Conversations**: Natural language understanding and generation (ZhipuAI)
+- **Ark Powered Conversations**: Natural language understanding and generation via Volcengine Ark CodingPlan
 - **Personalized Responses**: Context-aware explanations based on user interests
 - **Multi-language Support**: English, Chinese, Japanese, and more
 - **Rich Knowledge Base**: Historical facts, cultural insights, and travel tips
@@ -78,10 +78,10 @@ TripMeta is an innovative VR tourism platform combining AI technology with virtu
 - **Conversation Persistence**: Auto-save dialogue history to disk
 
 ### 🔄 LLM Fallback System
-- **ZhipuAI GLM**: Primary cloud LLM with streaming support (OpenAI-compatible API)
+- **Volcengine Ark**: Primary cloud LLM with streaming support (OpenAI-compatible API)
 - **Ollama Local LLM**: Fallback to local models (llama3.2, etc.)
-- **Automatic Failover**: Switch to Ollama if OpenAI API fails
-- **Dual Streaming**: SSE streaming support for both OpenAI and Ollama
+- **Automatic Failover**: Switch to Ollama if Ark API fails
+- **Dual Streaming**: SSE streaming support for both Ark and Ollama
 
 ### 🥽 Immersive VR Experience
 - **PICO 4 Support**: Optimized for PICO VR headsets
@@ -104,7 +104,7 @@ TripMeta is an innovative VR tourism platform combining AI technology with virtu
 | **Render Pipeline** | URP 17.0.3 | High-performance graphics |
 | **XR Interaction** | XR Interaction Toolkit 3.0.7 | VR interaction system |
 | **Input System** | Unity Input System 1.11.2 | Modern input handling |
-| **AI Engine** | GLM via ZhipuAI API | Conversational AI |
+| **AI Engine** | Volcengine Ark CodingPlan | Conversational AI |
 | **Speech** | Azure Cognitive Services | Voice recognition & TTS |
 | **Vision** | Azure Computer Vision | Object detection & AR |
 | **Networking** | Netcode for GameObjects 2.1.1 | Multiplayer support |
@@ -265,7 +265,7 @@ Built with amazing open-source technologies:
 
 - [Unity Technologies](https://unity.com/) - Game Engine
 - [PICO Interactive](https://www.pico-interactive.com/) - VR Platform
-- [OpenAI](https://openai.com/) - AI Services
+- [Volcengine Ark](https://www.volcengine.com/product/ark) - AI Services
 - [Microsoft Azure](https://azure.microsoft.com/) - Cloud Services
 
 ## Roadmap

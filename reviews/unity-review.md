@@ -147,7 +147,7 @@ MonoBehaviour
 
 | 模式 | 使用场景 | 文件示例 |
 |------|----------|----------|
-| async/await | AI 服务、网络请求、初始化 | GLMService.cs, GPTService.cs |
+| async/await | AI 服务、网络请求、初始化 | ArkService.cs, GPTService.cs |
 | Coroutine | 性能监控、帧同步操作 | VRPerformanceOptimizer.cs, PerformanceMonitor.cs |
 
 ### 4.2 发现的问题
@@ -279,7 +279,7 @@ void OnDestroy()
 - 适当的超时设置
 - 实现了指数退避重试机制
 
-**文件**: `Assets/Scripts/AI/Services/GLMService.cs` (第 572-608 行)
+**文件**: `Assets/Scripts/AI/Services/ArkService.cs` (第 572-608 行)
 ```csharp
 private async Task<string> SendHttpPostAsync(string url, object body, string apiKey)
 {
@@ -301,7 +301,7 @@ private async Task<string> SendHttpPostAsync(string url, object body, string api
 
 #### 问题 1: 流式响应中的轮询
 
-**文件**: `Assets/Scripts/AI/Services/GLMService.cs` (第 186-222 行)
+**文件**: `Assets/Scripts/AI/Services/ArkService.cs` (第 186-222 行)
 ```csharp
 while (!operation.isDone)
 {
@@ -365,7 +365,7 @@ private AIServiceConfig CreateDefaultConfig()
         gptConfig = new GPTConfig
         {
             apiKey = "",  // 空字符串
-            model = "glm-4-flash-250414",  // 硬编码模型
+            model = "doubao-seed-2-0-code-preview-260215",  // 硬编码模型
             // ...
         }
     };
@@ -835,7 +835,7 @@ public class VRHapticEventPool : MonoBehaviour
 ## 附录 A: 参考文件清单
 
 ### AI 系统
-- `/Assets/Scripts/AI/Services/GLMService.cs`
+- `/Assets/Scripts/AI/Services/ArkService.cs`
 - `/Assets/Scripts/AI/Services/GPTService.cs`
 - `/Assets/Scripts/AI/Services/DualEngineLLMService.cs`
 - `/Assets/Scripts/AI/Core/AIServiceManagerV2.cs`

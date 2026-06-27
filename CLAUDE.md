@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-TripMeta is an AI-driven VR tourism platform built with Unity 2021.3.11f1. It integrates multiple AI services (ZhipuAI GLM, Azure Speech, Computer Vision, Recommendations) with PICO VR headsets to create immersive virtual tourism experiences with intelligent AI tour guides.
+TripMeta is an AI-driven VR tourism platform built with Unity 2021.3.11f1. It integrates multiple AI services (Volcengine Ark CodingPlan, Azure Speech, Computer Vision, Recommendations) with PICO VR headsets to create immersive virtual tourism experiences with intelligent AI tour guides.
 
 ## Project Structure
 
@@ -76,13 +76,13 @@ Custom DI container in `Core/DependencyInjection/`:
 
 ### AI Service Architecture
 `AIServiceManager` (in `AI/AIServiceManager.cs`) orchestrates all AI services:
-- **Service Types**: LLM (ZhipuAI GLM), Speech (Azure), Vision, Recommendation, Translation
-- **LLM Backend**: `GLMService` (in `AI/Services/GLMService.cs`) implements `IGPTService`
-  - API: `https://open.bigmodel.cn/api/paas/v4/chat/completions` (OpenAI-compatible)
-  - Models: `glm-4-flash-250414` (free/dev), `glm-4.7` (production)
-  - Three-tier fallback: GLM → Ollama → Mock
+- **Service Types**: LLM (Volcengine Ark), Speech (Azure), Vision, Recommendation, Translation
+- **LLM Backend**: `ArkService` (in `AI/Services/ArkService.cs`) implements `IGPTService`
+  - API: `https://ark.cn-beijing.volces.com/api/coding/v3/chat/completions` (OpenAI-compatible)
+  - Model: `doubao-seed-2-0-code-preview-260215`
+  - Three-tier fallback: Ark → Ollama → Mock
   - SSE streaming, exponential backoff on 429, conversation history with system prompt preservation
-  - API Key loaded from `secrets.json` (gitignored)
+  - API Key loaded from `secrets.json` using `ark_api_key` (gitignored)
 - **Request Queue**: Manages concurrent requests (configurable max concurrent)
 - **Health Monitoring**: Individual service status tracking with auto-restart capability
 - **Event-Driven**: `OnServiceStatusChanged`, `OnAIResponseReceived`, `OnAIError` events
