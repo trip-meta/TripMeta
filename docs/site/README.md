@@ -1,6 +1,6 @@
 # TripMeta Demo Site
 
-**Live Demo**: https://trip-meta.github.io/TripMeta/site/
+**Live Demo**: https://trip-meta.github.io/TripMeta/
 
 ---
 
@@ -14,12 +14,11 @@ This directory contains the TripMeta demo website hosted on GitHub Pages.
 |-------|-----------|-------|
 | `index.html` | Main demo page with video player | ~24 KB |
 | `vr.mp4` | VR demo video (6.7 MB) | 6.7 MB |
+| `ai-npc-metaverse.html` | AI NPC scenario demo page | ~38 KB |
+| `robots.txt` | Search crawler hints | - |
+| `sitemap.xml` | Published URL sitemap | - |
 | `.nojekyll` | Bypass Jekyll processing for GitHub Pages | - |
 | `DEPLOYMENT.md` | Deployment documentation | ~2 KB |
-| `test-page.html` | Automated testing page | ~6.5 KB |
-| `test-responsive.html` | Responsive design tester | ~5 KB |
-| `verify-site.sh` | CLI verification script | ~2.5 KB |
-| `check-deployment.sh` | Deployment status checker | ~1.7 KB |
 
 ## Features
 
@@ -29,7 +28,7 @@ This directory contains the TripMeta demo website hosted on GitHub Pages.
 - Header with badge and gradient title
 - Video player with size controls (Small/Medium/Large)
 - Feature highlights (AI Tour Guide, VR, Interaction, Knowledge)
-- Technology stack showcase (Unity, PICO, GPT, Azure, Vision, URP)
+- Technology stack showcase (Unity, PICO, Ark, Azure, Vision, URP)
 - Project metrics (90 FPS, <20ms, 6+ AI Services, 4 Languages)
 - Key features grid (6 items)
 - CTA buttons (GitHub + Architecture)
@@ -55,61 +54,22 @@ This directory contains the TripMeta demo website hosted on GitHub Pages.
 - Semantic HTML structure
 - Proper heading hierarchy
 
-### Testing Pages
+### Verification
 
-#### test-page.html
-Automated verification page that checks:
-- Video file accessibility
-- HTML structure validation
-- CSS loading verification
-- Link validity testing
-- Responsive viewport detection
+Use a local static server and a browser or curl smoke test:
 
-**Usage:**
-```bash
-# Local test
-python -m http.server 8000
-# Open http://localhost:8000/test-page.html
-```
-
-#### test-responsive.html
-Interactive responsive design tester with:
-- Device presets (Mobile 375px, Tablet 768px, Laptop 1024px, Desktop 1440px)
-- Real-time viewport information
-- Live preview in iframe
-
-**Usage:**
-```bash
-# Local test
-python -m http.server 8000
-# Open http://localhost:8000/test-responsive.html
-```
-
-### Verification Scripts
-
-#### verify-site.sh
-Command-line verification tool that checks:
-- File structure (index.html, vr.mp4, .nojekyll)
-- HTML content (video tag, source, controls)
-- External links (GitHub URL correctness)
-- Responsive design (viewport meta, media queries)
-
-**Usage:**
 ```bash
 cd docs/site
-bash verify-site.sh
+python -m http.server 8000
+curl -I http://localhost:8000/
+curl -I http://localhost:8000/vr.mp4
 ```
 
-#### check-deployment.sh
-Deployment status checker that verifies:
-- All site files return HTTP 200
-- Video file is accessible
-- Deployment is successful
+For production, verify the published GitHub Pages paths:
 
-**Usage:**
 ```bash
-cd docs/site
-bash check-deployment.sh
+curl -L -I https://trip-meta.github.io/TripMeta/
+curl -L -I https://trip-meta.github.io/TripMeta/vr.mp4
 ```
 
 ## Local Development
@@ -129,14 +89,13 @@ python -m http.server 8001
 
 **Access URLs:**
 - Main demo: http://localhost:8000/index.html
-- Test page: http://localhost:8000/test-page.html
-- Responsive test: http://localhost:8000/test-responsive.html
+- AI NPC demo: http://localhost:8000/ai-npc-metaverse.html
 
 ### Making Changes
 
 1. Edit HTML/CSS files
 2. Test locally using above methods
-3. Run verification script: `bash verify-site.sh`
+3. Run local and production HTTP smoke checks after deployment
 4. Commit changes to Git
 5. Push to GitHub
 6. Wait 1-2 minutes for GitHub Pages deployment
@@ -146,12 +105,11 @@ python -m http.server 8001
 ### GitHub Pages Configuration
 
 **Settings:**
-- Source: Deploy from a branch
+- Source: GitHub Actions
 - Branch: `main`
-- Folder: `/docs` (not `/docs/site`)
 - Custom domain: (optional)
 
-**Note:** The site is accessed at `https://trip-meta.github.io/TripMeta/site/` because GitHub Pages serves from the `/docs` folder.
+**Note:** `.github/workflows/deploy-pages.yml` uploads `docs/site` as the Pages artifact, so the site is accessed at `https://trip-meta.github.io/TripMeta/`.
 
 ### Automatic Deployment
 
@@ -165,19 +123,13 @@ When you push to the `main` branch:
 After pushing changes:
 
 ```bash
-# Run deployment check
-cd docs/site
-bash check-deployment.sh
+curl -L -I https://trip-meta.github.io/TripMeta/
+curl -L -I https://trip-meta.github.io/TripMeta/vr.mp4
 ```
 
 Expected output:
 ```
-======================================
-Checking GitHub Pages Deployment
-======================================
-Checking index.html... ✓ OK (200)
-Checking vr.mp4... ✓ OK (6MB)
-======================================
+HTTP/2 200
 ```
 
 ## Troubleshooting
@@ -212,7 +164,7 @@ Checking vr.mp4... ✓ OK (6MB)
 - "Page not found" message
 
 **Solutions:**
-1. Verify GitHub Pages source is set to `/docs` folder
+1. Verify the GitHub Actions Pages workflow completed successfully
 2. Wait 1-2 minutes for deployment
 3. Check repository settings > Pages
 4. Verify branch is `main`, not `master`
@@ -286,7 +238,7 @@ To update the demo video:
 
 To update project info:
 1. Edit `index.html`
-2. Verify with test-page.html
+2. Verify locally and with production HTTP smoke
 3. Commit and push changes
 
 ---

@@ -10,11 +10,10 @@ This guide covers deploying the TripMeta demo site to GitHub Pages.
 docs/site/
 ├── index.html          # Main demo page
 ├── vr.mp4             # Demo video (6.7MB)
+├── ai-npc-metaverse.html  # AI NPC scenario demo
+├── robots.txt
+├── sitemap.xml
 ├── .nojekyll          # Bypass Jekyll processing
-├── test-page.html      # Automated test page
-├── test-responsive.html  # Responsive design tester
-├── create-poster.html  # Poster image generator
-├── verify-site.sh      # Verification script
 └── README.md          # Site documentation
 ```
 
@@ -25,14 +24,14 @@ docs/site/
 Go to: https://github.com/trip-meta/TripMeta/settings/pages
 
 **Configuration:**
-- **Source**: Deploy from a branch
-- **Branch**: `main`
-- **Folder**: `/docs`
+- **Source**: GitHub Actions
+- **Workflow**: `.github/workflows/deploy-pages.yml`
+- **Artifact path**: `docs/site`
 - **Custom domain**: (optional) Configure in DNS
 
-### Why /docs folder?
+### Why docs/site?
 
-GitHub Pages supports serving from `/docs` folder when configured.
+The Pages workflow uploads `docs/site` as the static artifact, so its files are served at the repository Pages root.
 
 ## Deployment Process
 
@@ -40,18 +39,17 @@ GitHub Pages supports serving from `/docs` folder when configured.
 
 1. Push changes to `main` branch
 2. GitHub Pages builds automatically (1-2 minutes)
-3. Site available at: https://trip-meta.github.io/TripMeta/site/
+3. Site available at: https://trip-meta.github.io/TripMeta/
 
 ### Local Testing
 
 ```bash
-# Run verification script
 cd docs/site
-bash verify-site.sh
-
-# Start local server
 python -m http.server 8000
 # Open http://localhost:8000/
+# Verify locally
+curl -I http://localhost:8000/
+curl -I http://localhost:8000/vr.mp4
 ```
 
 ## Troubleshooting
@@ -61,7 +59,8 @@ python -m http.server 8000
 - Check browser console for errors
 
 ### GitHub Pages 404
-- Verify Pages source is set to `/docs` folder
+- Verify the GitHub Actions Pages workflow completed
+- Verify the workflow artifact path is `docs/site`
 - Wait 1-2 minutes for deployment
 
 ### Styles not loading

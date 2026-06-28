@@ -4,16 +4,16 @@
 
 <!-- Banner image will be added later -->
 
-# ![Unity](https://img.shields.io/badge/Unity-2021.3.11f1-black?style=for-the-badge&logo=unity)
-[![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
-[![Platform](https://img.shields.io/badge/Platform-PICO%20VR-blue?style=for-the-badge)
-[![Status](https://img.shields.io/badge/Status-Alpha-orange?style=for-the-badge)
+![Unity](https://img.shields.io/badge/Unity-2022.3.45f1-black?style=for-the-badge&logo=unity)
+![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
+![Platform](https://img.shields.io/badge/Platform-PICO%20VR-blue?style=for-the-badge)
+![Status](https://img.shields.io/badge/Status-Alpha-orange?style=for-the-badge)
 
 **An immersive VR tourism experience powered by AI**
 
 **English** • [简体中文](README_CN.md)
 
-[Live Demo](https://trip-meta.github.io/TripMeta/site/) • [Report Issue](../../issues) • [Contribute](#contributing)
+[Live Demo](https://trip-meta.github.io/TripMeta/) • [Report Issue](../../issues) • [Contribute](#contributing)
 
 </div>
 
@@ -23,17 +23,17 @@
 
 | Resource | Link |
 |----------|------|
-| 🌐 **Live Demo** | [trip-meta.github.io/TripMeta/site](https://trip-meta.github.io/TripMeta/site/) |
+| 🌐 **Live Demo** | [trip-meta.github.io/TripMeta](https://trip-meta.github.io/TripMeta/) |
 | 📖 **Documentation** | [TripMeta/docs](./docs) |
 | 📹 **Source Code** | [github.com/trip-meta/TripMeta](https://github.com/trip-meta/TripMeta) |
-| 🎬 **Demo Video** | [Watch VR Demo](https://trip-meta.github.io/TripMeta/site/vr.mp4) |
+| 🎬 **Demo Video** | [Watch VR Demo](https://trip-meta.github.io/TripMeta/vr.mp4) |
 | 🐛 **Issue Tracker** | [GitHub Issues](../../issues) |
 | 💬 **Discussions** | [GitHub Discussions](../../discussions) |
 | 📜 **Changelog** | [Releases](../../releases) |
 
 ## Demo Video
 
-https://trip-meta.github.io/TripMeta/site/vr.mp4
+https://trip-meta.github.io/TripMeta/vr.mp4
 
 ---
 
@@ -42,7 +42,7 @@ https://trip-meta.github.io/TripMeta/site/vr.mp4
 TripMeta is an innovative VR tourism platform combining AI technology with virtual reality. It provides intelligent tour guides and immersive travel experiences where users can:
 
 - 🌍 **Explore** virtual attractions worldwide using PICO VR headsets
-- 🤖 **Converse** naturally with AI tour guides powered by GPT
+- 🤖 **Converse** naturally with AI tour guides powered by Volcengine Ark
 - 📚 **Learn** about history and culture through rich knowledge graphs
 - 🎯 **Interact** intuitively using voice dialogue and VR controllers
 
@@ -99,7 +99,7 @@ TripMeta is an innovative VR tourism platform combining AI technology with virtu
 
 | Component | Technology | Purpose |
 |-----------|----------|---------|
-| **Game Engine** | Unity 2021.3.11f1 | Core development platform |
+| **Game Engine** | Unity 2022.3.45f1 | Core development platform |
 | **VR Platform** | PICO 4 | Target VR headset |
 | **Render Pipeline** | URP 17.0.3 | High-performance graphics |
 | **XR Interaction** | XR Interaction Toolkit 3.0.7 | VR interaction system |
@@ -116,7 +116,7 @@ TripMeta is an innovative VR tourism platform combining AI technology with virtu
 TripMeta/
 ├── Assets/
 │   ├── Scripts/
-│   │   ├── AI/              # AI Services (GPT, Speech, Vision)
+│   │   ├── AI/              # AI Services (Ark, Speech, Vision)
 │   │   ├── Core/            # Infrastructure (DI, Config, Errors)
 │   │   ├── Features/        # Business Logic (Tour Guide, Social)
 │   │   ├── Interaction/     # Input Handling (VR Controllers)
@@ -136,7 +136,7 @@ TripMeta/
 
 | Requirement | Version/Platform |
 |-------------|------------------|
-| **Unity** | 2021.3.11f1 or later |
+| **Unity** | 2022.3.45f1 or later |
 | **OS** | Windows 10/11 |
 | **VR Headset** | PICO 4 (optional) |
 | **Git** | Latest version |
@@ -151,7 +151,7 @@ cd TripMeta
 # Open in Unity Hub
 # 1. Install Unity Hub from unity.com
 # 2. Click "Add" → Select this folder
-# 3. Open with Unity 2021.3.11f1
+# 3. Open with Unity 2022.3.45f1
 ```
 
 ### First Run Setup

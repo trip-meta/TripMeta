@@ -31,7 +31,7 @@ Complete navigation guide for all TripMeta documentation.
 
 1. **[README](../README.md)** - Project overview, features, and installation
 2. **[QUICKSTART](QUICKSTART.md)** - Step-by-step setup guide
-3. **[LIVE DEMO](https://trip-meta.github.io/TripMeta/site/)** - See the project in action
+3. **[LIVE DEMO](https://trip-meta.github.io/TripMeta/)** - See the project in action
 
 **For CI/CD Setup:**
 - **[GITHUB_ACTIONS_SETUP](GITHUB_ACTIONS_SETUP.md)** - Configure GitHub Actions

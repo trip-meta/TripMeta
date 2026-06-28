@@ -18,7 +18,7 @@ graph TB
     A[前端VR应用] --> B[Unity 3D Engine]
     B --> C[PICO SDK]
     B --> D[AI服务层]
-    D --> E[GPT-4 API]
+    D --> E[Volcengine Ark CodingPlan]
     D --> F[Azure Cognitive Services]
     B --> G[后端服务]
     G --> H[云存储]
@@ -29,7 +29,7 @@ graph TB
 
 ### VR开发平台
 - **Unity 3D 2022.3 LTS**
-  - 版本: 2022.3.12f1
+  - 版本: 2022.3.45f1
   - 渲染管线: Universal Render Pipeline (URP)
   - 平台支持: Windows, Android (PICO)
   - 脚本语言: C# 9.0+
@@ -42,8 +42,9 @@ graph TB
 
 ### AI技术栈
 - **大语言模型**
-  - OpenAI GPT-4 API
-  - Azure OpenAI Service
+  - 火山方舟 Ark CodingPlan
+  - OpenAI-compatible Chat Completions API
+  - 本地 fallback: Ollama
   - 本地推理: ONNX Runtime
 
 - **计算机视觉**
@@ -283,7 +284,7 @@ graph TB
 
 ### 最低要求
 ```yaml
-Unity: 2022.3.0f1
+Unity: 2022.3.45f1
 .NET: 6.0
 C#: 9.0
 PICO SDK: 2.1.0
@@ -293,7 +294,7 @@ Git: 2.35.0
 
 ### 推荐配置
 ```yaml
-Unity: 2022.3.12f1
+Unity: 2022.3.45f1
 .NET: 6.0
 C#: 10.0
 PICO SDK: 2.1.1
@@ -311,7 +312,7 @@ Git: 2.40+
 
 ### AI响应性能
 - **语音识别**: <500ms
-- **GPT响应**: <2s
+- **Ark响应**: <2s
 - **图像分析**: <1s
 - **推荐生成**: <100ms
 

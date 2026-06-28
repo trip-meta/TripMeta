@@ -131,10 +131,9 @@ When your repository is shared on:
 
 ```
 https://trip-meta.github.io/TripMeta/
-├── site/           # Live demo
-│   ├── index.html
-│   ├── test-page.html
-│   └── test-responsive.html
+├── index.html              # Live demo
+├── vr.mp4                  # Demo video
+├── ai-npc-metaverse.html   # AI NPC scenario demo
 └── docs/          # Documentation
     ├── INDEX.md
     ├── QUICKSTART.md
@@ -281,7 +280,7 @@ Example: `1.0.0` → `1.0.1` → `1.1.0`
 **Keywords:**
 ```
 TripMeta, VR tourism, AI tour guide, virtual reality travel,
-PICO VR, Unity VR, metaverse tourism, OpenAI GPT-4,
+PICO VR, Unity VR, metaverse tourism, Volcengine Ark,
 Azure Speech, computer vision attractions, smart travel guide,
 immersive travel, virtual destinations, 3D tourism,
 AI travel assistant, VR exploration, conversational AI

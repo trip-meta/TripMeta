@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-TripMeta is an AI-driven VR tourism platform built with Unity 2021.3.11f1. It integrates multiple AI services (Volcengine Ark CodingPlan, Azure Speech, Computer Vision, Recommendations) with PICO VR headsets to create immersive virtual tourism experiences with intelligent AI tour guides.
+TripMeta is an AI-driven VR tourism platform built with Unity 2022.3.45f1. It integrates multiple AI services (Volcengine Ark CodingPlan, Azure Speech, Computer Vision, Recommendations) with PICO VR headsets to create immersive virtual tourism experiences with intelligent AI tour guides.
 
 ## Project Structure
 
@@ -33,7 +33,7 @@ Assets/Scripts/
 ## Development Commands
 
 ### Unity Project
-- **Open Project**: Launch Unity Hub and open this directory (requires Unity 2021.3.11f1)
+- **Open Project**: Launch Unity Hub and open this directory (requires Unity 2022.3.45f1)
 - **Main Scenes**: `Assets/NewYork.unity` or `Assets/Scenes/MainScene.unity`
 - **Build**: Use Unity Build Settings (File > Build Settings) - target platform is Android for PICO
 - **Package Installation**: Dependencies auto-install via `Packages/manifest.json`
@@ -174,7 +174,7 @@ When adding new services:
 ### Platform Target
 - **Primary Target**: PICO 4 VR headset (Android platform)
 - **Development Platform**: Windows 10/11
-- Unity version: 2021.3.11f1 (planned upgrade to 2022.3 LTS - see docs)
+- Unity version: 2022.3.45f1
 
 ### Performance Targets for VR
 - Frame Rate: 90 FPS (PICO 4)
@@ -190,8 +190,8 @@ When adding new services:
 - **Language**: C# targeting .NET Standard 2.1
 
 ### Common Issues
-- The project has an ongoing upgrade plan from Unity 2021.3 to 2022.3 (see `Unity_2021.3_→_2023.3_升级执行计划.md`)
-- Some packages may have version conflicts during the upgrade process
+- Historical Unity upgrade notes are kept in `docs/`; treat `ProjectSettings/ProjectVersion.txt` as authoritative for the current editor version.
+- Some packages may have version conflicts when changing Unity versions
 - AI services have graceful degradation - app continues if some AI services fail
 
 ## Common Workflows
@@ -235,11 +235,11 @@ Comprehensive documentation is available in the `docs/` directory (in Chinese):
 - `CONFIGURATION.md` - Configuration management
 - `TROUBLESHOOTING.md` - Common issues and solutions
 
-## Upgrade Planning
+## Upgrade History
 
-The project is planned to upgrade from Unity 2021.3 to 2022.3 LTS. See:
+The project has been upgraded to Unity 2022.3 LTS. Historical planning notes remain in:
 - `docs/Unity_2021.3_→_2023.3_升级执行计划.md`
 - `docs/UPGRADE_PLAN_2023.md`
 - `docs/UPGRADE_CHANGESET_2023.md`
 
-The upgrade involves package version updates and potential breaking changes in XR Interaction Toolkit and URP.
+Future Unity upgrades should be validated against package compatibility for XR Interaction Toolkit and URP.

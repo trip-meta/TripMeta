@@ -2,15 +2,15 @@
 
 ## 概述
 
-这是一个AI驱动的VR旅游平台项目，使用Unity 2021.3.11f1开发，目标平台为PICO VR头显。
+这是一个AI驱动的VR旅游平台项目，使用Unity 2022.3.45f1开发，目标平台为PICO VR头显。
 
 ## 环境准备
 
 ### 必需软件
 
-1. **Unity Hub** 和 **Unity 2021.3.11f1**
+1. **Unity Hub** 和 **Unity 2022.3.45f1**
    - 从 Unity 官网下载 Unity Hub
-   - 安装 Unity 2021.3.11f1 版本
+   - 安装 Unity 2022.3.45f1 版本
    - 需要的模块:
      - Android Build Support
      - OpenJDK

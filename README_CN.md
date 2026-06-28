@@ -4,16 +4,16 @@
 
 <!-- Banner image will be added later -->
 
-# ![Unity](https://img.shields.io/badge/Unity-2021.3.11f1-black?style=for-the-badge&logo=unity)
-[![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
-[![Platform](https://img.shields.io/badge/Platform-PICO%20VR-blue?style=for-the-badge)
-[![Status](https://img.shields.io/badge/Status-Alpha-orange?style=for-the-badge)
+![Unity](https://img.shields.io/badge/Unity-2022.3.45f1-black?style=for-the-badge&logo=unity)
+![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
+![Platform](https://img.shields.io/badge/Platform-PICO%20VR-blue?style=for-the-badge)
+![Status](https://img.shields.io/badge/Status-Alpha-orange?style=for-the-badge)
 
 **由 AI 驱动的沉浸式 VR 旅游体验**
 
 [English](README.md) • **简体中文**
 
-[在线演示](https://trip-meta.github.io/TripMeta/site/) • [问题反馈](../../issues) • [参与贡献](#贡献)
+[在线演示](https://trip-meta.github.io/TripMeta/) • [问题反馈](../../issues) • [参与贡献](#贡献)
 
 </div>
 
@@ -23,17 +23,17 @@
 
 | 资源 | 链接 |
 |------|------|
-| 🌐 **在线演示** | [trip-meta.github.io/TripMeta/site](https://trip-meta.github.io/TripMeta/site/) |
+| 🌐 **在线演示** | [trip-meta.github.io/TripMeta](https://trip-meta.github.io/TripMeta/) |
 | 📖 **文档** | [TripMeta/docs](./docs) |
 | 📹 **源码** | [github.com/trip-meta/TripMeta](https://github.com/trip-meta/TripMeta) |
-| 🎬 **演示视频** | [观看 VR 演示](https://trip-meta.github.io/TripMeta/site/vr.mp4) |
+| 🎬 **演示视频** | [观看 VR 演示](https://trip-meta.github.io/TripMeta/vr.mp4) |
 | 🐛 **问题追踪** | [GitHub Issues](../../issues) |
 | 💬 **讨论区** | [GitHub Discussions](../../discussions) |
 | 📜 **更新日志** | [Releases](../../releases) |
 
 ## 演示视频
 
-https://trip-meta.github.io/TripMeta/site/vr.mp4
+https://trip-meta.github.io/TripMeta/vr.mp4
 
 ---
 
@@ -42,7 +42,7 @@ https://trip-meta.github.io/TripMeta/site/vr.mp4
 TripMeta 是一个创新的 VR 旅游平台，结合 AI 技术和虚拟现实，提供智能导游和沉浸式旅游体验。用户可以：
 
 - 🌍 **探索** - 使用 PICO VR 头显探索世界各地的虚拟景点
-- 🤖 **对话** - 与基于 GPT 的 AI 导游进行自然对话
+- 🤖 **对话** - 与基于火山方舟 Ark 的 AI 导游进行自然对话
 - 📚 **学习** - 通过丰富的知识图谱了解历史和文化
 - 🎯 **交互** - 使用语音对话和 VR 控制器直观交互
 
@@ -83,7 +83,7 @@ TripMeta 是一个创新的 VR 旅游平台，结合 AI 技术和虚拟现实，
 
 | 组件 | 技术 | 用途 |
 |------|--------|------|
-| **游戏引擎** | Unity 2021.3.11f1 | 核心开发平台 |
+| **游戏引擎** | Unity 2022.3.45f1 | 核心开发平台 |
 | **VR 平台** | PICO 4 | 目标 VR 头显 |
 | **渲染管线** | Universal Render Pipeline (URP) | 高性能图形 |
 | **输入系统** | Unity Input System | 现代输入处理 |
@@ -98,7 +98,7 @@ TripMeta 是一个创新的 VR 旅游平台，结合 AI 技术和虚拟现实，
 TripMeta/
 ├── Assets/
 │   ├── Scripts/
-│   │   ├── AI/              # AI 服务（GPT、语音、视觉）
+│   │   ├── AI/              # AI 服务（Ark、语音、视觉）
 │   │   ├── Core/            # 基础设施（DI、配置、错误）
 │   │   ├── Features/        # 业务逻辑（导游、社交）
 │   │   ├── Interaction/     # 输入处理（VR 控制器）
@@ -118,7 +118,7 @@ TripMeta/
 
 | 要求 | 版本/平台 |
 |-------------|----------|
-| **Unity** | 2021.3.11f1 或更高 |
+| **Unity** | 2022.3.45f1 或更高 |
 | **操作系统** | Windows 10/11 |
 | **VR 头显** | PICO 4（可选） |
 | **Git** | 最新版本 |
@@ -133,7 +133,7 @@ cd TripMeta
 # 在 Unity Hub 中打开
 # 1. 从 unity.com 安装 Unity Hub
 # 2. 点击"添加" → 选择此文件夹
-# 3. 使用 Unity 2021.3.11f1 打开
+# 3. 使用 Unity 2022.3.45f1 打开
 ```
 
 ### 首次运行设置
@@ -258,7 +258,7 @@ MIT 许可证
 - [ ] AR 景点叠加
 - [ ] 实时翻译
 - [ ] 移动应用伴侣
-- [ ] Unity 2022.3 升级
+- [x] Unity 2022.3 升级
 
 ---
 
