@@ -18,7 +18,7 @@ graph TB
     A[前端VR应用] --> B[Unity 3D Engine]
     B --> C[PICO SDK]
     B --> D[AI服务层]
-    D --> E[Volcengine Ark CodingPlan]
+    D --> E[Volcengine Ark Agent Plan]
     D --> F[Azure Cognitive Services]
     B --> G[后端服务]
     G --> H[云存储]
@@ -42,7 +42,7 @@ graph TB
 
 ### AI技术栈
 - **大语言模型**
-  - 火山方舟 Ark CodingPlan
+  - 火山方舟 Ark Agent Plan
   - OpenAI-compatible Chat Completions API
   - 本地 fallback: Ollama
   - 本地推理: ONNX Runtime

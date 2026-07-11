@@ -10,7 +10,7 @@ using TripMeta.Core.ErrorHandling;
 namespace TripMeta.AI
 {
     /// <summary>
-    /// Ark服务 — 火山方舟 CodingPlan 模型集成（OpenAI兼容格式）
+    /// Ark服务 — 火山方舟 Agent Plan 模型集成（OpenAI兼容格式）
     /// 支持流式SSE响应，三级降级：Ark → Ollama → Mock
     /// </summary>
     public class ArkService : IGPTService

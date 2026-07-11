@@ -1,6 +1,6 @@
 # Ark Service Setup Guide
 
-TripMeta uses Volcengine Ark CodingPlan as the primary OpenAI-compatible LLM backend for AI tour guide conversations.
+TripMeta uses Volcengine Ark Agent Plan as the primary OpenAI-compatible LLM backend for AI tour guide conversations.
 
 ## 1. Required Secret
 
@@ -21,7 +21,7 @@ Legacy provider-specific key fields are no longer read by runtime code.
 Open `Assets/Resources/Config/AppSettings` in the Unity Inspector and set:
 
 - `AI Settings > Ark Api Key`: your Ark API key, or leave empty to load `secrets.json`
-- `AI Settings > Ark Base Url`: `https://ark.cn-beijing.volces.com/api/coding/v3`
+- `AI Settings > Ark Base Url`: `https://ark.cn-beijing.volces.com/api/plan/v3`
 - `AI Settings > Ark Chat Model`: `doubao-seed-2-0-code-preview-260215`
 
 The existing `OpenAI Api Key` field is kept only for older serialized settings. Prefer the Ark fields for new configuration.
@@ -30,7 +30,7 @@ The existing `OpenAI Api Key` field is kept only for older serialized settings. 
 
 `GPTConfig` in `Assets/Scripts/AI/Models/AIModels.cs` defaults to:
 
-- Endpoint: `https://ark.cn-beijing.volces.com/api/coding/v3/chat/completions`
+- Endpoint: `https://ark.cn-beijing.volces.com/api/plan/v3/chat/completions`
 - Model: `doubao-seed-2-0-code-preview-260215`
 
 Only the API key is required for the default Ark path.
@@ -58,8 +58,8 @@ Ark API (primary) -> Ollama local (fallback) -> Mock response
 | Parameter | Default | Description |
 | --- | --- | --- |
 | `apiKey` | `""` | Ark API key, loaded from Inspector or `secrets.json` |
-| `apiEndpoint` | `https://ark.cn-beijing.volces.com/api/coding/v3/chat/completions` | OpenAI-compatible chat endpoint |
-| `model` | `doubao-seed-2-0-code-preview-260215` | Ark CodingPlan chat model |
+| `apiEndpoint` | `https://ark.cn-beijing.volces.com/api/plan/v3/chat/completions` | OpenAI-compatible chat endpoint |
+| `model` | `doubao-seed-2-0-code-preview-260215` | Ark Agent Plan chat model |
 | `maxTokens` | `2048` | Maximum generated tokens |
 | `temperature` | `0.7` | Generation randomness |
 | `maxRequestsPerMinute` | `30` | Rate limit |

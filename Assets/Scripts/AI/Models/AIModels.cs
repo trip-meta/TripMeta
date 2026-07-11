@@ -17,12 +17,12 @@ namespace TripMeta.AI
     }
     
     /// <summary>
-    /// LLM配置 — 默认使用火山方舟 Ark CodingPlan（OpenAI兼容格式）
+    /// LLM配置 — 默认使用火山方舟 Ark Agent Plan（OpenAI兼容格式）
     /// </summary>
     [Serializable]
     public class GPTConfig
     {
-        public const string DefaultArkBaseUrl = "https://ark.cn-beijing.volces.com/api/coding/v3";
+        public const string DefaultArkBaseUrl = "https://ark.cn-beijing.volces.com/api/plan/v3";
         public const string DefaultArkChatEndpoint = DefaultArkBaseUrl + "/chat/completions";
         public const string DefaultArkModel = "doubao-seed-2-0-code-preview-260215";
 

@@ -62,7 +62,7 @@ TripMeta is an innovative VR tourism platform combining AI technology with virtu
 ## Key Features
 
 ### 🤖 AI Tour Guide
-- **Ark Powered Conversations**: Natural language understanding and generation via Volcengine Ark CodingPlan
+- **Ark Powered Conversations**: Natural language understanding and generation via Volcengine Ark Agent Plan
 - **Personalized Responses**: Context-aware explanations based on user interests
 - **Multi-language Support**: English, Chinese, Japanese, and more
 - **Rich Knowledge Base**: Historical facts, cultural insights, and travel tips
@@ -104,7 +104,7 @@ TripMeta is an innovative VR tourism platform combining AI technology with virtu
 | **Render Pipeline** | URP 17.0.3 | High-performance graphics |
 | **XR Interaction** | XR Interaction Toolkit 3.0.7 | VR interaction system |
 | **Input System** | Unity Input System 1.11.2 | Modern input handling |
-| **AI Engine** | Volcengine Ark CodingPlan | Conversational AI |
+| **AI Engine** | Volcengine Ark Agent Plan | Conversational AI |
 | **Speech** | Azure Cognitive Services | Voice recognition & TTS |
 | **Vision** | Azure Computer Vision | Object detection & AR |
 | **Networking** | Netcode for GameObjects 2.1.1 | Multiplayer support |

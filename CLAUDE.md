@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-TripMeta is an AI-driven VR tourism platform built with Unity 2022.3.45f1. It integrates multiple AI services (Volcengine Ark CodingPlan, Azure Speech, Computer Vision, Recommendations) with PICO VR headsets to create immersive virtual tourism experiences with intelligent AI tour guides.
+TripMeta is an AI-driven VR tourism platform built with Unity 2022.3.45f1. It integrates multiple AI services (Volcengine Ark Agent Plan, Azure Speech, Computer Vision, Recommendations) with PICO VR headsets to create immersive virtual tourism experiences with intelligent AI tour guides.
 
 ## Project Structure
 
@@ -78,7 +78,7 @@ Custom DI container in `Core/DependencyInjection/`:
 `AIServiceManager` (in `AI/AIServiceManager.cs`) orchestrates all AI services:
 - **Service Types**: LLM (Volcengine Ark), Speech (Azure), Vision, Recommendation, Translation
 - **LLM Backend**: `ArkService` (in `AI/Services/ArkService.cs`) implements `IGPTService`
-  - API: `https://ark.cn-beijing.volces.com/api/coding/v3/chat/completions` (OpenAI-compatible)
+  - API: `https://ark.cn-beijing.volces.com/api/plan/v3/chat/completions` (OpenAI-compatible)
   - Model: `doubao-seed-2-0-code-preview-260215`
   - Three-tier fallback: Ark → Ollama → Mock
   - SSE streaming, exponential backoff on 429, conversation history with system prompt preservation
