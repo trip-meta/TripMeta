@@ -177,6 +177,7 @@ Unity upgrade documentation:
 ### Archive Documentation
 
 **Historical** (For Reference):
+- [Game Studios planning snapshot (2026)](archive/game-studios-planning-2026/README.md) - Recovered concept, systems, Ark integration, stage, and sprint documents; historical assumptions are not current configuration
 - PROJECT_COMPLETION_SUMMARY.md - Project completion status
 - FINAL_SUMMARY.md - Final project summary
 - SYSTEM_TEST_GUIDE.md - System testing procedures
